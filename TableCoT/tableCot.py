@@ -18,7 +18,7 @@ import argparse
 from pathlib import Path
 
 
-GOOGLE_API_KEY="AIzaSyB0cy_y8IjPzTh8VdbuGua-IJb8-MDLCLg"
+GOOGLE_API_KEY="SECRET_KEY"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 model = genai.GenerativeModel('gemini-2.0-flash-001')
