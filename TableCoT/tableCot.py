@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1wh-nBqyrbbtAj91rwE7Eu1Tz4oq4UK8O
 """
 
-!pip install -q -U google-generativeai
-
 # Import the Python SDK
 import google.generativeai as genai
 # Used to securely store your API key

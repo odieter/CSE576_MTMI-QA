@@ -1,0 +1,35 @@
+### Demonstration 1
+### T1 = Departments
+| department_id | location |
+|---------------|----------|
+| 1             | New York |
+| 3             | Chicago  |
+
+### T2 = Employees
+| employee_id | first_name | department_id |
+|-------------|------------|---------------|
+| 107         | James      | 3             |
+| 108         | Sarah      | 1             |
+
+Question: Which location does employee James work in?
+Explanation:
+1. In **T2** locate James → department_id = 3  
+2. In **T1** find department_id 3 → location = **Chicago**  
+Therefore the answer is **Chicago**.
+
+### Demonstration 2
+### T1 = Salaries
+| employee_id | salary |
+|-------------|--------|
+| 108         | 66000  |
+
+### T2 = Employees
+| employee_id | first_name |
+|-------------|------------|
+| 108         | Sarah      |
+
+Question: What salary does Sarah earn?
+Explanation:
+1. In **T2** find Sarah → employee_id = 108  
+2. In **T1** match employee_id 108 → salary = **66000**  
+Therefore the answer is **66000**.

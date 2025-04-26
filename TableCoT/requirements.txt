@@ -1,0 +1,2 @@
+openai     # needed when provider=openai
+google-generativeai # needed when provider=gemini
