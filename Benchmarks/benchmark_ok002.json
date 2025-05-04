@@ -1,0 +1,372 @@
+{
+    "schema_id": "schema_fl002",
+    "domain": "Student Loans",
+    "tables": [
+      {
+        "name": "male",
+        "columns": ["name"],
+        "column_descriptions": ["Names of all individuals whose gender is recorded as male"],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Bob"],
+          ["Charlie"],
+          ["David"],
+          ["Frank"]
+        ]
+      },
+      {
+        "name": "unemployed",
+        "columns": ["name"],
+        "column_descriptions": ["Individuals currently without employment"],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Bob"],
+          ["Eve"],
+          ["Frank"],
+          ["Grace"]
+        ]
+      },
+      {
+        "name": "no_payment_due",
+        "columns": ["name"],
+        "column_descriptions": ["Borrowers who have no payment due on their student loans"],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Bob"],
+          ["Eve"]
+        ]
+      },
+      {
+        "name": "disabled",
+        "columns": ["name", "organ"],
+        "column_descriptions": [
+          "Individuals with a registered disability",
+          "Primary organ affected (if recorded)"
+        ],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Alice", "Heart"],
+          ["Charlie", "Lung"],
+          ["Grace", "Kidney"]
+        ]
+      },
+      {
+        "name": "filed_for_bankruptcy",
+        "columns": ["name"],
+        "column_descriptions": ["Individuals who have filed for bankruptcy at least once"],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Alice"],
+          ["Charlie"]
+        ]
+      },
+      {
+        "name": "longest_absense_from_school",
+        "columns": ["name", "months"],
+        "column_descriptions": [
+          "Individuals with a recorded uninterrupted absence from school",
+          "Length of absence in months"
+        ],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Eve", "10"],
+          ["Frank", "15"],
+          ["David", "15"]
+        ]
+      },
+      {
+        "name": "enrolled",
+        "columns": ["name", "school"],
+        "column_descriptions": [
+          "Individuals currently enrolled in an educational institution",
+          "Name of school"
+        ],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Alice", "State University"],
+          ["Charlie", "Tech University"],
+          ["David", "HighSchoolX"]
+        ]
+      },
+      {
+        "name": "enlist",
+        "columns": ["name", "capacity"],
+        "column_descriptions": [
+          "Individuals with any military or government enlistment record",
+          "Type of capacity enlisted"
+        ],
+        "challenge_types": [],
+        "primary_key": "name",
+        "foreign_keys": [],
+        "data": [
+          ["Alice", "National Guard"],
+          ["Frank", "Reserves"]
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question_id": "question_fl009",
+        "question": "List the names of all people who are both male and unemployed but still have a record in no_payment_due.",
+        "answer": ["Bob"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["male", "unemployed", "no_payment_due"],
+        "primary_keys": ["male.name", "unemployed.name", "no_payment_due.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Select all name values from male.",
+            "tables": ["male"],
+            "columns": ["name"]
+          },
+          {
+            "step": 2,
+            "description": "Intersect with unemployed to keep only unemployed males.",
+            "tables": ["unemployed"],
+            "columns": ["name"]
+          },
+          {
+            "step": 3,
+            "description": "Check which of those names also appear in no_payment_due.",
+            "tables": ["no_payment_due"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl010",
+        "question": "Find every person who is disabled AND has also filed for bankruptcy. Include their organ field from the disabled table.",
+        "answer": ["Alice (Heart)", "Charlie (Lung)"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["disabled", "filed_for_bankruptcy"],
+        "primary_keys": ["disabled.name", "filed_for_bankruptcy.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Retrieve name and organ from disabled.",
+            "tables": ["disabled"],
+            "columns": ["name", "organ"]
+          },
+          {
+            "step": 2,
+            "description": "Keep only names that also appear in filed_for_bankruptcy.",
+            "tables": ["filed_for_bankruptcy"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl011",
+        "question": "Which individuals have the longest absence recorded in the longest_absense_from_school table and are also unemployed?",
+        "answer": ["Frank"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["longest_absense_from_school", "unemployed"],
+        "primary_keys": ["longest_absense_from_school.name", "unemployed.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Identify the maximum months value in longest_absense_from_school.",
+            "tables": ["longest_absense_from_school"],
+            "columns": ["name", "months"]
+          },
+          {
+            "step": 2,
+            "description": "Return the names with that maximum months who also appear in unemployed.",
+            "tables": ["unemployed"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl012",
+        "question": "Identify all male individuals who are enrolled in HighSchoolX and do not appear in the no_payment_due table.",
+        "answer": ["David"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["male", "enrolled", "no_payment_due"],
+        "primary_keys": ["male.name", "enrolled.name", "no_payment_due.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter enrolled for rows where school = 'HighSchoolX'.",
+            "tables": ["enrolled"],
+            "columns": ["name", "school"]
+          },
+          {
+            "step": 2,
+            "description": "Keep only those names that are also present in male.",
+            "tables": ["male"],
+            "columns": ["name"]
+          },
+          {
+            "step": 3,
+            "description": "Exclude any names that appear in no_payment_due.",
+            "tables": ["no_payment_due"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl013",
+        "question": "Which people have both an enlist record and a record showing the longest absence from school of at least 6 months?",
+        "answer": ["Frank"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["longest_absense_from_school", "enlist"],
+        "primary_keys": ["longest_absense_from_school.name", "enlist.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Select names from longest_absense_from_school where months >= 6.",
+            "tables": ["longest_absense_from_school"],
+            "columns": ["name", "months"]
+          },
+          {
+            "step": 2,
+            "description": "Return those names that also appear in enlist.",
+            "tables": ["enlist"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl014",
+        "question": "Find all the students whose school contains the word 'University' and who have also filed for bankruptcy at least once.",
+        "answer": ["Alice", "Charlie"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["enrolled", "filed_for_bankruptcy"],
+        "primary_keys": ["enrolled.name", "filed_for_bankruptcy.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter enrolled rows where school LIKE '%University%'.",
+            "tables": ["enrolled"],
+            "columns": ["name", "school"]
+          },
+          {
+            "step": 2,
+            "description": "Intersect with filed_for_bankruptcy to keep only matching names.",
+            "tables": ["filed_for_bankruptcy"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl015",
+        "question": "Among disabled people who also show up as unemployed, do any of them not appear in enrolled (i.e., they are not enrolled in any school)?",
+        "answer": ["Grace"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["disabled", "unemployed", "enrolled"],
+        "primary_keys": ["disabled.name", "unemployed.name", "enrolled.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Find names present in both disabled and unemployed.",
+            "tables": ["disabled", "unemployed"],
+            "columns": ["name"]
+          },
+          {
+            "step": 2,
+            "description": "From that set, exclude any names that appear in enrolled.",
+            "tables": ["enrolled"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl016",
+        "question": "Which individuals have no record in filed_for_bankruptcy and do not appear in no_payment_due, yet are listed as enlisted in some capacity?",
+        "answer": ["Frank"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["enlist", "filed_for_bankruptcy", "no_payment_due"],
+        "primary_keys": ["enlist.name", "filed_for_bankruptcy.name", "no_payment_due.name"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Start with all names in enlist.",
+            "tables": ["enlist"],
+            "columns": ["name"]
+          },
+          {
+            "step": 2,
+            "description": "Exclude any names appearing in filed_for_bankruptcy.",
+            "tables": ["filed_for_bankruptcy"],
+            "columns": ["name"]
+          },
+          {
+            "step": 3,
+            "description": "Further exclude names that appear in no_payment_due.",
+            "tables": ["no_payment_due"],
+            "columns": ["name"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl017",
+        "question": "Among those who have the longest absence from school exceeding 12 months, how many are also male and have not enlisted?",
+        "answer": ["1"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": [
+          "longest_absense_from_school",
+          "male",
+          "enlist"
+        ],
+        "primary_keys": [
+          "longest_absense_from_school.name",
+          "male.name",
+          "enlist.name"
+        ],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter longest_absense_from_school rows where months > 12.",
+            "tables": ["longest_absense_from_school"],
+            "columns": ["name", "months"]
+          },
+          {
+            "step": 2,
+            "description": "Keep only those names that also appear in male.",
+            "tables": ["male"],
+            "columns": ["name"]
+          },
+          {
+            "step": 3,
+            "description": "Exclude any names that appear in enlist and count the remaining.",
+            "tables": ["enlist"],
+            "columns": ["name"]
+          }
+        ]
+      }
+    ]
+  }
+  

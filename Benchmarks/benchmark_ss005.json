@@ -1,0 +1,552 @@
+{
+  "schema_id": "schema_ss005",
+  "domain": "rideshare & driver history",
+  "tables": [
+    {
+      "name": "Drivers",
+      "columns": ["driver_id", "full_name", "license_number", "registration_date"],
+      "column_descriptions": [
+        "Unique identifier for each driver (e.g., 'D12345')",
+        "Full name of the driver. Formats include 'First Last', 'Last, First'",
+        "Driver's license number (e.g., 'AZ1234567'). Some states may use different formats",
+        "Date the driver was registered (e.g., '2021-06-15', 'June 15, 2021')"
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "driver_id",
+      "foreign_keys": [],
+      "data": [
+        ["D1000", "Emily Smith", "AZ1865574", "March 10, 2020"],
+        ["D1001", "Lance Davis", "AZ5778654", "2020-05-15"],
+        ["D1002", "Dawson, Jane", "AZ6247835", "March 24, 2022"],
+        ["D1003", "Paul, Laura", "AZ9985543", "2020-09-06"],
+        ["D1004", "Katie Garcia", "AZ5357276", "November 06, 2020"],
+        ["D1005", "Martin, John", "AZ4790772", "01/04/2022"],
+        ["D1006", "Martinez, Chris", "AZ7451429", "November 02, 2020"],
+        ["D1007", "John Garcia", "AZ9257478", "01/05/2019"],
+        ["D1008", "Sarah Johnson", "AZ2254108", "08/15/2019"],
+        ["D1009", "Daniel Wang", "AZ4907635", "2021-03-31"]
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "columns": ["vehicle_id", "driver_id", "license_plate", "vehicle_type", "current_mileage"],
+      "column_descriptions": [
+        "Unique identifier for each vehicle (e.g., 'V98765')",
+        "Foreign key referencing the driver of the vehicle",
+        "License plate of the vehicle. Formats may vary by state (e.g., 'ABC-1234', '123 ABC')",
+        "Type of vehicle (e.g., 'Sedan', 'SUV', 'Van')",
+        "Current odometer reading of the vehicle in miles (e.g., 87210)"
+      ],
+      "challenge_types": ["format_variation", "ambiguous_column_name"],
+      "primary_key": "vehicle_id",
+      "foreign_keys": ["Vehicles.driver_id = Drivers.driver_id"],
+      "data": [
+        ["V1000", "D1000", "738 RVA", "SUV", 94252],
+        ["V1001", "D1006", "FOR-5849", "Sedan", 40883],
+        ["V1002", "D1001", "DNT-3924", "Sedan", 65813],
+        ["V1003", "D1003", "XYZ-456", "Van", 48978],
+        ["V1004", "D1002", "TRY 092", "Sedan", 73905],
+        ["V1005", "D1004", "ZRX 298", "Van", 56560],
+        ["V1006", "D1008", "ABC-1234", "Sedan", 79322],
+        ["V1007", "D1009", "239 FPO", "Sedan", 107629],
+        ["V1008", "D1009", "XYZ-456", "Van", 114438],
+        ["V1009", "D1002", "789 XYZ", "SUV", 53490]
+      ]
+    },
+    {
+      "name": "Passengers",
+      "columns": ["passenger_id", "full_name", "preferred_payment_method", "email"],
+      "column_descriptions": [
+        "Unique identifier for each passenger (e.g., 'P12345')",
+        "Full name of the passenger. Formats include 'First Last', 'Last, First'",
+        "Passenger's preferred payment method (e.g., 'Credit Card', 'Cash', 'PayPal')",
+        "Email address of the passenger (e.g., 'jane.doe@example.com')"
+      ],
+      "challenge_types": ["format_variation", "ambiguous_column_name", "null_values"],
+      "primary_key": "passenger_id",
+      "foreign_keys": [],
+      "data": [
+        ["P1000", "Garcia, Daniel", "Cash", "garcia.daniel@gmail.com"],
+        ["P1001", "John Davis", "PayPal", null],
+        ["P1002", "Brown, Jane", "PayPal", "brown.jane@gmail.com"],
+        ["P1003", "Laura Lee", "PayPal", null],
+        ["P1004", "Emily Davis", "Credit Card", "emily.davis@example.com"],
+        ["P1005", "Martinez, Katie", "Cash", "martinez.katie@gmail.com"],
+        ["P1006", "Lee, Katie", "Credit Card", null],
+        ["P1007", "Smith, Katie", "Cash", "smith.katie@gmail.com"],
+        ["P1008", "Smith, John", "Credit Card", null],
+        ["P1009", "Garcia, Laura", "PayPal", "garcia.laura@gmail.com"],
+        ["P1010", "Chris Smith", "Cash", "chris.smith@gmail.com"],
+        ["P1011", "Daniel Brown", "PayPal", null],
+        ["P1012", "John Lee", "PayPal", "john.lee@example.com"],
+        ["P1013", "Lee, Emily", "PayPal", "lee.emily@example.com"],
+        ["P1014", "Lee, Jane", "Credit Card", null],
+        ["P1015", "Davis, Chris", "Credit Card", "davis.chris@yahoo.com"],
+        ["P1016", "Emily Lee", "Credit Card", "emily.lee@example.com"],
+        ["P1017", "Alex Lee", "Cash", "alex.lee@yahoo.com"],
+        ["P1018", "Laura Garcia", "PayPal", "laura.garcia@example.com"],
+        ["P1019", "Chris Smith", "Cash", "chris.smith@example.com"]
+      ]
+    },
+    {
+      "name": "Rides",
+      "columns": ["ride_id", "vehicle_id", "passenger_id", "start_time", "end_time", "passenger_rating", "fare_amount"],
+      "column_descriptions": [
+        "Unique identifier for each ride (e.g., 'R56789')",
+        "Foreign key referencing the vehicle used for the ride",
+        "Foreign key referencing the passenger who booked the ride",
+        "Timestamp when the ride started (e.g., '2023-04-01 08:30:00')",
+        "Timestamp when the ride ended (e.g., '2023-04-01 09:15:00')",
+        "Rating given by the passenger (1.0 to 5.0). May be missing if not rated",
+        "Total fare charged for the ride in USD (e.g., 17.85)"
+      ],
+      "challenge_types": ["format_variation", "null_values"],
+      "primary_key": "ride_id",
+      "foreign_keys": ["Rides.vehicle_id = Vehicles.vehicle_id", "Rides.passenger_id = Passengers.passenger_id"],
+      "data": [
+        ["R1000", "V1009", "P1014", "2023-04-19 17:00:00", "04/19/2023 18:30", null, 21.81],
+        ["R1001", "V1000", "P1008", "Apr 20, 2023 12:00", "04/20/2023 13:19", 3.7, 17.53],
+        ["R1002", "V1006", "P1013", "Feb 23, 2023 06:00", "Feb 23, 2023 07:24", 3.6, 26.56],
+        ["R1003", "V1004", "P1019", "Feb 06, 2023 01:00", "2023-02-06 01:47:00", 3.8, 12.83],
+        ["R1004", "V1000", "P1008", "2023-07-27 03:00:00", "Jul 27, 2023 03:39", 4.9, 21.61],
+        ["R1005", "V1009", "P1007", "2023-09-04 19:00:00", "09/04/2023 20:20", 3.6, 47.36],
+        ["R1006", "V1006", "P1012", "2023-03-04 17:00:00", "Mar 04, 2023 18:05", 3.6, 38.42],
+        ["R1007", "V1008", "P1013", "2023-09-01 07:00:00", "2023-09-01 08:18:00", 4.6, 27.74],
+        ["R1008", "V1003", "P1002", "2023-09-15 05:00:00", "2023-09-15 05:38:00", null, 19.94],
+        ["R1009", "V1008", "P1002", "2023-03-18 04:00:00", "2023-03-18 05:13:00", null, 10.13],
+        ["R1010", "V1000", "P1014", "Jul 17, 2023 01:00", "2023-07-17 01:27:00", 3.7, 13.38],
+        ["R1011", "V1006", "P1002", "07/10/2023 13:00", "2023-07-10 14:29:00", null, 14.68],
+        ["R1012", "V1002", "P1002", "Aug 16, 2023 02:00", "08/16/2023 03:24", null, 40.57],
+        ["R1013", "V1009", "P1000", "Aug 01, 2023 07:00", "2023-08-01 07:48:00", null, 47.97],
+        ["R1014", "V1006", "P1005", "2023-05-12 04:00:00", "May 12, 2023 04:40", 4.1, 9.53],
+        ["R1015", "V1003", "P1015", "01/14/2023 23:00", "01/14/2023 23:55", 3.4, 48.1],
+        ["R1016", "V1000", "P1008", "11/13/2023 00:00", "Nov 13, 2023 01:15", 3.9, 38.54],
+        ["R1017", "V1004", "P1009", "2023-01-11 07:00:00", "01/11/2023 07:21", 4.6, 7.61],
+        ["R1018", "V1003", "P1016", "04/08/2023 05:00", "04/08/2023 05:41", 4.7, 16.94],
+        ["R1019", "V1006", "P1003", "05/03/2023 11:00", "May 03, 2023 11:39", null, 8.71],
+        ["R1020", "V1000", "P1014", "Mar 31, 2023 12:00", "2023-03-31 12:40:00", 4.6, 35.57],
+        ["R1021", "V1009", "P1003", "2023-08-08 19:00:00", "Aug 08, 2023 20:27", 4.2, 46.03],
+        ["R1022", "V1004", "P1008", "09/12/2023 17:00", "Sep 12, 2023 17:41", 3.4, 16.5],
+        ["R1023", "V1001", "P1014", "2023-03-11 07:00:00", "03/11/2023 07:33", 3.3, 14.76],
+        ["R1024", "V1003", "P1017", "Oct 18, 2023 22:00", "2023-10-18 22:12:00", 3.2, 36.12]
+      ]
+    },
+    {
+      "name": "RideLocations",
+      "columns": ["location_id", "ride_id", "pickup_address", "dropoff_address", "trip_distance_miles"],
+      "column_descriptions": [
+        "Unique identifier for each ride location record (e.g., 'L0123')",
+        "Foreign key referencing the ride this location data belongs to",
+        "Street-level pickup address, including city and state (e.g., '123 Main St, Phoenix, AZ')",
+        "Street-level drop-off address, including city and state (e.g., '456 Elm St, Tempe, AZ')",
+        "Total distance of the trip in miles (e.g., 5.6)"
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "location_id",
+      "foreign_keys": ["RideLocations.ride_id = Rides.ride_id"],
+      "data": [
+        ["L1000","R1000","75709 John Lakes, Chandler, AZ","2081 Reid Court, Surprise, AZ",4.2],
+        ["L1001","R1001","15443 Christopher Stravenue, Surprise, AZ","07436 Seth Vista, Tempe, AZ",7.8],
+        ["L1002","R1002","153 Ward Falls, Mesa, AZ","3361 Day Forest, Tucson, AZ",11.4],
+        ["L1003","R1003","405 Jamie Forks, Phoenix, AZ","8139 Heidi Branch, Tempe, AZ",14.4],
+        ["L1004","R1004","990 Barker Walks, Tempe, AZ","775 Frey Glens, Tucson, AZ",1.9],
+        ["L1005","R1005","09391 Mark Ford, Gilbert, AZ","991 Bryant Unions, Chandler, AZ",10.3],
+        ["L1006","R1006","1246 Knapp Knoll, Phoenix, AZ","3754 Robinson Path, Peoria, AZ",13.6],
+        ["L1007","R1007","583 King Alley, Tucson, AZ","080 Moses Summit, Surprise, AZ",13.8],
+        ["L1008","R1008","97178 Derrick Mountains, Phoenix, AZ","4177 Buchanan Dam, Mesa, AZ",13.5],
+        ["L1009","R1009","52892 Patrick Pass, Scottsdale, AZ","338 Steele Trafficway, Tempe, AZ",3.2],
+        ["L1010","R1010","3886 Kyle Parkway, Surprise, AZ","092 Margaret Knoll, Peoria, AZ",10.3],
+        ["L1011","R1011","142 Christopher Port, Chandler, AZ","524 Klein Hill, Phoenix, AZ",12.3],
+        ["L1012","R1012","1210 Karen Green, Scottsdale, AZ","1688 Michael Vista, Peoria, AZ",14.6],
+        ["L1013","R1013","0222 Miller Manors, Tempe, AZ","3013 Mack Plaza, Tucson, AZ",3.8],
+        ["L1014","R1014","27037 Fleming Crossroad, Surprise, AZ","7404 Emily Rapids, Surprise, AZ",8.9],
+        ["L1015","R1015","35919 Bullock Court, Tucson, AZ","9316 Kelsey Lakes, Phoenix, AZ",2.4],
+        ["L1016","R1016","50831 Mooney Island, Glendale, AZ","94187 Rebecca Crossing, Surprise, AZ",8.9],
+        ["L1017","R1017","32364 Gabriel Orchard, Glendale, AZ","467 Reynolds Mission, Tucson, AZ",10.7],
+        ["L1018","R1018","578 Medina Branch, Tempe, AZ","5659 Rodriguez Plain, Glendale, AZ",10.4],
+        ["L1019","R1019","13924 Michael Street, Surprise, AZ","69392 Margaret Cove, Gilbert, AZ",7.0],
+        ["L1020","R1020","053 Paul Trafficway, Chandler, AZ","836 Wong Roads, Gilbert, AZ",3.6],
+        ["L1021","R1021","9184 Ashley Radial, Chandler, AZ","353 Murray Cove, Tempe, AZ",3.6],
+        ["L1022","R1022","417 Rojas Parks, Tucson, AZ","3720 Tony Dale, Scottsdale, AZ",14.0],
+        ["L1023","R1023","34350 Caroline Falls, Glendale, AZ","79676 Chavez Ford, Mesa, AZ",7.2],
+        ["L1024","R1024","358 Orozco Grove, Phoenix, AZ","47034 Marissa Ridges, Surprise, AZ",3.3]
+      ]
+    },
+    {
+      "name": "DriverViolations",
+      "columns": ["violation_id", "driver_id", "violation_type", "violation_date"],
+      "column_descriptions": [
+        "Unique identifier for each violation record (e.g., 'V10001')",
+        "Foreign key referencing the driver who received the violation",
+        "Type of violation (e.g., 'Speeding', 'Reckless Driving')",
+        "Date the violation occurred (e.g., '2023-03-10', 'March 10, 2023')"
+      ],
+      "challenge_types": ["format_variation", "ambiguous_column_name"],
+      "primary_key": "violation_id",
+      "foreign_keys": ["DriverViolations.driver_id = Drivers.driver_id"],
+      "data": [
+        ["V1000", "D1004", "Speeding", "10/20/2023"],
+        ["V1001", "D1005", "Reckless Driving", "09/24/2022"],
+        ["V1002", "D1004", "Speeding", "2023-08-29"],
+        ["V1003", "D1003", "Reckless Driving", "2023-12-10"],
+        ["V1004", "D1008", "Speeding", "December 21, 2022"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ss001",
+      "question": "Which drivers have multiple vehicles with different types?",
+      "answer": ["Dawson, Jane", "Daniel Wang"],
+      "challenge_types": ["multi-hop", "group_by", "comparison"],
+      "num_hops": 1,
+      "table_names": ["Vehicles", "Drivers"],
+      "primary_keys": ["Vehicles.vehicle_id", "Drivers.driver_id"],
+      "foreign_keys": ["Vehicles.driver_id = Drivers.driver_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Group all vehicles by driver_id and gather the set of unique vehicle_type values associated with each driver.",
+          "tables": ["Vehicles"],
+          "columns": ["driver_id", "vehicle_type"]
+        },
+        {
+          "step": 2,
+          "description": "Filter to include only those drivers who are associated with more than one distinct vehicle_type.",
+          "tables": ["Vehicles"],
+          "columns": ["vehicle_type"]
+        },
+        {
+          "step": 3,
+          "description": "Retrieve the full name for each driver_id.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss002",
+      "question": "Which rides had passenger ratings below 4.0 and a trip distance above 10 miles?",
+      "answer": ["R1002", "R1003", "R1005", "R1006", "R1010", "R1015", "R1022"],
+      "challenge_types": ["multi-hop", "comparison", "conditional"],
+      "num_hops": 1,
+      "table_names": ["Rides", "RideLocations"],
+      "primary_keys": ["Rides.ride_id", "RideLocations.location_id"],
+      "foreign_keys": ["RideLocations.ride_id = Rides.ride_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter rides where the passenger_rating is less than 4.0 and is not null.",
+          "tables": ["Rides"],
+          "columns": ["ride_id", "passenger_rating"]
+        },
+        {
+          "step": 2,
+          "description": "Filter rides with trip_distance_miles greater than 10.",
+          "tables": ["RideLocations"],
+          "columns": ["ride_id", "trip_distance_miles"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss003",
+      "question": "Which passengers have an email on file and took more than three rides?",
+      "answer": ["Brown, Jane"],
+      "challenge_types": ["multi-hop", "aggregation", "boolean_logic", "null_values"],
+      "num_hops": 1,
+      "table_names": ["Passengers", "Rides"],
+      "primary_keys": ["Passengers.passenger_id", "Rides.ride_id"],
+      "foreign_keys": ["Rides.passenger_id = Passengers.passenger_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find passenger_ids where email is not null.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "email"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve all rides taken by each passenger.",
+          "tables": ["Rides"],
+          "columns": ["ride_id", "passenger_id"]
+        },
+        {
+          "step": 3,
+          "description": "Group the resulting rides by passenger_id and count the number of rides for each passenger.",
+          "tables": ["Rides"],
+          "columns": ["passenger_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of each passenger_id who took more than three rides.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss004",
+      "question": "Who had their longest ride (by time) in a vehicle with mileage above 100000?",
+      "answer": ["Brown, Jane"],
+      "challenge_types": ["multi-hop", "derived_metric", "arithmetic", "superlative"],
+      "num_hops": 3,
+      "table_names": ["Rides", "Vehicles", "RideLocations"],
+      "primary_keys": ["Rides.ride_id", "Vehicles.vehicle_id"],
+      "foreign_keys": [
+        "Rides.vehicle_id = Vehicles.vehicle_id",
+        "RideLocations.ride_id = Rides.ride_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Rides with Vehicles using vehicle_id and filter for vehicles with current_mileage greater than 100000.",
+          "tables": ["Rides", "Vehicles"],
+          "columns": ["ride_id", "vehicle_id", "current_mileage"]
+        },
+        {
+          "step": 2,
+          "description": "Normalize start_time and end_time with consistent format.",
+          "tables": ["Rides"],
+          "columns": ["start_time", "end_time"]
+        },
+        {
+          "step": 3,
+          "description": "For each ride_id, compute the duration in minutes between the start_time and end_time.",
+          "tables": ["Rides"],
+          "columns": ["ride_id", "start_time", "end_time"]
+        },
+        {
+          "step": 4,
+          "description": "Group by passenger_id and identify the longest ride by duration for each passenger.",
+          "tables": ["Rides"],
+          "columns": ["passenger_id", "ride_id", "duration_minutes"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of each passenger_id found.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss005",
+      "question": "Which passengers gave their highest rating on a ride with a fare under $20?",
+      "answer": ["Martinez, Katie", "Garcia, Laura", "Emily Le", "Chris Smith"],
+      "challenge_types": ["multi-hop", "superlative", "conditional"],
+      "num_hops": 1,
+      "table_names": ["Rides", "Passengers"],
+      "primary_keys": ["Rides.ride_id", "Passengers.passenger_id"],
+      "foreign_keys": ["Passengers.passenger_id = Rides.passenger_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter rides to include only those with a fare_amount less than 20 and a non-null passenger_rating.",
+          "tables": ["Rides"],
+          "columns": ["ride_id", "passenger_id", "fare_amount", "passenger_rating"]
+        },
+        {
+          "step": 2,
+          "description": "For each passenger_id, identify their highest passenger_rating across all rides.",
+          "tables": ["Rides"],
+          "columns": ["passenger_id", "passenger_rating"]
+        },
+        {
+          "step": 3,
+          "description": "Compare each passenger’s highest rating with the ratings on rides under $20. Return passengers whose highest rating occurred on a ride that meets the fare condition.",
+          "tables": ["Rides"],
+          "columns": ["passenger_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss006",
+      "question": "Which drivers have more than one violation and also operate a van?",
+      "answer": ["Katie Garcia"],
+      "challenge_types": ["multi-hop", "aggregation", "boolean_logic"],
+      "num_hops": 2,
+      "table_names": ["DriverViolations", "Vehicles", "Drivers"],
+      "primary_keys": ["DriverViolations.violation_id", "Vehicles.vehicle_id", "Drivers.driver_id"],
+      "foreign_keys": ["Vehicles.driver_id = DriverViolations.driver_id", "Drivers.driver_id = Vehicles.driver_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Group violations by driver_id and count the number of violations per driver.",
+          "tables": ["DriverViolations"],
+          "columns": ["driver_id"]
+        },
+        {
+          "step": 2,
+          "description": "Collect driver_ids that have more than one violation.",
+          "tables": ["DriverViolations"],
+          "columns": ["driver_id"]
+        },
+        {
+          "step": 3,
+          "description": "Select driver_ids where vehicle_type is 'Van'.",
+          "tables": ["Vehicles"],
+          "columns": ["driver_id", "vehicle_type"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of each driver found.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss007",
+      "question": "Which drivers registered in 2020 and have received at least one violation?",
+      "answer": ["Paul, Laura", "Katie Garcia"],
+      "challenge_types": ["multi-hop", "temporal", "boolean_logic"],
+      "num_hops": 1,
+      "table_names": ["Drivers", "DriverViolations"],
+      "primary_keys": ["Drivers.driver_id", "DriverViolations.violation_id"],
+      "foreign_keys": ["DriverViolations.driver_id = Drivers.driver_id"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize registration_date with consistent format.",
+          "tables": ["Drivers"],
+          "columns": ["registration_date"]
+        },
+        {
+          "step": 2,
+          "description": "Filter drivers whose registration_date falls within the year 2020.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "registration_date"]
+        },
+        {
+          "step": 3,
+          "description": "Select the driver_ids that are shared between step 2 and the DriverViolations table.",
+          "tables": ["Drivers", "DriverViolations"],
+          "columns": ["driver_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of each driver found.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss008",
+      "question": "Which passengers have only ever taken rides in one vehicle type?",
+      "answer": ["Garcia, Daniel", "Martinez, Katie", "Smith, Katie", "Garcia, Laura", "John Lee", "Davis, Chris", "Emily Lee", "Alex Lee", "Chris Smith"],
+      "challenge_types": ["multi-hop", "group_by", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Rides", "Vehicles", "Passengers"],
+      "primary_keys": ["Rides.ride_id", "Vehicles.vehicle_id", "Passengers.passenger_id"],
+      "foreign_keys": [
+        "Rides.vehicle_id = Vehicles.vehicle_id",
+        "Rides.passenger_id = Passengers.passenger_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Rides with Vehicles to obtain the vehicle_type for each ride.",
+          "tables": ["Rides", "Vehicles"],
+          "columns": ["ride_id", "vehicle_id", "vehicle_type"]
+        },
+        {
+          "step": 2,
+          "description": "Join the result with Passengers to associate each ride and vehicle_type with a passenger.",
+          "tables": ["Rides", "Vehicles", "Passengers"],
+          "columns": ["ride_id", "vehicle_id", "vehicle_type", "passenger_id"]
+        },
+        {
+          "step": 3,
+          "description": "Group by passenger_id and collect the distinct vehicle_type values they experienced.",
+          "tables": ["Rides", "Vehicles"],
+          "columns": ["passenger_id", "vehicle_type"]
+        },
+        {
+          "step": 4,
+          "description": "Filter to include only those passengers associated with exactly one distinct vehicle_type.",
+          "tables": ["Rides", "Vehicles"],
+          "columns": ["passenger_id"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of each passenger_id found.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss009",
+      "question": "Which drivers have never had any of their vehicles used in a ride?",
+      "answer": ["Katie Garcia"],
+      "challenge_types": ["multi-hop", "negation", "missing_join_target"],
+      "num_hops": 2,
+      "table_names": ["Drivers", "Vehicles", "Rides"],
+      "primary_keys": ["Drivers.driver_id", "Vehicles.vehicle_id", "Rides.ride_id"],
+      "foreign_keys": [
+        "Vehicles.driver_id = Drivers.driver_id",
+        "Rides.vehicle_id = Vehicles.vehicle_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Drivers to Vehicles using driver_id to get all vehicles associated with each driver.",
+          "tables": ["Drivers", "Vehicles"],
+          "columns": ["driver_id", "vehicle_id"]
+        },
+        {
+          "step": 2,
+          "description": "Check which vehicle_ids from the joined list do not appear in the Rides table.",
+          "tables": ["Vehicles", "Rides"],
+          "columns": ["vehicle_id"]
+        },
+        {
+          "step": 3,
+          "description": "Return the driver_ids of drivers whose vehicles are all unused in any ride.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of each driver remaining.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss010",
+      "question": "Who was the driver of the ride with the highest fare out of all rides?",
+      "answer": ["Paul, Laura"],
+      "challenge_types": ["multi-hop", "superlative"],
+      "num_hops": 2,
+      "table_names": ["Rides", "Vehicles", "Drivers"],
+      "primary_keys": ["Rides.ride_id", "Vehicles.vehicle_id", "Drivers.driver_id"],
+      "foreign_keys": [
+        "Rides.vehicle_id = Vehicles.vehicle_id",
+        "Vehicles.driver_id = Drivers.driver_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify the ride with the maximum fare_amount from the Rides table.",
+          "tables": ["Rides"],
+          "columns": ["ride_id", "fare_amount"]
+        },
+        {
+          "step": 2,
+          "description": "Get the associated vehicle_id and driver_id for the identified ride_id.",
+          "tables": ["Rides", "Vehicles"],
+          "columns": ["ride_id", "vehicle_id", "driver_id"]
+        },
+        {
+          "step": 3,
+          "description": "Retrieve the name of each driver remaining.",
+          "tables": ["Drivers"],
+          "columns": ["driver_id", "full_name"]
+        }
+      ]
+    }
+  ]
+}

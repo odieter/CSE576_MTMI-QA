@@ -1,0 +1,632 @@
+{
+  "schema_id": "schema_mr003",
+  "domain": "Sports & Entertainment",
+  "tables": [
+    {
+      "name": "Events",
+      "columns": ["event_id", "name", "event_date", "venue_id", "event_type"],
+      "column_descriptions": {
+        "event_id": "Unique identifier for the event",
+        "name": "Name of the event",
+        "event_date": "Date of the event (YYYY-MM-DD)",
+        "venue_id": "ID of the venue",
+        "event_type": "Type of event (e.g., Concert, Match)"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "event_id",
+      "foreign_keys": [
+        "Events.venue_id = Venues.venue_id"
+      ],
+      "data": [
+        ["E001", "Rock Fest 2023", "2023-07-01", "V001", "Concert"],
+        ["E002", "Soccer Final", "2023-07-02", "V002", "Match"],
+        ["E003", "Jazz Night", "2023-07-03", "V003", "Concert"],
+        ["E004", "Tennis Open", "2023-07-04", "V004", "Match"],
+        ["E005", "Pop Star Live", "2023-07-05", "V001", "Concert"]
+      ]
+    },
+    {
+      "name": "Attendees",
+      "columns": ["attendee_id", "name", "birth_year", "country"],
+      "column_descriptions": {
+        "attendee_id": "Unique identifier for the attendee",
+        "name": "Full name of the attendee",
+        "birth_year": "Year of birth",
+        "country": "Attendee's country of residence"
+      },
+      "challenge_types": ["format_variation"],
+      "primary_key": "attendee_id",
+      "foreign_keys": [],
+      "data": [
+        ["A001", "Alice Smith", 1990, "USA"],
+        ["A002", "Bob Jones", 1985, "UK"],
+        ["A003", "Clara Lee", 1995, "Canada"],
+        ["A004", "David Kim", 1980, "USA"],
+        ["A005", "Emma Wong", 1992, "Australia"]
+      ]
+    },
+    {
+      "name": "Tickets",
+      "columns": ["ticket_id", "attendee_id", "event_id", "purchase_date", "seat"],
+      "column_descriptions": {
+        "ticket_id": "Unique identifier for the ticket",
+        "attendee_id": "ID of the attendee",
+        "event_id": "ID of the event",
+        "purchase_date": "Date of ticket purchase (YYYY-MM-DD)",
+        "seat": "Assigned seat number"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "ticket_id",
+      "foreign_keys": [
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Tickets.event_id = Events.event_id"
+      ],
+      "data": [
+        ["T001", "A001", "E001", "2023-06-15", "A12"],
+        ["T002", "A002", "E002", "2023-06-16", "B15"],
+        ["T003", "A003", "E003", "2023-06-17", "C10"],
+        ["T004", "A004", "E001", "2023-06-18", "A14"],
+        ["T005", "A005", "E004", "2023-06-19", "D20"]
+      ]
+    },
+    {
+      "name": "Venues",
+      "columns": ["venue_id", "name", "city", "country", "capacity"],
+      "column_descriptions": {
+        "venue_id": "Unique identifier for the venue",
+        "name": "Name of the venue",
+        "city": "City where the venue is located",
+        "country": "Country of the venue",
+        "capacity": "Seating capacity"
+      },
+      "challenge_types": [],
+      "primary_key": "venue_id",
+      "foreign_keys": [],
+      "data": [
+        ["V001", "Madison Square Garden", "New York", "USA", 20000],
+        ["V002", "Wembley Stadium", "London", "UK", 90000],
+        ["V003", "Royale Hall", "Toronto", "Canada", 5000],
+        ["V004", "Rod Laver Arena", "Melbourne", "Australia", 15000],
+        ["V005", "Staples Center", "Los Angeles", "USA", 19000]
+      ]
+    },
+    {
+      "name": "Performers",
+      "columns": ["performer_id", "name", "performer_type"],
+      "column_descriptions": {
+        "performer_id": "Unique identifier for the performer",
+        "name": "Name of the performer (e.g., band, athlete)",
+        "performer_type": "Type of performer (e.g., Band, Athlete)"
+      },
+      "challenge_types": [],
+      "primary_key": "performer_id",
+      "foreign_keys": [],
+      "data": [
+        ["P001", "The Rockers", "Band"],
+        ["P002", "Lions FC", "Team"],
+        ["P003", "Jazz Trio", "Band"],
+        ["P004", "Serena Williams", "Athlete"],
+        ["P005", "Pop Star", "Singer"]
+      ]
+    },
+    {
+      "name": "Event_Performers",
+      "columns": ["event_performer_id", "event_id", "performer_id"],
+      "column_descriptions": {
+        "event_performer_id": "Unique identifier for the event-performer mapping",
+        "event_id": "ID of the event",
+        "performer_id": "ID of the performer"
+      },
+      "challenge_types": [],
+      "primary_key": "event_performer_id",
+      "foreign_keys": [
+        "Event_Performers.event_id = Events.event_id",
+        "Event_Performers.performer_id = Performers.performer_id"
+      ],
+      "data": [
+        ["EP001", "E001", "P001"],
+        ["EP002", "E002", "P002"],
+        ["EP003", "E003", "P003"],
+        ["EP004", "E004", "P004"],
+        ["EP005", "E005", "P005"]
+      ]
+    },
+    {
+      "name": "Sponsors",
+      "columns": ["sponsor_id", "name", "industry"],
+      "column_descriptions": {
+        "sponsor_id": "Unique identifier for the sponsor",
+        "name": "Name of the sponsor",
+        "industry": "Industry of the sponsor"
+      },
+      "challenge_types": [],
+      "primary_key": "sponsor_id",
+      "foreign_keys": [],
+      "data": [
+        ["S001", "Coca-Cola", "Beverage"],
+        ["S002", "Nike", "Sportswear"],
+        ["S003", "Sony", "Electronics"],
+        ["S004", "Adidas", "Sportswear"],
+        ["S005", "Pepsi", "Beverage"]
+      ]
+    },
+    {
+      "name": "Event_Sponsors",
+      "columns": ["event_sponsor_id", "event_id", "sponsor_id", "sponsorship_amount_usd"],
+      "column_descriptions": {
+        "event_sponsor_id": "Unique identifier for the event-sponsor mapping",
+        "event_id": "ID of the event",
+        "sponsor_id": "ID of the sponsor",
+        "sponsorship_amount_usd": "Sponsorship amount in USD"
+      },
+      "challenge_types": [],
+      "primary_key": "event_sponsor_id",
+      "foreign_keys": [
+        "Event_Sponsors.event_id = Events.event_id",
+        "Event_Sponsors.sponsor_id = Sponsors.sponsor_id"
+      ],
+      "data": [
+        ["ES001", "E001", "S001", 50000],
+        ["ES002", "E002", "S002", 100000],
+        ["ES003", "E003", "S003", 30000],
+        ["ES004", "E004", "S004", 80000],
+        ["ES005", "E005", "S005", 60000]
+      ]
+    },
+    {
+      "name": "Cancellations",
+      "columns": ["cancellation_id", "ticket_id", "cancellation_date", "refund_amount_usd"],
+      "column_descriptions": {
+        "cancellation_id": "Unique identifier for the cancellation",
+        "ticket_id": "ID of the cancelled ticket",
+        "cancellation_date": "Date of cancellation (YYYY-MM-DD)",
+        "refund_amount_usd": "Refund amount in USD"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "cancellation_id",
+      "foreign_keys": [
+        "Cancellations.ticket_id = Tickets.ticket_id"
+      ],
+      "data": [
+        ["C001", "T001", "2023-06-20", 150],
+        ["C002", "T003", "2023-06-21", 100],
+        ["C003", "T004", "2023-06-22", 120]
+      ]
+    },
+    {
+      "name": "Merchandise",
+      "columns": ["merchandise_id", "event_id", "item_name", "price_usd"],
+      "column_descriptions": {
+        "merchandise_id": "Unique identifier for the merchandise",
+        "event_id": "ID of the associated event",
+        "item_name": "Name of the merchandise item",
+        "price_usd": "Price in USD"
+      },
+      "challenge_types": [],
+      "primary_key": "merchandise_id",
+      "foreign_keys": [
+        "Merchandise.event_id = Events.event_id"
+      ],
+      "data": [
+        ["M001", "E001", "Band T-Shirt", 30],
+        ["M002", "E002", "Team Jersey", 50],
+        ["M003", "E003", "Jazz CD", 20],
+        ["M004", "E004", "Tennis Cap", 25],
+        ["M005", "E005", "Signed Poster", 40]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_mr001",
+      "question": "Which attendees from the USA purchased tickets for events sponsored by beverage companies and held in venues with capacity over 15000?",
+      "answer": ["Alice Smith", "David Kim"],
+      "challenge_types": ["multi-hop", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Attendees", "Tickets", "Events", "Event_Sponsors", "Sponsors", "Venues"],
+      "primary_keys": ["Attendees.attendee_id", "Tickets.ticket_id", "Events.event_id", "Event_Sponsors.event_sponsor_id", "Sponsors.sponsor_id", "Venues.venue_id"],
+      "foreign_keys": [
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Tickets.event_id = Events.event_id",
+        "Event_Sponsors.event_id = Events.event_id",
+        "Event_Sponsors.sponsor_id = Sponsors.sponsor_id",
+        "Events.venue_id = Venues.venue_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Attendees table for attendees from the USA.",
+          "tables": ["Attendees"],
+          "columns": ["attendee_id", "name", "country"]
+        },
+        {
+          "step": 2,
+          "description": "Join Attendees with Tickets to find events they purchased tickets for.",
+          "tables": ["Attendees", "Tickets"],
+          "columns": ["attendee_id", "ticket_id", "event_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Tickets with Events and Venues to filter events held in venues with capacity over 15000.",
+          "tables": ["Tickets", "Events", "Venues"],
+          "columns": ["event_id", "venue_id", "capacity"]
+        },
+        {
+          "step": 4,
+          "description": "Join Events with Event_Sponsors and Sponsors to filter events sponsored by beverage companies.",
+          "tables": ["Events", "Event_Sponsors", "Sponsors"],
+          "columns": ["event_id", "sponsor_id", "industry"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr002",
+      "question": "Which events featured performers who also performed at events in the USA and were attended by people born after 1990?",
+      "answer": ["Rock Fest 2023", "Pop Star Live"],
+      "challenge_types": ["multi-hop", "self_referential", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Events", "Event_Performers", "Performers", "Tickets", "Attendees", "Venues"],
+      "primary_keys": ["Events.event_id", "Event_Performers.event_performer_id", "Performers.performer_id", "Tickets.ticket_id", "Attendees.attendee_id", "Venues.venue_id"],
+      "foreign_keys": [
+        "Event_Performers.event_id = Events.event_id",
+        "Event_Performers.performer_id = Performers.performer_id",
+        "Tickets.event_id = Events.event_id",
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Events.venue_id = Venues.venue_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Events with Venues to identify events held in the USA.",
+          "tables": ["Events", "Venues"],
+          "columns": ["event_id", "venue_id", "country"]
+        },
+        {
+          "step": 2,
+          "description": "Join Events with Event_Performers to find performers who performed at these US events.",
+          "tables": ["Events", "Event_Performers"],
+          "columns": ["event_id", "performer_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Event_Performers with Events to find other events featuring these performers.",
+          "tables": ["Event_Performers", "Events"],
+          "columns": ["performer_id", "event_id", "name"]
+        },
+        {
+          "step": 4,
+          "description": "Join Events with Tickets and Attendees to filter events attended by people born after 1990.",
+          "tables": ["Events", "Tickets", "Attendees"],
+          "columns": ["event_id", "ticket_id", "attendee_id", "birth_year"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr003",
+      "question": "Which attendees purchased tickets for concerts that were not cancelled and featured merchandise priced above $30?",
+      "answer": ["Emma Wong"],
+      "challenge_types": ["multi-hop", "negation", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Attendees", "Tickets", "Cancellations", "Events", "Merchandise"],
+      "primary_keys": ["Attendees.attendee_id", "Tickets.ticket_id", "Cancellations.cancellation_id", "Events.event_id", "Merchandise.merchandise_id"],
+      "foreign_keys": [
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Cancellations.ticket_id = Tickets.ticket_id",
+        "Tickets.event_id = Events.event_id",
+        "Merchandise.event_id = Events.event_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Tickets with Events to filter for concert-type events.",
+          "tables": ["Tickets", "Events"],
+          "columns": ["ticket_id", "event_id", "event_type"]
+        },
+        {
+          "step": 2,
+          "description": "Left join Tickets with Cancellations and filter for tickets that were not cancelled (null cancellation_id).",
+          "tables": ["Tickets", "Cancellations"],
+          "columns": ["ticket_id", "cancellation_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Tickets with Merchandise to filter events with merchandise priced above $30.",
+          "tables": ["Tickets", "Merchandise"],
+          "columns": ["event_id", "price_usd"]
+        },
+        {
+          "step": 4,
+          "description": "Join Tickets with Attendees to retrieve the names of attendees who purchased these tickets.",
+          "tables": ["Tickets", "Attendees"],
+          "columns": ["ticket_id", "attendee_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr004",
+      "question": "Which venues hosted events with performers who also performed at events sponsored by sportswear companies?",
+      "answer": ["Wembley Stadium", "Rod Laver Arena"],
+      "challenge_types": ["multi-hop", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Venues", "Events", "Event_Performers", "Event_Sponsors", "Sponsors"],
+      "primary_keys": ["Venues.venue_id", "Events.event_id", "Event_Performers.event_performer_id", "Event_Sponsors.event_sponsor_id", "Sponsors.sponsor_id"],
+      "foreign_keys": [
+        "Events.venue_id = Venues.venue_id",
+        "Event_Performers.event_id = Events.event_id",
+        "Event_Sponsors.event_id = Events.event_id",
+        "Event_Sponsors.sponsor_id = Sponsors.sponsor_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Event_Sponsors with Sponsors to identify events sponsored by sportswear companies.",
+          "tables": ["Event_Sponsors", "Sponsors"],
+          "columns": ["event_id", "sponsor_id", "industry"]
+        },
+        {
+          "step": 2,
+          "description": "Join these events with Event_Performers to find performers involved.",
+          "tables": ["Event_Sponsors", "Event_Performers"],
+          "columns": ["event_id", "performer_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Event_Performers with Events to find other events featuring these performers.",
+          "tables": ["Event_Performers", "Events"],
+          "columns": ["performer_id", "event_id", "venue_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Events with Venues to retrieve the names of venues hosting these events.",
+          "tables": ["Events", "Venues"],
+          "columns": ["venue_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr005",
+      "question": "Which attendees received refunds greater than $100 for cancelled tickets to events held in the USA?",
+      "answer": ["Alice Smith", "David Kim"],
+      "challenge_types": ["multi-hop", "conditional", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Cancellations", "Tickets", "Events", "Venues", "Attendees"],
+      "primary_keys": ["Cancellations.cancellation_id", "Tickets.ticket_id", "Events.event_id", "Venues.venue_id", "Attendees.attendee_id"],
+      "foreign_keys": [
+        "Cancellations.ticket_id = Tickets.ticket_id",
+        "Tickets.event_id = Events.event_id",
+        "Events.venue_id = Venues.venue_id",
+        "Tickets.attendee_id = Attendees.attendee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Cancellations table for refunds greater than $100.",
+          "tables": ["Cancellations"],
+          "columns": ["cancellation_id", "ticket_id", "refund_amount_usd"]
+        },
+        {
+          "step": 2,
+          "description": "Join Cancellations with Tickets and Events to find events associated with these tickets.",
+          "tables": ["Cancellations", "Tickets", "Events"],
+          "columns": ["ticket_id", "event_id", "venue_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Events with Venues and Attendees to filter events held in the USA and retrieve attendee names.",
+          "tables": ["Events", "Venues", "Tickets", "Attendees"],
+          "columns": ["venue_id", "country", "attendee_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr006",
+      "question": "Which performers appeared at events attended by the same attendees who purchased merchandise for other events?",
+      "answer": ["The Rockers", "Pop Star"],
+      "challenge_types": ["multi-hop", "self_referential", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Event_Performers", "Performers", "Tickets", "Merchandise", "Attendees"],
+      "primary_keys": ["Event_Performers.event_performer_id", "Performers.performer_id", "Tickets.ticket_id", "Merchandise.merchandise_id", "Attendees.attendee_id"],
+      "foreign_keys": [
+        "Event_Performers.performer_id = Performers.performer_id",
+        "Event_Performers.event_id = Tickets.event_id",
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Merchandise.event_id = Tickets.event_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Tickets with Merchandise to find attendees who purchased merchandise for events.",
+          "tables": ["Tickets", "Merchandise"],
+          "columns": ["ticket_id", "event_id", "attendee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Join these attendees with Tickets to find other events they attended.",
+          "tables": ["Tickets", "Attendees"],
+          "columns": ["attendee_id", "ticket_id", "event_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Tickets with Event_Performers to identify performers at these events.",
+          "tables": ["Tickets", "Event_Performers"],
+          "columns": ["event_id", "performer_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Event_Performers with Performers to retrieve the names of the performers.",
+          "tables": ["Event_Performers", "Performers"],
+          "columns": ["performer_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr007",
+      "question": "Which events held in venues with capacity less than 10000 were sponsored by companies that also sponsored events attended by UK residents?",
+      "answer": ["Jazz Night"],
+      "challenge_types": ["multi-hop", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Events", "Venues", "Event_Sponsors", "Sponsors", "Tickets", "Attendees"],
+      "primary_keys": ["Events.event_id", "Venues.venue_id", "Event_Sponsors.event_sponsor_id", "Sponsors.sponsor_id", "Tickets.ticket_id", "Attendees.attendee_id"],
+      "foreign_keys": [
+        "Events.venue_id = Venues.venue_id",
+        "Event_Sponsors.event_id = Events.event_id",
+        "Event_Sponsors.sponsor_id = Sponsors.sponsor_id",
+        "Tickets.event_id = Events.event_id",
+        "Tickets.attendee_id = Attendees.attendee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Events with Venues to filter events held in venues with capacity less than 10000.",
+          "tables": ["Events", "Venues"],
+          "columns": ["event_id", "venue_id", "capacity"]
+        },
+        {
+          "step": 2,
+          "description": "Join Events with Event_Sponsors to find sponsors of these events.",
+          "tables": ["Events", "Event_Sponsors"],
+          "columns": ["event_id", "sponsor_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Event_Sponsors with Tickets and Attendees to find sponsors of events attended by UK residents.",
+          "tables": ["Event_Sponsors", "Tickets", "Attendees"],
+          "columns": ["sponsor_id", "event_id", "attendee_id", "country"]
+        },
+        {
+          "step": 4,
+          "description": "Join back with Events to retrieve the names of events meeting all conditions.",
+          "tables": ["Event_Sponsors", "Events"],
+          "columns": ["sponsor_id", "event_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr008",
+      "question": "Which attendees purchased tickets for events featuring athletes and also attended concerts in the same city?",
+      "answer": ["Emma Wong"],
+      "challenge_types": ["multi-hop", "deep_join", "self_referential"],
+      "num_hops": 4,
+      "table_names": ["Attendees", "Tickets", "Events", "Event_Performers", "Performers", "Venues"],
+      "primary_keys": ["Attendees.attendee_id", "Tickets.ticket_id", "Events.event_id", "Event_Performers.event_performer_id", "Performers.performer_id", "Venues.venue_id"],
+      "foreign_keys": [
+        "Tickets.attendee_id = Attendees.attendee_id",
+        "Tickets.event_id = Events.event_id",
+        "Event_Performers.event_id = Events.event_id",
+        "Event_Performers.performer_id = Performers.performer_id",
+        "Events.venue_id = Venues.venue_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Event_Performers with Performers and Events to find events featuring athletes.",
+          "tables": ["Event_Performers", "Performers", "Events"],
+          "columns": ["event_id", "performer_id", "performer_type"]
+        },
+        {
+          "step": 2,
+          "description": "Join these events with Tickets and Attendees to find attendees who purchased tickets.",
+          "tables": ["Events", "Tickets", "Attendees"],
+          "columns": ["event_id", "ticket_id", "attendee_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Attendees with Tickets and Events to find concerts attended by these attendees.",
+          "tables": ["Attendees", "Tickets", "Events"],
+          "columns": ["attendee_id", "ticket_id", "event_id", "event_type", "venue_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Events with Venues to ensure the concerts are in the same city as the athlete events.",
+          "tables": ["Events", "Venues"],
+          "columns": ["venue_id", "city"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr009",
+      "question": "Which sponsors funded events that were not cancelled and attended by attendees who also purchased merchandise for other events?",
+      "answer": ["Adidas"],
+      "challenge_types": ["multi-hop", "negation", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Event_Sponsors", "Sponsors", "Tickets", "Cancellations", "Merchandise", "Attendees"],
+      "primary_keys": ["Event_Sponsors.event_sponsor_id", "Sponsors.sponsor_id", "Tickets.ticket_id", "Cancellations.cancellation_id", "Merchandise.merchandise_id", "Attendees.attendee_id"],
+      "foreign_keys": [
+        "Event_Sponsors.sponsor_id = Sponsors.sponsor_id",
+        "Event_Sponsors.event_id = Tickets.event_id",
+        "Cancellations.ticket_id = Tickets.ticket_id",
+        "Merchandise.event_id = Tickets.event_id",
+        "Tickets.attendee_id = Attendees.attendee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Tickets with Merchandise to find attendees who purchased merchandise for events.",
+          "tables": ["Tickets", "Merchandise"],
+          "columns": ["ticket_id", "event_id", "attendee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Join these attendees with Tickets to find other events they attended.",
+          "tables": ["Tickets", "Attendees"],
+          "columns": ["attendee_id", "ticket_id", "event_id"]
+        },
+        {
+          "step": 3,
+          "description": "Left join Tickets with Cancellations to filter for non-cancelled tickets.",
+          "tables": ["Tickets", "Cancellations"],
+          "columns": ["ticket_id", "cancellation_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Tickets with Event_Sponsors and Sponsors to retrieve sponsors of these events.",
+          "tables": ["Tickets", "Event_Sponsors", "Sponsors"],
+          "columns": ["event_id", "sponsor_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr010",
+      "question": "Which performers appeared at events held in the same city as venues that hosted concerts attended by Canadian residents?",
+      "answer": ["Jazz Trio"],
+      "challenge_types": ["multi-hop", "deep_join", "self_referential"],
+      "num_hops": 4,
+      "table_names": ["Performers", "Event_Performers", "Events", "Venues", "Tickets", "Attendees"],
+      "primary_keys": ["Performers.performer_id", "Event_Performers.event_performer_id", "Events.event_id", "Venues.venue_id", "Tickets.ticket_id", "Attendees.attendee_id"],
+      "foreign_keys": [
+        "Event_Performers.performer_id = Performers.performer_id",
+        "Event_Performers.event_id = Events.event_id",
+        "Events.venue_id = Venues.venue_id",
+        "Tickets.event_id = Events.event_id",
+        "Tickets.attendee_id = Attendees.attendee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Tickets with Attendees and Events to find concerts attended by Canadian residents.",
+          "tables": ["Tickets", "Attendees", "Events"],
+          "columns": ["ticket_id", "attendee_id", "country", "event_id", "event_type"]
+        },
+        {
+          "step": 2,
+          "description": "Join Events with Venues to identify the cities where these concerts were held.",
+          "tables": ["Events", "Venues"],
+          "columns": ["event_id", "venue_id", "city"]
+        },
+        {
+          "step": 3,
+          "description": "Join Venues with Events to find other events held in these cities.",
+          "tables": ["Venues", "Events"],
+          "columns": ["city", "venue_id", "event_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Events with Event_Performers and Performers to retrieve the names of performers at these events.",
+          "tables": ["Events", "Event_Performers", "Performers"],
+          "columns": ["event_id", "performer_id", "name"]
+        }
+      ]
+    }
+  ]
+}
+

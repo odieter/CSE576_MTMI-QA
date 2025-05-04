@@ -1,0 +1,305 @@
+{
+    "schema_id": "schema_fl005",
+    "domain": "U.S. Airline On-Time Performance 2016",
+    "tables": [
+      {
+        "name": "On_Time_On_Time_Performance_2016_1",
+        "columns": [
+          "Year", "Quarter", "Month", "DayOfWeek", "FlightDate",
+          "UniqueCarrier", "Carrier", "FlightNum",
+          "Origin", "OriginCityName",
+          "DestStateName", "Distance", "DistanceGroup",
+          "CRSDepTime", "DepDelay",
+          "CRSArrTime", "ArrDelay",
+          "TaxiOut", "TaxiIn", "ActualElapsedTime",
+          "Cancelled", "CancellationCode", "Diverted",
+          "WeatherDelay"
+        ],
+        "column_descriptions": [
+          "Flight year",
+          "Calendar quarter (1-4)",
+          "Month number (1-12)",
+          "Day of week (1-7, Monday = 1)",
+          "Flight date",
+          "DOT carrier code",
+          "Carrier marketing code",
+          "Flight number",
+          "Three-letter origin airport code",
+          "Full origin-city name",
+          "Full state name of destination",
+          "Great-circle distance in miles",
+          "DOT distance bucket (1 = 0-250, …)",
+          "Scheduled departure time (hhmm)",
+          "Departure delay in minutes (positive = late)",
+          "Scheduled arrival time (hhmm)",
+          "Arrival delay in minutes (positive = late)",
+          "Taxi-out time in minutes",
+          "Taxi-in time in minutes",
+          "Gate-to-gate elapsed time in minutes",
+          "1 = cancelled flight, 0 = operated",
+          "Reason code for cancellation",
+          "1 = flight diverted, 0 = not diverted",
+          "Delay minutes attributed to weather"
+        ],
+        "challenge_types": [],
+        "primary_key": ["FlightDate", "Carrier", "FlightNum"],
+        "foreign_keys": [
+          "UniqueCarrier = L_UNIQUE_CARRIERS.Code",
+          "Origin = L_AIRPORT.Code",
+          "Quarter = L_QUARTERS.Code",
+          "Month = L_MONTHS.Code",
+          "DayOfWeek = L_WEEKDAYS.Code",
+          "DistanceGroup = L_DISTANCE_GROUP_250.Code",
+          "CancellationCode = L_CANCELLATION.Code"
+        ],
+        "data": [
+          [2016, 1, 1, 1, "2016-01-15", "AA", "AA", 100, "JFK", "New York", "California", 2475, 10, 800,  5, 1115,  0, 14,  5, 320, 0, "", 0,   0 ],
+          [2016, 1, 2, 2, "2016-02-20", "AA", "AA", 101, "JFK", "New York", "Texas",      1623,  7, 930,  4, 1230, 10, 12,  6, 240, 0, "", 0,   0 ],
+          [2016, 1, 3, 3, "2016-03-10", "AA", "AA", 102, "ORD", "Chicago",  "Florida",     1197,  5, 700, -2, 1000, -3, 11,  5, 175, 0, "", 0,   0 ],
+  
+          [2016, 1, 1, 1, "2016-01-18", "DL", "DL", 200, "JFK", "New York", "Alaska",      3376, 14, 815, 15, 1245, 18, 15,  7, 355, 0, "", 0,   5 ],
+          [2016, 1, 2, 2, "2016-02-25", "DL", "DL", 201, "ATL", "Atlanta", "California",   2135,  9, 945, 12, 1240, 11, 14,  7, 295, 1, "B", 0,   0 ],
+          [2016, 1, 3, 3, "2016-03-22", "DL", "DL", 202, "ATL", "Atlanta", "Texas",        725,   3, 730,  8, 945,  7, 12,  6, 145, 0, "", 1,  12 ],
+  
+          [2016, 2, 4, 3, "2016-04-05", "UA", "UA", 300, "ORD", "Chicago",  "Alaska",      2846, 11, 800, 32, 1130, 35, 17,  8, 335, 0, "", 0,  20 ],
+          [2016, 2, 5, 4, "2016-05-15", "UA", "UA", 301, "LAX", "Los Angeles", "Nevada",   236,   6, 930, 18, 1045, 20,  9,  4,  85, 0, "", 0,   3 ],
+          [2016, 2, 6, 5, "2016-06-20", "UA", "UA", 302, "JFK", "New York", "Florida",     1090,  7, 700, 25, 1000, 28, 16,  9, 185, 1, "A", 0,   0 ]
+        ]
+      },
+  
+      {
+        "name": "L_UNIQUE_CARRIERS",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["Carrier code", "Carrier name"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          ["AA", "American Airlines"],
+          ["DL", "Delta Air Lines"],
+          ["UA", "United Airlines"]
+        ]
+      },
+  
+      {
+        "name": "L_AIRPORT",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["IATA airport code", "Airport full name"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          ["JFK", "John F. Kennedy Intl"],
+          ["ORD", "Chicago O'Hare Intl"],
+          ["ATL", "Hartsfield-Jackson Atlanta Intl"],
+          ["LAX", "Los Angeles Intl"]
+        ]
+      },
+  
+      {
+        "name": "L_WEEKDAYS",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["Day-of-week code", "Weekday name"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          [1, "Monday"], [2, "Tuesday"], [3, "Wednesday"],
+          [4, "Thursday"], [5, "Friday"], [6, "Saturday"], [7, "Sunday"]
+        ]
+      },
+  
+      {
+        "name": "L_MONTHS",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["Calendar month number", "Month name"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          [1, "January"], [2, "February"], [3, "March"],
+          [4, "April"],  [5, "May"],      [6, "June"]
+        ]
+      },
+  
+      {
+        "name": "L_QUARTERS",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["Quarter number", "Quarter name"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          [1, "First Quarter"], [2, "Second Quarter"], [3, "Third Quarter"], [4, "Fourth Quarter"]
+        ]
+      },
+  
+      {
+        "name": "L_DISTANCE_GROUP_250",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["DOT 250-mile distance bucket", "Bucket label"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          [5, "1001–1250 mi"],
+          [6, "1251–1500 mi"],
+          [9, "2251–2500 mi"],
+          [13,"3251–3500 mi"]
+        ]
+      },
+  
+      {
+        "name": "L_CANCELLATION",
+        "columns": ["Code", "Description"],
+        "column_descriptions": ["Cancellation reason code", "Description"],
+        "challenge_types": [],
+        "primary_key": "Code",
+        "foreign_keys": [],
+        "data": [
+          ["A", "Carrier"], ["B", "Weather"], ["C", "NAS"]
+        ]
+      }
+    ],
+  
+    "questions": [
+      {
+        "question_id": "question_fl034",
+        "question": "Which unique carrier had the lowest average departure delay during Q1 2016?",
+        "answer": ["American Airlines"],
+        "challenge_types": ["aggregation", "comparison"],
+        "num_hops": 2,
+        "table_names": ["On_Time_On_Time_Performance_2016_1", "L_UNIQUE_CARRIERS"],
+        "primary_keys": ["UniqueCarrier"],
+        "foreign_keys": ["UniqueCarrier = L_UNIQUE_CARRIERS.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Filter rows where Year = 2016 and Quarter = 1, then group by UniqueCarrier and AVG(DepDelay).", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["UniqueCarrier","DepDelay"]},
+          {"step": 2, "description": "Choose carrier with minimum average; translate code through lookup.", "tables": ["L_UNIQUE_CARRIERS"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl035",
+        "question": "Identify the origin airport that shows the highest cancellation rate in 2016.",
+        "answer": ["John F. Kennedy Intl"],
+        "challenge_types": ["aggregation", "ratio", "comparison"],
+        "num_hops": 3,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_AIRPORT"],
+        "primary_keys": ["Origin"],
+        "foreign_keys": ["Origin = L_AIRPORT.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Group 2016 data by Origin; count flights and cancelled flights.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["Origin","Cancelled"]},
+          {"step": 2, "description": "Compute cancellation_rate = cancelled / total; order desc.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["Origin","cancellation_rate"]},
+          {"step": 3, "description": "Translate top Origin via L_AIRPORT.", "tables": ["L_AIRPORT"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl036",
+        "question": "Which destination state had the longest average flight distance in 2016?",
+        "answer": ["Alaska"],
+        "challenge_types": ["aggregation", "comparison"],
+        "num_hops": 1,
+        "table_names": ["On_Time_On_Time_Performance_2016_1"],
+        "primary_keys": ["DestStateName"],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Group 2016 rows by DestStateName and AVG(Distance); order desc, pick first.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["DestStateName","Distance"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl037",
+        "question": "On which weekday did flights achieve the highest on-time arrival rate in 2016?",
+        "answer": ["Tuesday"],
+        "challenge_types": ["aggregation", "comparison"],
+        "num_hops": 2,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_WEEKDAYS"],
+        "primary_keys": ["DayOfWeek"],
+        "foreign_keys": ["DayOfWeek = L_WEEKDAYS.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Classify ArrDelay ≤ 0 as on-time; group by DayOfWeek and compute on-time_rate.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["DayOfWeek","ArrDelay"]},
+          {"step": 2, "description": "Pick DayOfWeek with max rate and map to weekday name.", "tables": ["L_WEEKDAYS"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl038",
+        "question": "Rank 2016 months by diversion percentage.",
+        "answer": ["March", "February", "January", "April", "May", "June"],
+        "challenge_types": ["aggregation", "ratio", "ranking"],
+        "num_hops": 2,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_MONTHS"],
+        "primary_keys": ["Month"],
+        "foreign_keys": ["Month = L_MONTHS.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Group by Month; compute diverted_pct = SUM(Diverted)/COUNT(*)×100.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["Month","Diverted"]},
+          {"step": 2, "description": "Order months by diverted_pct desc, map codes to names.", "tables": ["L_MONTHS"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl039",
+        "question": "Which airline had the highest average total delay (DepDelay + ArrDelay) in 2016?",
+        "answer": ["United Airlines"],
+        "challenge_types": ["aggregation", "comparison"],
+        "num_hops": 2,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_UNIQUE_CARRIERS"],
+        "primary_keys": ["UniqueCarrier"],
+        "foreign_keys": ["UniqueCarrier = L_UNIQUE_CARRIERS.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Compute total_delay per flight; group by UniqueCarrier and AVG(total_delay).", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["UniqueCarrier","DepDelay","ArrDelay"]},
+          {"step": 2, "description": "Select carrier with highest average; translate to name.", "tables": ["L_UNIQUE_CARRIERS"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl040",
+        "question": "For New York-origin flights in 2016, what was the average taxi-time percentage of ActualElapsedTime?",
+        "answer": ["15.3%"],
+        "challenge_types": ["derived_metric"],
+        "num_hops": 1,
+        "table_names": ["On_Time_On_Time_Performance_2016_1"],
+        "primary_keys": [],
+        "foreign_keys": [],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Filter OriginCityName = 'New York', compute (TaxiOut+TaxiIn)/ActualElapsedTime×100, then AVG.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["TaxiOut","TaxiIn","ActualElapsedTime"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl041",
+        "question": "Which distance group experienced the highest average weather delay in 2016?",
+        "answer": ["3251–3500 mi"],
+        "challenge_types": ["aggregation", "comparison"],
+        "num_hops": 2,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_DISTANCE_GROUP_250"],
+        "primary_keys": ["DistanceGroup"],
+        "foreign_keys": ["DistanceGroup = L_DISTANCE_GROUP_250.Code"],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Group by DistanceGroup; AVG(WeatherDelay).", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["DistanceGroup","WeatherDelay"]},
+          {"step": 2, "description": "Select group with max avg; map via lookup.", "tables": ["L_DISTANCE_GROUP_250"], "columns": ["Code","Description"]}
+        ]
+      },
+  
+      {
+        "question_id": "question_fl042",
+        "question": "Which quarter had the highest flight-cancellation rate in 2016 and what was the cancellation-code breakdown?",
+        "answer": ["Third Quarter", "Carrier (‘A’) → 1", "Weather (‘B’) → 1"],
+        "challenge_types": ["aggregation", "ratio", "conditional"],
+        "num_hops": 3,
+        "table_names": ["On_Time_On_Time_Performance_2016_1","L_QUARTERS","L_CANCELLATION"],
+        "primary_keys": ["Quarter"],
+        "foreign_keys": [
+          "Quarter = L_QUARTERS.Code",
+          "CancellationCode = L_CANCELLATION.Code"
+        ],
+        "intermediate_reasoning_steps": [
+          {"step": 1, "description": "Group 2016 data by Quarter; compute cancellation_rate.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["Quarter","Cancelled"]},
+          {"step": 2, "description": "Find Quarter with highest rate; isolate its cancelled rows.", "tables": ["On_Time_On_Time_Performance_2016_1"], "columns": ["Quarter","Cancelled","CancellationCode"]},
+          {"step": 3, "description": "Group those rows by CancellationCode, count, map via L_CANCELLATION.", "tables": ["L_CANCELLATION"], "columns": ["Code","Description"]}
+        ]
+      }
+    ]
+  }
+  

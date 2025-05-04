@@ -1,0 +1,575 @@
+{
+  "schema_id": "od_001",
+  "domain": "Business",
+  "tables": [
+    {
+      "name": "Employees",
+      "columns": ["employee_id", "first_name", "last_name", "job_title", "department_id", "hire_date"],
+      "column_descriptions": [
+        "Unique identifier for each employee",
+        "First name of the employee",
+        "Last name of the employee",
+        "Job title of the employee",
+        "Foreign key referencing the Departments table",
+        "Date when the employee was hired"
+      ],
+      "challenge_types": [],
+      "primary_key": "employee_id",
+      "foreign_keys": [
+        "Employees.department_id = Departments.department_id"
+      ],
+      "data": [
+        [
+          "101",
+          "John",
+          "Doe",
+          "Software Engineer",
+          "1",
+          "2020-05-01"
+        ],
+        [
+          "102",
+          "Jane",
+          "Smith",
+          "HR Manager",
+          "2",
+          "2018-03-15"
+        ],
+        [
+          "103",
+          "Michael",
+          "Johnson",
+          "Marketing Manager",
+          "3",
+          "2019-08-10"
+        ],
+        [
+          "104",
+          "Emily",
+          "Brown",
+          "Sales Associate",
+          "4",
+          "2021-01-23"
+        ],
+        [
+          "105",
+          "Daniel",
+          "Williams",
+          "Researcher",
+          "7",
+          "2017-11-07"
+        ],
+        [
+          "106",
+          "Olivia",
+          "Martinez",
+          "Customer Support",
+          "5",
+          "2022-03-18"
+        ],
+        [
+          "107",
+          "James",
+          "Taylor",
+          "Data Analyst",
+          "6",
+          "2018-07-29"
+        ],
+        [
+          "108",
+          "Sarah",
+          "Davis",
+          "UX Designer",
+          "1",
+          "2020-02-15"
+        ],
+        [
+          "109",
+          "Robert",
+          "White",
+          "Business Analyst",
+          "3",
+          "2021-05-10"
+        ],
+        [
+          "110",
+          "Laura",
+          "Green",
+          "Sales Manager",
+          "4",
+          "2019-06-05"
+        ]
+      ]
+    },
+    {
+      "name": "Departments",
+      "columns": ["department_id", "department_name", "location"],
+      "column_descriptions": [
+        "Unique identifier for each department",
+        "Name of the department",
+        "Location of the department"
+      ],
+      "challenge_types": [],
+      "primary_key": "department_id",
+      "foreign_keys": [
+      ],
+      "data": [
+        [
+          "1",
+          "IT",
+          "New York"
+        ],
+        [
+          "2",
+          "Human Resources",
+          "Los Angeles"
+        ],
+        [
+          "3",
+          "Marketing",
+          "Chicago"
+        ],
+        [
+          "4",
+          "Sales",
+          "San Francisco"
+        ],
+        [
+          "5",
+          "Customer Support",
+          "Austin"
+        ],
+        [
+          "6",
+          "Data Analytics",
+          "Boston"
+        ],
+        [
+          "7",
+          "Research & Development",
+          "Boston"
+        ]
+      ]
+    },
+    {
+      "name": "Salaries",
+      "columns": ["salary_id", "employee_id", "salary_amount", "bonus"],
+      "column_descriptions": [
+        "Unique identifier for each salary record",
+        "Foreign key referencing the Employees table",
+        "Annual salary amount",
+        "Bonus amount received"
+      ],
+      "challenge_types": [],
+      "primary_key": "salary_id",
+      "foreign_keys": [
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "data": [
+        [
+          "1001",
+          "101",
+          "95000",
+          "5000"
+        ],
+        [
+          "1002",
+          "102",
+          "75000",
+          "3000"
+        ],
+        [
+          "1003",
+          "103",
+          "80000",
+          "4000"
+        ],
+        [
+          "1004",
+          "104",
+          "60000",
+          "2000"
+        ],
+        [
+          "1005",
+          "105",
+          "90000",
+          "4500"
+        ],
+        [
+          "1006",
+          "106",
+          "55000",
+          "1500"
+        ],
+        [
+          "1007",
+          "107",
+          "85000",
+          "3500"
+        ],
+        [
+          "1008",
+          "108",
+          "66000",
+          "4500"
+        ],
+        [
+          "1009",
+          "109",
+          "78000",
+          "3200"
+        ],
+        [
+          "1010",
+          "110",
+          "86000",
+          "1050"
+        ]
+      ]
+    },
+    {
+      "name": "Projects",
+      "columns": ["employee_id", "project_id", "project_role"],
+      "column_descriptions": [
+        "Foreign key referencing the Employees table",
+        "Identifier for each project",
+        "Role of the employee in the project"
+      ],
+      "challenge_types": [],
+      "primary_key": "project_id",
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id"
+      ],
+      "data": [
+        [
+          "101",
+          "201",
+          "Developer"
+        ],
+        [
+          "102",
+          "202",
+          "Project Manager"
+        ],
+        [
+          "103",
+          "203",
+          "Marketing Lead"
+        ],
+        [
+          "104",
+          "204",
+          "Sales Specialist"
+        ],
+        [
+          "105",
+          "201",
+          "Research Lead"
+        ],
+        [
+          "106",
+          "205",
+          "Customer Support"
+        ],
+        [
+          "107",
+          "203",
+          "Data Analyst"
+        ]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_od001",
+      "question": "How much money does the employee in Chicago who started before 2020 make in total?",
+      "answer": ["$84,000"],
+      "challenge_types": ["multi-hop", "conditional", "date_format_inference", "arithmetic", "commonsense"],
+      "num_hops": 2,
+      "table_names": ["Departments", "Employees", "Salaries"],
+      "primary_keys": ["Departments.department_id", "Employees.employee_id"],
+      "foreign_keys": [
+        "Employees.department_id = Departments.department_id",
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find department_id corresponding to Chicago in Departments table.",
+          "tables": ["Departments"],
+          "columns": ["department_id"]
+        },
+        {
+          "step": 2,
+          "description": "Find the records from Employees table with matching department_id.",
+          "tables": ["Employees"],
+          "columns": ["department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Select the record with the hire_date before the year 2020 and look at its employee_id.",
+          "tables": ["Employees"],
+          "columns": ["hire_date,employee_id"]
+        },
+        {
+          "step": 4,
+          "description": "Find the matching employee_id in the Salaries table and add the salary_amount and bonus to get total money made.",
+          "tables": ["Salaries"],
+          "columns": ["employee_id,salary_amount,bonus"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od002",
+      "question": " What is the location of the employee with the highest bonus?",
+      "answer": ["New York"],
+      "challenge_types": ["multi-hop", "superlative", "conditional"],
+      "num_hops": 2,
+      "table_names": ["Salaries", "Employees", "Departments"],
+      "primary_keys": ["Employees.employee_id","Departments.department_id"],
+      "foreign_keys": [
+        "Salaries.employee_id = Employees.employee_id",
+        "Employees.department_id = Department.department_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find max value of bonus in the Salaries table (5000) and its corresponding employee_id.",
+          "tables": ["Salaries"],
+          "columns": ["bonus","employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Match the employee_id in the Employees table to find the department_id.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Match the department_id in the Departments table and get the corresponding location value",
+          "tables": ["Departments"],
+          "columns": ["department_id","location"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od003",
+      "question": "What is the salary of the employee working on project 203 who isn't located in Boston?",
+      "answer": ["$80,000"],
+      "challenge_types": ["multi-hop", "conditional", "negation"],
+      "num_hops": 3,
+      "table_names": ["Projects","Employees","Departments","Salaries"],
+      "primary_keys": ["project_id","employee_id","department_id"],
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id",
+        "Employees.department_id = Departments.department_id",
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Get employee_id values corresponding to project_id of 203 from Projects table.",
+          "tables": ["Projects"],
+          "columns": ["project_id", "employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "For each employee_id find its corresponding department_id from Employees table.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Match department_id to location values in Departments table and discard candidates with Boston as a value.",
+          "tables": ["Departments"],
+          "columns": ["department_id","location"]
+        },
+        {
+          "step": 4,
+          "description": "Match remaining employee_id value to salary_amount in Salaries table.",
+          "tables": ["Salaries"],
+          "columns": ["employee_id","salary_amount"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od004",
+      "question": "What department does the employee working as a Project Manager work in?",
+      "answer": ["Human Resources"],
+      "challenge_types": ["multi-hop", "comparison", "conditional", "indirect_reference",  "hybrid_reasoning"],
+      "num_hops": 2,
+      "table_names": ["Projects","Employees","Departments"],
+      "primary_keys": ["employee_id","department_id"],
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id",
+        "Employees.department_id = Departments.department_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the employee_id corresponding to the project_role of Project Manager in the Projects table.",
+          "tables": ["Projects"],
+          "columns": ["project_role","employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Match the employee_id in the Employees table and find the corresponding department_id.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Match the department_id in the Departments table and find the corresponding department_name.",
+          "tables": ["Departments"],
+          "columns": ["department_id","department_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od005",
+      "question": "What is the combined salary of the Sales department?",
+      "answer": ["$146,000"],
+      "challenge_types": ["multi-hop", "aggregation", "conditional",
+        "arithmetic"],
+      "num_hops": 2,
+      "table_names": ["Departments","Employees","Salaries"],
+      "primary_keys": ["department_id","employee_id"],
+      "foreign_keys": [
+        "Employees.department_id = Departments.department_id",
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Departments table, find the department_id corresponding to the department_name of Sales.",
+          "tables": ["Departments"],
+          "columns": ["department_id","department_name"]
+        },
+        {
+          "step": 2,
+          "description": "Get the employee_id values matching the department_id in the Employees table.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Match each employee_id in the Salaries table to its salary_amount and add them all",
+          "tables": ["Salaries"],
+          "columns": ["employee_id","salary_amount"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od006",
+      "question": "Which employee is working on a project with John Doe?",
+      "answer": ["Daniel Williams"],
+      "challenge_types": ["multi-hop", "conditional", "commonsense",
+        "implicit_logic", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Employees","Projects"],
+      "primary_keys": ["employee_id","project_id"],
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the employee_id in the Employees table corresponding with first_name John and last_name Doe.",
+          "tables": ["Employees"],
+          "columns": ["first_name","last_name","employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Based on employee_id, find the corresponding project_id in the Projects table.",
+          "tables": ["Projects"],
+          "columns": ["employee_id","project_id"]
+        },
+        {
+          "step": 3,
+          "description": "Search the Projects table for records with the same project_id and get the corresponding employee_id values.",
+          "tables": ["Projects"],
+          "columns": ["project_id","employee_id"]
+        },
+        {
+          "step": 4,
+          "description": "Go back to the Employees table and match the new employee_id values to their corresponding first_name and last_name.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","first_name","last_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od007",
+      "question": "What is the location of the most senior employee working on project 203?",
+      "answer": ["Boston"],
+      "challenge_types": ["multi-hop", "comparison", "superlative", "conditional", "date_format_inference"],
+      "num_hops": 2,
+      "table_names": ["Projects","Employees","Departments"],
+      "primary_keys": ["project_id","employee_id","department_id"],
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id",
+        "Employees.department_id = Departments.department_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Projects table, match project_id of 203 to its corresponding employee_id values.",
+          "tables": ["Projects"],
+          "columns": ["project_id","employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "Match these employee_id values to the hire_date field in the Employees table and choose the earliest date.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","hire_date"]
+        },
+        {
+          "step": 3,
+          "description": "Match the chosen employee_id to its department_id in the Employees table.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","department_id"]
+        },
+        {
+          "step": 4,
+          "description": "Match the department_id to its corresponding location in the Departments table.",
+          "tables": ["Departments"],
+          "columns": ["department_id","location"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_od008",
+      "question": "Which locations are working on project 201?",
+      "answer": ["New York","Boston"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "conditional"],
+      "num_hops": 2,
+      "table_names": ["Projects","Employees","Departments"],
+      "primary_keys": ["project_id","employee_id","department_id"],
+      "foreign_keys": [
+        "Projects.employee_id = Employees.employee_id",
+        "Employees.department_id = Departments.department_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In Projects table, find employee_id values corresponding to project_id of 201.",
+          "tables": ["Projects"],
+          "columns": ["project_id","employee_id"]
+        },
+        {
+          "step": 2,
+          "description": "In Employees table, find the department_id associated with each employee_id chosen.",
+          "tables": ["Employees"],
+          "columns": ["employee_id","department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Based on these department_id values, find their corresponding location values in the Departments table.",
+          "tables": ["Departments"],
+          "columns": ["department_id","location"]
+        }
+      ]
+    }
+  ]
+}

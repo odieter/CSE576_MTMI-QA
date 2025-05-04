@@ -1,0 +1,540 @@
+{
+  "schema_id": "schema_ss001",
+  "domain": "university course registration",
+  "tables": [
+    {
+      "name": "Departments",
+      "columns": ["department_id", "dept_name", "building", "contact_email"],
+      "column_descriptions": [
+        "Unique alphanumeric identifier for each department in the university.",
+        "Full name of the department such as 'Computer Science'. Helps in matching courses, students, and instructors to their organizational unit.",
+        "Building where the department office is located. Examples include codes like 'CSE-191', 'MATH-251'.",
+        "Official email address for the department, formatted as 'department@univ.edu'. May include variations like underscores."
+      ],
+      "challenge_types": ["null_values", "format_variation", "aliasing"],
+      "primary_key": "department_id",
+      "foreign_keys": [],
+      "data": [
+        ["D001", "Computer Science", "CSE-191", "cs@univ.edu"],
+        ["D002", "Mathematics", "MATH-251", "math_dept@univ.edu"],
+        ["D003", "Physics", "PHY-324", "physics@univ.edu"],
+        ["D004", "History", "HIST-305", "history@univ.edu"]
+      ]
+    },
+    {
+      "name": "Students",
+      "columns": ["student_id", "full_name", "birth_date", "major"],
+      "column_descriptions": [
+        "Unique identifier for each student across the system.",
+        "Full name of student, which may appear in formats like 'First Last' or 'Last, First'.",
+        "Date of birth with multiple possible formats including 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Field of study that corresponds to a department."
+      ],
+      "challenge_types": ["null_values", "format_variation"],
+      "primary_key": "student_id",
+      "foreign_keys": [],
+      "data": [
+        ["S1001", "John Smith", "1999-07-15", "Computer Science"],
+        ["S1002", "Doe, Jane", "July 3, 2000", "Mathematics"],
+        ["S1003", "Alice Johnson", "03/25/1998", null],
+        ["S1004", "Robert King", "1997-12-12", "History"],
+        ["S1005", "Emily Zhang", "May 2, 2001", "Physics"],
+        ["S1006", "Patel, Raj", "2000-01-20", null],
+        ["S1007", "Sarah Chen", "06/14/1999", "Mathematics"],
+        ["S1008", "Miller, Chris", "1998-09-09", "Computer Science"]
+      ]
+    },
+    {
+      "name": "Courses",
+      "columns": ["course_id", "course_title", "credits", "department_id"],
+      "column_descriptions": [
+        "Unique course code such as 'C101'. Used across enrollment, assignment, and teaching records.",
+        "Title of the course, such as 'Data Structures'. May include terms that require string or fuzzy matching.",
+        "Numeric value representing credit hours, typically integers like 3 or 4.",
+        "Foreign key linking the course to the offering department, used for grouping or filtering."
+      ],
+      "challenge_types": ["ambiguous_column_name"],
+      "primary_key": "course_id",
+      "foreign_keys": [
+        "Courses.department_id = Departments.department_id"
+      ],
+      "data": [
+        ["C101", "Intro to Programming", 4, "D001"],
+        ["C102", "Data Structures", 3, "D001"],
+        ["C201", "Calculus I", 4, "D002"],
+        ["C202", "Linear Algebra", 3, "D002"],
+        ["C301", "Classical Mechanics", 4, "D003"],
+        ["C302", "Quantum Physics", 4, "D003"],
+        ["C401", "World History", 3, "D004"]
+      ]
+    },
+    {
+      "name": "Instructors",
+      "columns": ["instructor_id", "name", "department_id", "office_number"],
+      "column_descriptions": [
+        "Primary key identifying each instructor uniquely.",
+        "Full name of instructor, often appearing in formats such as 'First Last' or 'Last, First'.",
+        "Foreign key linking to the department the instructor is affiliated with.",
+        "Location of the instructor's office, formatted as a building-room string like 'CSE-205'."
+      ],
+      "challenge_types": ["null_values", "format_variation"],
+      "primary_key": "instructor_id",
+      "foreign_keys": [
+        "Instructors.department_id = Departments.department_id"
+      ],
+      "data": [
+        ["I001", "Anderson, Lisa", "D001", "CSE-205"],
+        ["I002", "Michael Tan", "D002", "MAT-310"],
+        ["I003", "Chen, Alice", "D003", "SCI-210"],
+        ["I004", "Hernandez, Maria", "D004", "HIST-138"]
+      ]
+    },
+    {
+      "name": "CourseAssignments",
+      "columns": ["assignment_id", "course_id", "instructor_id", "term"],
+      "column_descriptions": [
+        "Primary key for a teaching assignment.",
+        "Foreign key linking to the course being taught.",
+        "Foreign key identifying the assigned instructor.",
+        "Semester in which the course is offered. Multiple formats may appear such as 'Fall 2022', '2022 Spring', or 'SPRING-2023'."
+      ],
+      "challenge_types": ["inconsistent_naming_style", "overlapping_column_names"],
+      "primary_key": "assignment_id",
+      "foreign_keys": [
+        "CourseAssignments.course_id = Courses.course_id",
+        "CourseAssignments.instructor_id = Instructors.instructor_id"
+      ],
+      "data": [
+        ["A001", "C101", "I001", "Fall 2021"],
+        ["A002", "C102", "I001", "fall 2022"],
+        ["A003", "C201", "I002", "Spring 2022"],
+        ["A004", "C202", "I002", "2021 Spring"],
+        ["A005", "C301", "I003", "SPRING 2023"],
+        ["A006", "C302", "I003", "FALL 2023"],
+        ["A007", "C401", "I004", "Fall2022"]
+      ]
+    },
+    {
+      "name": "Enrollments",
+      "columns": ["enrollment_id", "student_id", "course_id", "enrollment_date"],
+      "column_descriptions": [
+        "Primary key for enrollment records. Each row ties a student to a course instance.",
+        "Foreign key linking to the student who enrolled.",
+        "Foreign key linking to the course in which the student enrolled.",
+        "Date when enrollment was recorded. Can appear in multiple formats: 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'."
+      ],
+      "challenge_types": ["null_values", "format_variation", "overlapping_column_names"],
+      "primary_key": "enrollment_id",
+      "foreign_keys": [
+        "Enrollments.student_id = Students.student_id",
+        "Enrollments.course_id = Courses.course_id"
+      ],
+      "data": [
+        ["E001", "S1001", "C101", "2021-08-15"],
+        ["E002", "S1001", "C102", "August 20, 2022"],
+        ["E003", "S1002", "C201", "2022/01/09"],
+        ["E004", "S1002", "C202", null],
+        ["E005", "S1003", "C301", "01/15/2023"],
+        ["E006", "S1004", "C401", "2022-08-30"],
+        ["E007", "S1005", "C302", "August 29, 2023"],
+        ["E008", "S1006", "C101", "2021-08-16"],
+        ["E009", "S1006", "C201", null],
+        ["E010", "S1007", "C201", "01/12/2022"],
+        ["E011", "S1007", "C202", "2021-01-07"],
+        ["E012", "S1008", "C101", "August 18, 2021"],
+        ["E013", "S1008", "C102", "08/21/2022"],
+        ["E014", "S1007", "C301", "2023-01-11"],
+        ["E015", "S1006", "C401", "2020-08-17"],
+        ["E016", "S1003", "C201", null]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ss001",
+      "question": "Which students enrolled in all courses taught by Lisa Anderson in Fall 2022?",
+      "answer": ["John Smith", "Miller, Chris"],
+      "challenge_types": ["multi-hop", "inconsistent_naming_style", "group_by", "fuzzy_matching", "format_variation"],
+      "num_hops": 3,
+      "table_names": ["Instructors", "CourseAssignments", "Enrollments", "Students"],
+      "primary_keys": [
+        "Instructors.instructor_id",
+        "CourseAssignments.assignment_id",
+        "Enrollments.enrollment_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "CourseAssignments.instructor_id = Instructors.instructor_id",
+        "Enrollments.course_id = CourseAssignments.course_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the instructor_id for the instructor with the name Lisa Anderson.",
+          "tables": ["Instructors"],
+          "columns": ["instructor_id", "name"]
+        },
+        {
+          "step": 2,
+          "description": "Find the course_ids where the instructor_id identified is matching and the term is Fall 2022.",
+          "tables": ["CourseAssignments"],
+          "columns": ["course_id", "instructor_id", "term"]
+        },
+        {
+          "step": 3,
+          "description": "Find the student_ids who enrolled in each of the course_ids identified.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of the students using the student_ids identified.",
+          "tables": ["Students"],
+          "columns": ["student_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss002",
+      "question": "How many unique students were enrolled in Mathematics courses in 2022?",
+      "answer": 2,
+      "challenge_types": ["aggregation", "temporal", "date_format_inference", "null_values"],
+      "num_hops": 2,
+      "table_names": ["Departments", "Courses", "Enrollments", "Students"],
+      "primary_keys": [
+        "Departments.department_id",
+        "Courses.course_id",
+        "Enrollments.enrollment_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "Courses.department_id = Departments.department_id",
+        "Enrollments.course_id = Courses.course_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the department_id for the Mathematics department.",
+          "tables": ["Departments"],
+          "columns": ["department_id", "dept_name"]
+        },
+        {
+          "step": 2,
+          "description": "Find all course_ids that belong to the identified department_id.",
+          "tables": ["Courses"],
+          "columns": ["course_id", "department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Normalize the enrollment_date to year format.",
+          "tables": ["Enrollments"],
+          "columns": ["enrollment_date"]
+        },
+        {
+          "step": 4,
+          "description": "Filter enrollments that match those course_ids and have an enrollment_date in 2022.",
+          "tables": ["Enrollments"],
+          "columns": ["course_id", "student_id", "enrollment_date"]
+        },
+        {
+          "step": 5,
+          "description": "Count the number of unique student_ids that match the criteria",
+          "tables": ["Enrollments"],
+          "columns": ["student_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss003",
+      "question": "Which instructors taught courses taken by Raj Patel?",
+      "answer": ["Anderson, Lisa", "Michael Tan", "Hernandez, Maria"],
+      "challenge_types": ["multi-hop", "fuzzy_matching", "format_variation"],
+      "num_hops": 3,
+      "table_names": ["Students", "Enrollments", "CourseAssignments", "Instructors"],
+      "primary_keys": [
+        "Students.student_id",
+        "Enrollments.enrollment_id",
+        "CourseAssignments.assignment_id",
+        "Instructors.instructor_id"
+      ],
+      "foreign_keys": [
+        "Enrollments.student_id = Students.student_id",
+        "Enrollments.course_id = CourseAssignments.course_id",
+        "CourseAssignments.instructor_id = Instructors.instructor_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify the student_id for Raj Patel.",
+          "tables": ["Students"],
+          "columns": ["student_id", "full_name"]
+        },
+        {
+          "step": 2,
+          "description": "Find all course_ids for the identified student_id.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 3,
+          "description": "Find all instructor_ids for the identified course_ids.",
+          "tables": ["CourseAssignments"],
+          "columns": ["course_id", "instructor_id"]
+        },
+        {
+          "step": 4,
+          "description": "Find the names for the identified instructor_ids.",
+          "tables": ["Instructors"],
+          "columns": ["instructor_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss004",
+      "question": "What is the average number of credits taken by students majoring in Computer Science?",
+      "answer": 7,
+      "challenge_types": ["aggregation", "arithmetic", "multi-hop"],
+      "num_hops": 2,
+      "table_names": ["Students", "Enrollments", "Courses"],
+      "primary_keys": [
+        "Students.student_id",
+        "Enrollments.enrollment_id",
+        "Courses.course_id"
+      ],
+      "foreign_keys": [
+        "Enrollments.student_id = Students.student_id",
+        "Enrollments.course_id = Courses.course_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify student_ids where the major is Computer Science.",
+          "tables": ["Students"],
+          "columns": ["student_id", "major"]
+        },
+        {
+          "step": 2,
+          "description": "Find all course_ids that match the identified student_ids.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 3,
+          "description": "Retrieve the credits for each course_id.",
+          "tables": ["Courses"],
+          "columns": ["course_id", "credits"]
+        },
+        {
+          "step": 4,
+          "description": "Sum the credits for the course_ids associated with each student_id.",
+          "tables": ["Enrollments", "Courses"],
+          "columns": ["student_id", "course_id", "credits"]
+        },
+        {
+          "step": 5,
+          "description": "Divide the total number of credits taken by all student_ids by the number of student_ids.",
+          "tables": ["Enrollments", "Courses"],
+          "columns": ["student_id", "credits"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss005",
+      "question": "Which department has the most students enrolled in its courses?",
+      "answer": ["Mathematics"],
+      "challenge_types": ["negation", "multi-hop", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Departments", "Courses", "Enrollments"],
+      "primary_keys": [
+        "Departments.department_id",
+        "Courses.course_id",
+        "Enrollments.enrollment_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "Courses.department_id = Departments.department_id",
+        "Enrollments.course_id = Courses.course_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Retrieve all course_ids and their associated department_ids.",
+          "tables": ["Courses"],
+          "columns": ["course_id", "department_id"]
+        },
+        {
+          "step": 2,
+          "description": "Count number of enrollments for each course_id.",
+          "tables": ["Enrollments"],
+          "columns": ["enrollment_id", "course_id"]
+        },
+        {
+          "step": 3,
+          "description": "Sum enrollment count of all course_ids associated with each department_id.",
+          "tables": ["Enrollments", "Courses"],
+          "columns": ["enrollment_id", "course_id", "department_id"]
+        },
+        {
+          "step": 4,
+          "description": "Get the dept_name for department_id that has the highest enrollment count.",
+          "tables": ["Departments"],
+          "columns": ["department_id", "dept_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss006",
+      "question": "Which student has enrolled in the most distinct departments' courses?",
+      "answer": ["Patel, Raj"],
+      "challenge_types": ["multi-hop", "superlative", "group_by"],
+      "num_hops": 3,
+      "table_names": ["Enrollments", "Courses", "Departments", "Students"],
+      "primary_keys": [
+        "Enrollments.enrollment_id",
+        "Courses.course_id",
+        "Departments.department_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "Enrollments.course_id = Courses.course_id",
+        "Courses.department_id = Departments.department_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect all course_ids and corresponding student_ids.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 2,
+          "description": "Find the department_id for each course_id.",
+          "tables": ["Courses"],
+          "columns": ["course_id", "department_id"]
+        },
+        {
+          "step": 3,
+          "description": "Count the number of unique department_ids for each student_id.",
+          "tables": ["Courses", "Enrollments"],
+          "columns": ["student_id", "department_id"]
+        },
+        {
+          "step": 4,
+          "description": "Select the student_id with the highest number of distinct departments.",
+          "tables": ["Courses", "Enrollments"],
+          "columns": ["student_id", "department_id"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of the student using the student_id identified.",
+          "tables": ["Students"],
+          "columns": ["student_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss007",
+      "question": "Which students have only taken 4-credit courses?",
+      "answer": ["Alice Johnson", "Emily Zhang"],
+      "challenge_types": ["multi-hop", "group_by", "comparison"],
+      "num_hops": 2,
+      "table_names": ["Enrollments", "Courses", "Students"],
+      "primary_keys": [
+        "Enrollments.enrollment_id",
+        "Courses.course_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "Enrollments.course_id = Courses.course_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect all course_ids associated with each student_id.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve the credits value for each course_id.",
+          "tables": ["Courses"],
+          "columns": ["course_id", "credits"]
+        },
+        {
+          "step": 3,
+          "description": "For each student_id, collect the credits for their respective course_ids.",
+          "tables": ["Enrollments", "Courses"],
+          "columns": ["student_id", "course_id", "credits"]
+        },
+        {
+          "step": 4,
+          "description": "Filter students where the set of credits taken contains only the value 4.",
+          "tables": ["Enrollments", "Courses"],
+          "columns": ["student_id", "credits"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of the students using the student_ids identified.",
+          "tables": ["Students"],
+          "columns": ["student_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss008",
+      "question": "List students who enrolled in courses across at least 3 different terms.",
+      "answer": ["Patel, Raj", "Sarah Chen"],
+      "challenge_types": ["group_by", "inconsistent_naming_style", "derived_metric"],
+      "num_hops": 2,
+      "table_names": ["Enrollments", "Courses", "CourseAssignments", "Students"],
+      "primary_keys": [
+        "Enrollments.enrollment_id",
+        "Courses.course_id",
+        "CourseAssignments.assignment_id",
+        "Students.student_id"
+      ],
+      "foreign_keys": [
+        "Enrollments.course_id = Courses.course_id",
+        "Courses.course_id = CourseAssignments.course_id",
+        "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect all course_ids and associated student_ids.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id", "course_id"]
+        },
+        {
+          "step": 2,
+          "description": "Match each course_id to the term.",
+          "tables": ["CourseAssignments"],
+          "columns": ["course_id", "term"]
+        },
+        {
+          "step": 3,
+          "description": "Normalize term values for comparison.",
+          "tables": ["CourseAssignments"],
+          "columns": ["term"]
+        },
+        {
+          "step": 4,
+          "description": "For each student_id, count the number of distinct term values they are associated with.",
+          "tables": ["Enrollments", "CourseAssignments"],
+          "columns": ["student_id", "term"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of student_ids with 3 or more unique term values.",
+          "tables": ["Students"],
+          "columns": ["student_id", "name"]
+        }
+      ]
+    }
+  ]
+}

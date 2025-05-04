@@ -1,0 +1,703 @@
+{
+  "schema_id": "schema_ss003",
+  "domain": "recruitment & job applications",
+  "tables": [
+    {
+      "name": "Candidates",
+      "columns": ["candidate_id", "full_name", "email", "phone_number", "resume_submitted", "registration_date"],
+      "column_descriptions": [
+        "Unique identifier for each candidate.",
+        "Full name of the candidate, which may appear in formats like 'First Last' or 'Last, First'.",
+        "Email address of the candidate (e.g., 'john.smith@email.com').",
+        "Contact phone number (e.g., '(123) 456-7890', '+1-123-456-7890'). Nullable field.",
+        "Boolean value for Whether the candidate has submitted their resume.",
+        "Date when the candidate registered in the system. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'."
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "candidate_id",
+      "foreign_keys": [],
+      "data": [
+        ["C001", "John Smith", "john.smith@email.com", "+1-202-555-0191", true, "2024-05-12"],
+        ["C002", "Doe, Jane", "jane.doe@workmail.com", "(480) 555-2211", true, "May 10, 2024"],
+        ["C003", "Alice Johnson", "alice.j@email.com", null, false, "2024-04-18"],
+        ["C004", "Brown, Mike", "mike.brown@mail.net", "+1-212-888-3000", true, "04/20/2024"],
+        ["C005", "Emily Davis", "emily_davis@company.org", "480.333.4422", false, "2024-03-30"],
+        ["C006", "Liu, Wei", "wei.liu@workplace.com", "(310) 444-8899", true, "April 5, 2024"],
+        ["C007", "Patel, Riya", "riya.patel@gmail.com", null, true, "2024-04-25"],
+        ["C008", "Carlos Ramirez", "c.ramirez@domain.com", "+1-646-555-0001", false, "2024-04-02"],
+        ["C009", "Nguyen, An", "an.nguyen@site.net", "602-555-5522", true, "03/29/2024"],
+        ["C010", "Kim, Soo", "soo.kim@global.org", null, true, "2024-03-10"]
+      ]
+    },
+    {
+      "name": "JobPostings",
+      "columns": ["job_id", "job_title", "department", "posting_date", "employment_type", "location"],
+      "column_descriptions": [
+        "Unique identifier for a job posting.",
+        "Title of the job (e.g., 'Software Engineer', 'Data Analyst').",
+        "Department offering the job (e.g., 'Engineering', 'Human Resources').",
+        "Date the job was posted. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Type of employment (e.g., 'Full-Time', 'Contract', 'Internship').",
+        "Job location (e.g., 'New York, NY', 'Remote')."
+      ],
+      "challenge_types": ["format_variation", "aliasing", "ambiguous_column_name"],
+      "primary_key": "job_id",
+      "foreign_keys": [],
+      "data": [
+        ["J101", "Software Engineer", "Engineering", "2024-06-01", "Full-Time", "New York, NY"],
+        ["J102", "Data Analyst", "Data Science", "June 3, 2024", "contract", "Remote"],
+        ["J103", "HR Specialist", "Human Resources", "2024-05-28", "FT", "San Francisco, CA"],
+        ["J104", "Marketing Manager", "Marketing", "05/15/2024", "fulltime", null],
+        ["J105", "DevOps Engineer", "Engineering", "May 22, 2024", "Contract", "Austin, TX"],
+        ["J106", "UX Designer", "Design", "04/28/2024", "internship", "Chicago, IL"],
+        ["J107", "Business Analyst", "Operations", "2024-06-10", "FT", "Boston, MA"]
+      ]
+    },
+    {
+      "name": "Applications",
+      "columns": ["application_id", "candidate_id", "job_id", "application_date", "status"],
+      "column_descriptions": [
+        "Unique identifier for a job application.",
+        "Foreign key linking to Candidates.candidate_id.",
+        "Foreign key linking to JobPostings.job_id.",
+        "Date the application was submitted. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Current status of the application (e.g., 'Under Review', 'Rejected', 'Interviewing')"
+      ],
+      "challenge_types": ["format_variation", "aliasing"],
+      "primary_key": "application_id",
+      "foreign_keys": [
+        "Applications.candidate_id = Candidates.candidate_id",
+        "Applications.job_id = JobPostings.job_id"
+      ],
+      "data": [
+        ["A001", "C001", "J101", "2024-06-15", "selected"],
+        ["A002", "C002", "J102", "June 20, 2024", "Selected"],
+        ["A003", "C003", "J105", "06/25/2024", "REJECTED"],
+        ["A004", "C001", "J102", "2024-07-01", "SELECTED"],
+        ["A005", "C004", "J101", "2024-07-03", "UNDER_REVIEW"],
+        ["A006", "C005", "J104", "2024-06-21", "Selected"],
+        ["A007", "C006", "J105", "2024-06-30", "Interviewing"],
+        ["A008", "C007", "J101", "07/02/2024", "REJECTED"],
+        ["A009", "C008", "J106", "2024-07-10", "under_review"],
+        ["A010", "C009", "J107", "July 12, 2024", "UNDER_REVIEW"],
+        ["A011", "C010", "J103", "2024-07-14", "Rejected"]
+      ]
+    },
+    {
+      "name": "Interviews",
+      "columns": ["interview_id", "application_id", "interview_date", "interviewer", "interview_mode"],
+      "column_descriptions": [
+        "Unique identifier for each interview.",
+        "Foreign key linking to Applications.application_id.",
+        "Date of the interview. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Name of the interviewer, which may appear in formats like 'First Last' or 'Last, First'.",
+        "Mode of the interview (e.g., 'In-Person', 'Zoom', 'Phone')"
+      ],
+      "challenge_types": ["format_variation", "inconsistent_naming_style", "aliasing"],
+      "primary_key": "interview_id",
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id"
+      ],
+      "data": [
+        ["I001", "A001", "2024-07-10", "Jane Doe", "zoom"],
+        ["I002", "A002", "July 12, 2024", "Smith, Robert", "In-Person"],
+        ["I003", "A004", "2024-07-15", "Johnson, M.", "phone"],
+        ["I004", "A006", "2024-07-18", "Tina Wong", "Zoom"],
+        ["I005", "A007", "07/22/2024", "Lee, Andrew", "INPERSON"]
+      ]
+    },
+    {
+      "name": "OfferLetters",
+      "columns": ["offer_id", "application_id", "offer_date", "salary_offer", "accepted"],
+      "column_descriptions": [
+        "Unique identifier for the offer letter.",
+        "Foreign key referencing Applications.application_id.",
+        "Date the offer was sent. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Offered salary stored in mixed units (e.g., '70000', '70K', '$70,000').",
+        "Indicates whether the candidate accepted the offer."
+      ],
+      "challenge_types": ["format_variation", "mixed_units"],
+      "primary_key": "offer_id",
+      "foreign_keys": [
+        "OfferLetters.application_id = Applications.application_id"
+      ],
+      "data": [
+        ["O001", "A001", "08/01/2024", "70K", true],
+        ["O002", "A002", "2024-07-18", "$68,000", false],
+        ["O003", "A004", "July 28, 2024", "72000", false],
+        ["O004", "A006", "2024-08-05", "$65,500", true]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ss001",
+      "question": "Which candidates received job offers but did not accept them despite going through an interview?",
+      "answer": [ "John Smith", "Doe, Jane"],
+      "challenge_types": ["multi-hop", "boolean_logic", "format_variation", "aliasing"],
+      "num_hops": 3,
+      "table_names": ["OfferLetters", "Applications", "Interviews", "Candidates"],
+      "primary_keys": ["OfferLetters.offer_id", "Applications.application_id", "Interviews.interview_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "OfferLetters.application_id = Applications.application_id",
+        "Interviews.application_id = Applications.application_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter offer letters that have false for the accepted column.",
+          "tables": ["OfferLetters"],
+          "columns": ["offer_id", "application_id", "accepted"]
+        },
+        {
+          "step": 2,
+          "description": "Collect the application_ids that had interviews.",
+          "tables": ["Interviews"],
+          "columns": ["application_id"]
+        },
+        {
+          "step": 3,
+          "description": "Select the application_ids that are shared between step 1 and 2.",
+          "tables": ["OfferLetters", "Interviews"],
+          "columns": ["application_id"]
+        },
+        {
+          "step": 4,
+          "description": "From the selected application_ids, retrieve the associated candidate_ids.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of the candidate using the candidate_ids.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss002",
+      "question": "Which job titles had more than one candidate interview for them?",
+      "answer": ["Data Analyst"],
+      "challenge_types": ["multi-hop", "group_by", "aggregation", "aliasing"],
+      "num_hops": 3,
+      "table_names": ["Interviews", "Applications", "JobPostings"],
+      "primary_keys": ["Interviews.interview_id", "Applications.application_id", "JobPostings.job_id"],
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id",
+        "Applications.job_id = JobPostings.job_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect all application_id values associated with interviews.",
+          "tables": ["Interviews"],
+          "columns": ["interview_id", "application_id"]
+        },
+        {
+          "step": 2,
+          "description": "For each application_id, retrieve the corresponding job_id.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "job_id"]
+        },
+        {
+          "step": 3,
+          "description": "Track the count of each job_id.",
+          "tables": ["Applications"],
+          "columns": ["job_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the job titles for the job_ids that have a count greater than one.",
+          "tables": ["JobPostings"],
+          "columns": ["job_id", "job_title"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss003",
+      "question": "Which candidates received an offer within 7 days of their interview?",
+      "answer": ["Doe, Jane"],
+      "challenge_types": ["multi-hop", "temporal", "date_format_inference", "derived_metric"],
+      "num_hops": 3,
+      "table_names": ["OfferLetters", "Applications", "Interviews", "Candidates"],
+      "primary_keys": ["OfferLetters.offer_id", "Applications.application_id", "Interviews.interview_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "OfferLetters.application_id = Applications.application_id",
+        "Interviews.application_id = Applications.application_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect all application_id values and offer_date entries.",
+          "tables": ["OfferLetters"],
+          "columns": ["application_id", "offer_date"]
+        },
+        {
+          "step": 2,
+          "description": "Normalize the interview_date to a consistent format.",
+          "tables": ["Interviews"],
+          "columns": ["interview_date"]
+        },
+        {
+          "step": 3,
+          "description": "Find the corresponding interview_date for each application_id.",
+          "tables": ["OfferLetters", "Interviews"],
+          "columns": ["application_id", "offer_date", "interview_date"]
+        },
+        {
+          "step": 4,
+          "description": "Compute the number of days between interview_date and offer_date",
+          "tables": ["OfferLetters", "Interviews"],
+          "columns": ["application_id", "offer_date", "interview_date"]
+        },
+        {
+          "step": 5,
+          "description": "Idenify the candidate_ids for the application_id that had less than or equal to 7 days.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 6,
+          "description": "Retrieve the candidate name for the identified candidates.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss004",
+      "question": "Which candidate(s) applied for more than one job and got interviewed for at least one of them?",
+      "answer": ["John Smith"],
+      "challenge_types": ["multi-hop", "aggregation", "boolean_logic"],
+      "num_hops": 3,
+      "table_names": ["Applications", "Interviews", "Candidates"],
+      "primary_keys": ["Applications.application_id", "Interviews.interview_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Count how many distinct job_ids is associated with each unique candidate_id.",
+          "tables": ["Applications"],
+          "columns": ["candidate_id", "job_id"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve the candidate_ids that had more than one job_id.",
+          "tables": [ "Applications"],
+          "columns": ["candidate_id"]
+        },
+        {
+          "step": 3,
+          "description": "Collect the candidate_id corresponding to each application_id in the Interviews table.",
+          "tables": ["Applications", "Interviews"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the names corresponding to the candidate_id that appear in both step 2 and 3.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss005",
+      "question": "What are the job titles of jobs that have been applied to by candidates who did not submit a resume?",
+      "answer": ["Marketing Manager", "DevOps Engineer", "UX Designer"],
+      "challenge_types": ["multi-hop", "boolean_logic"],
+      "num_hops": 2,
+      "table_names": ["Candidates", "Applications", "JobPostings"],
+      "primary_keys": ["Candidates.candidate_id", "Applications.application_id", "JobPostings.job_id"],
+      "foreign_keys": [
+        "Applications.candidate_id = Candidates.candidate_id",
+        "Applications.job_id = JobPostings.job_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify candidate_ids where resume_submitted is false.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "resume_submitted"]
+        },
+        {
+          "step": 2,
+          "description": "Collect job_ids for applications submitted by the identified candidate_ids.",
+          "tables": ["Applications"],
+          "columns": ["candidate_id", "job_id"]
+        },
+        {
+          "step": 3,
+          "description": "Retrieve the job_title for each job_id.",
+          "tables": ["JobPostings"],
+          "columns": ["job_id", "job_title"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss006",
+      "question": "Which candidate(s) registered before April 2024 and eventually received a job offer?",
+      "answer": ["Emily Davis"],
+      "challenge_types": ["multi-hop", "temporal", "conditional"],
+      "num_hops": 2,
+      "table_names": ["Candidates", "Applications", "OfferLetters"],
+      "primary_keys": ["Candidates.candidate_id", "Applications.application_id", "OfferLetters.offer_id"],
+      "foreign_keys": [
+        "Applications.candidate_id = Candidates.candidate_id",
+        "OfferLetters.application_id = Applications.application_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize the registration_date to a consistent format.",
+          "tables": ["Candidates"],
+          "columns": ["registration_date"]
+        },
+        {
+          "step": 2,
+          "description": "Identify candidate_ids where the registration_date is earlier than April 1, 2024.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name", "registration_date"]
+        },
+        {
+          "step": 3,
+          "description": "Find all application_ids linked to those filtered candidate_ids.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the application_ids for candidates who received offers.",
+          "tables": ["OfferLetters"],
+          "columns": ["application_id"]
+        },
+        {
+          "step": 5,
+          "description": "Collect the candidate_id for each application_id that is shared between step 3 and 4.",
+          "tables": ["Applications", "OfferLetters"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 6,
+          "description": "Return the full names associated with each candidate_id.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss007",
+      "question": "Which candidate(s) got an offer for a contract job and rejected it?",
+      "answer": ["John Smith", "Doe, Jane"],
+      "challenge_types": ["multi-hop", "format_variation", "aliasing", "boolean_logic"],
+      "num_hops": 3,
+      "table_names": ["OfferLetters", "Applications", "JobPostings", "Candidates"],
+      "primary_keys": ["OfferLetters.offer_id", "Applications.application_id", "JobPostings.job_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "OfferLetters.application_id = Applications.application_id",
+        "Applications.job_id = JobPostings.job_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Collect application_ids where accepted is false.",
+          "tables": ["OfferLetters"],
+          "columns": ["application_id", "accepted"]
+        },
+        {
+          "step": 2,
+          "description": "From each application_id, find the corresponding job_id and candidate_id.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "candidate_id", "job_id"]
+        },
+        {
+          "step": 3,
+          "description": "Filter by job_ids from step 2 and 'contract' employment_type.",
+          "tables": ["JobPostings"],
+          "columns": ["job_id", "employment_type"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name associated with the candidate_ids that corresponds to the job_ids remaining.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss008",
+      "question": "Who was interviewed by someone with the last name 'Lee'?",
+      "answer": ["Liu, Wei"],
+      "challenge_types": ["multi-hop", "fuzzy_matching", "inconsistent_naming_style"],
+      "num_hops": 2,
+      "table_names": ["Interviews", "Applications", "Candidates"],
+      "primary_keys": ["Interviews.interview_id", "Applications.application_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize the name of the interview to only include last names.",
+          "tables": ["Interviews"],
+          "columns": ["interviewer"]
+        },
+        {
+          "step": 2,
+          "description": "Identify application_ids where the interviewer name contains 'Lee'.",
+          "tables": ["Interviews"],
+          "columns": ["application_id", "interviewer"]
+        },
+        {
+          "step": 3,
+          "description": "Match the candidate_id to each application_id.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "candidate_id"]
+        },
+        {
+          "step": 4,
+          "description": "Look up the full names associated with each candidate_id.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss009",
+      "question": "Which interview mode is most commonly used for candidates who got selected and accepted their job offer?",
+      "answer": ["Zoom"],
+      "challenge_types": ["multi-hop", "group_by", "superlative", "aliasing"],
+      "num_hops": 2,
+      "table_names": ["Interviews", "Applications", "OfferLetters"],
+      "primary_keys": ["Interviews.interview_id", "Applications.application_id", "OfferLetters.offer_id"],
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id",
+        "OfferLetters.application_id = Applications.application_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Retrieve application_ids where the status is 'selected'.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "status"]
+        },
+        {
+          "step": 2,
+          "description": "Find the application_ids where accepted is true.",
+          "tables": ["OfferLetters"],
+          "columns": ["application_id", "accepted"]
+        },
+        {
+          "step": 3,
+          "description": "Collect the application_ids that are shared between step 1 and 2.",
+          "tables": ["Interviews"],
+          "columns": ["application_id", "interview_mode"]
+        },
+        {
+          "step": 4,
+          "description": "Group the application_ids by interview_mode and count how many times each mode was used.",
+          "tables": ["Interviews"],
+          "columns": ["interview_mode"]
+        },
+        {
+          "step": 5,
+          "description": "Return the interview mode that appears the most in the counts.",
+          "tables": ["Interviews"],
+          "columns": ["interview_mode"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss010",
+      "question": "What’s the difference between the highest and lowest salary offered to candidates who accepted their offers?",
+      "answer": ["$4,500"],
+      "challenge_types": ["multi-hop", "arithmetic", "superlative", "mixed_units"],
+      "num_hops": 1,
+      "table_names": ["OfferLetters"],
+      "primary_keys": ["OfferLetters.offer_id"],
+      "foreign_keys": [],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter offers where accepted is true.",
+          "tables": ["OfferLetters"],
+          "columns": ["offer_id", "salary_offer", "accepted"]
+        },
+        {
+          "step": 2,
+          "description": "Normalize the salary_offer values to a consistent numeric format.",
+          "tables": ["OfferLetters"],
+          "columns": ["salary_offer"]
+        },
+        {
+          "step": 3,
+          "description": "Identify the highest and lowest numeric salary_offer values among accepted offers.",
+          "tables": ["OfferLetters"],
+          "columns": ["salary_offer"]
+        },
+        {
+          "step": 4,
+          "description": "Compute and return the difference between the highest and lowest salaries.",
+          "tables": ["OfferLetters"],
+          "columns": ["salary_offer"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss011",
+      "question": "Which candidate applied the longest time after registering in the system?",
+      "answer": ["Kim, Soo"],
+      "challenge_types": ["multi-hop", "temporal", "derived_metric"],
+      "num_hops": 1,
+      "table_names": ["Candidates", "Applications"],
+      "primary_keys": ["Candidates.candidate_id", "Applications.application_id"],
+      "foreign_keys": [
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Applications with Candidates using candidate_id to get application_date and registration_date for each candidate.",
+          "tables": ["Applications", "Candidates"],
+          "columns": ["candidate_id", "application_date", "registration_date"]
+        },
+        {
+          "step": 2,
+          "description": "Normalize both registration_date and application_date to a common date format.",
+          "tables": ["Applications", "Candidates"],
+          "columns": ["application_date", "registration_date"]
+        },
+        {
+          "step": 3,
+          "description": "Compute the difference in days between the registration_date and the most recent application_date for each candidate.",
+          "tables": ["Applications", "Candidates"],
+          "columns": ["candidate_id", "application_date", "registration_date"]
+        },
+        {
+          "step": 4,
+          "description": "Return the full name of the candidate with the largest time gap.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss012",
+      "question": "Who applied for a job in Engineering and got interviewed?",
+      "answer": ["John Smith", "Liu, Wei"],
+      "challenge_types": ["multi-hop", "boolean_logic"],
+      "num_hops": 3,
+      "table_names": ["Interviews", "Applications", "JobPostings", "Candidates"],
+      "primary_keys": ["Interviews.interview_id", "Applications.application_id", "JobPostings.job_id", "Candidates.candidate_id"],
+      "foreign_keys": [
+        "Interviews.application_id = Applications.application_id",
+        "Applications.job_id = JobPostings.job_id",
+        "Applications.candidate_id = Candidates.candidate_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify all application_id values for candidates who were interviewed.",
+          "tables": ["Interviews"],
+          "columns": ["application_id"]
+        },
+        {
+          "step": 2,
+          "description": "Match these application_id values with the corresponding job_id and candidate_id values.",
+          "tables": ["Applications"],
+          "columns": ["application_id", "job_id", "candidate_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join the department column and filter for job_ids where department is 'Engineering'.",
+          "tables": ["Applications", "JobPostings"],
+          "columns": ["candidate_id", "job_id", "department"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the full name for each candidate_id.",
+          "tables": ["Candidates"],
+          "columns": ["candidate_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss013",
+      "question": "Which offer was sent the most days after the corresponding application was submitted?",
+      "answer": ["O004"],
+      "challenge_types": ["multi-hop", "date_format_inference", "superlative"],
+      "num_hops": 2,
+      "table_names": ["OfferLetters", "Applications"],
+      "primary_keys": ["OfferLetters.offer_id", "Applications.application_id"],
+      "foreign_keys": [
+        "OfferLetters.application_id = Applications.application_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join OfferLetters to Applications using application_id and collect both offer_date and application_date.",
+          "tables": ["OfferLetters", "Applications"],
+          "columns": ["application_id", "offer_date", "application_date"]
+        },
+        {
+          "step": 2,
+          "description": "Normalize both dates to a consistent format.",
+          "tables": ["OfferLetters", "Applications"],
+          "columns": ["offer_date", "application_date"]
+        },
+        {
+          "step": 3,
+          "description": "Compute the difference in days between offer_date and application_date for each record.",
+          "tables": ["OfferLetters", "Applications"],
+          "columns": ["offer_date", "application_date"]
+        },
+        {
+          "step": 4,
+          "description": "Return the offer_id associated with the largest delay.",
+          "tables": ["OfferLetters"],
+          "columns": ["offer_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss014",
+      "question": "Which job postings have only ever been applied to by candidates without phone numbers?",
+      "answer": ["HR Specialist", "Marketing Manager"],
+      "challenge_types": ["multi-hop", "boolean_logic", "incomplete_data"],
+      "num_hops": 2,
+      "table_names": ["Applications", "Candidates", "JobPostings"],
+      "primary_keys": ["Applications.application_id", "Candidates.candidate_id", "JobPostings.job_id"],
+      "foreign_keys": [
+        "Applications.candidate_id = Candidates.candidate_id",
+        "Applications.job_id = JobPostings.job_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Applications to Candidates using candidate_id and gather all job_id and phone_number values.",
+          "tables": ["Applications", "Candidates"],
+          "columns": ["job_id", "phone_number"]
+        },
+        {
+          "step": 2,
+          "description": "Group the result by job_id. For each group, check if all associated phone_number values are null.",
+          "tables": ["Candidates"],
+          "columns": ["phone_number"]
+        },
+        {
+          "step": 3,
+          "description": "Return the job title corresponding to the job_id values.",
+          "tables": ["JobPostings"],
+          "columns": ["job_id", "job_title"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,640 @@
+{
+  "schema_id": "schema_mr004",
+  "domain": "Software Employers",
+  "tables": [
+    {
+      "name": "Employees",
+      "columns": ["employee_id", "name", "hire_date", "birth_year", "department_id"],
+      "column_descriptions": {
+        "employee_id": "Unique identifier for the employee",
+        "name": "Full name of the employee",
+        "hire_date": "Date of hiring (YYYY-MM-DD)",
+        "birth_year": "Year of birth",
+        "department_id": "ID of the department"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "employee_id",
+      "foreign_keys": [
+        "Employees.department_id = Departments.department_id"
+      ],
+      "data": [
+        ["E001", "Alice Smith", "2020-03-15", 1990, "D001"],
+        ["E002", "Bob Johnson", "2019-06-01", 1985, "D002"],
+        ["E003", "Clara Lee", "2021-09-10", 1995, "D001"],
+        ["E004", "David Brown", "2018-11-01", 1980, "D003"],
+        ["E005", "Emma Davis", "2022-01-20", 1992, "D002"]
+      ]
+    },
+    {
+      "name": "Departments",
+      "columns": ["department_id", "name", "company_id"],
+      "column_descriptions": {
+        "department_id": "Unique identifier for the department",
+        "name": "Name of the department",
+        "company_id": "ID of the company"
+      },
+      "challenge_types": [],
+      "primary_key": "department_id",
+      "foreign_keys": [
+        "Departments.company_id = Companies.company_id"
+      ],
+      "data": [
+        ["D001", "Engineering", "C001"],
+        ["D002", "Data Science", "C001"],
+        ["D003", "Product Management", "C002"],
+        ["D004", "DevOps", "C002"],
+        ["D005", "QA", "C003"]
+      ]
+    },
+    {
+      "name": "Companies",
+      "columns": ["company_id", "name", "founded_year", "headquarters_country"],
+      "column_descriptions": {
+        "company_id": "Unique identifier for the company",
+        "name": "Name of the company",
+        "founded_year": "Year the company was founded",
+        "headquarters_country": "Country of the headquarters"
+      },
+      "challenge_types": [],
+      "primary_key": "company_id",
+      "foreign_keys": [],
+      "data": [
+        ["C001", "TechCorp", 2000, "USA"],
+        ["C002", "InnovateSoft", 2010, "UK"],
+        ["C003", "DataDriven", 2015, "Canada"],
+        ["C004", "CloudPeak", 2005, "USA"],
+        ["C005", "AIWave", 2018, "Germany"]
+      ]
+    },
+    {
+      "name": "Projects",
+      "columns": ["project_id", "name", "start_date", "end_date", "budget_usd"],
+      "column_descriptions": {
+        "project_id": "Unique identifier for the project",
+        "name": "Name of the project",
+        "start_date": "Project start date (YYYY-MM-DD)",
+        "end_date": "Project end date (YYYY-MM-DD)",
+        "budget_usd": "Project budget in USD"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "project_id",
+      "foreign_keys": [],
+      "data": [
+        ["PR001", "AI Platform", "2020-01-01", "2021-12-31", 500000],
+        ["PR002", "Cloud Migration", "2019-03-01", "2020-06-30", 300000],
+        ["PR003", "Data Pipeline", "2021-06-01", "2022-05-31", 200000],
+        ["PR004", "Web Redesign", "2018-07-01", "2019-12-31", 150000],
+        ["PR005", "ML Model", "2022-02-01", "2023-01-31", 400000]
+      ]
+    },
+    {
+      "name": "Project_Assignments",
+      "columns": ["assignment_id", "employee_id", "project_id", "hours_worked"],
+      "column_descriptions": {
+        "assignment_id": "Unique identifier for the assignment",
+        "employee_id": "ID of the assigned employee",
+        "project_id": "ID of the project",
+        "hours_worked": "Total hours worked by the employee on the project"
+      },
+      "challenge_types": [],
+      "primary_key": "assignment_id",
+      "foreign_keys": [
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id"
+      ],
+      "data": [
+        ["PA001", "E001", "PR001", 500],
+        ["PA002", "E002", "PR002", 300],
+        ["PA003", "E003", "PR003", 200],
+        ["PA004", "E004", "PR004", 400],
+        ["PA005", "E005", "PR005", 350]
+      ]
+    },
+    {
+      "name": "Skills",
+      "columns": ["skill_id", "name", "category"],
+      "column_descriptions": {
+        "skill_id": "Unique identifier for the skill",
+        "name": "Name of the skill",
+        "category": "Category of the skill (e.g., Programming, Data Analysis)"
+      },
+      "challenge_types": [],
+      "primary_key": "skill_id",
+      "foreign_keys": [],
+      "data": [
+        ["S001", "Python", "Programming"],
+        ["S002", "SQL", "Data Analysis"],
+        ["S003", "AWS", "Cloud"],
+        ["S004", "JavaScript", "Programming"],
+        ["S005", "Machine Learning", "Data Science"]
+      ]
+    },
+    {
+      "name": "Employee_Skills",
+      "columns": ["employee_skill_id", "employee_id", "skill_id", "proficiency_level"],
+      "column_descriptions": {
+        "employee_skill_id": "Unique identifier for the employee-skill mapping",
+        "employee_id": "ID of the employee",
+        "skill_id": "ID of the skill",
+        "proficiency_level": "Proficiency level (1-5)"
+      },
+      "challenge_types": [],
+      "primary_key": "employee_skill_id",
+      "foreign_keys": [
+        "Employee_Skills.employee_id = Employees.employee_id",
+        "Employee_Skills.skill_id = Skills.skill_id"
+      ],
+      "data": [
+        ["ES001", "E001", "S001", 4],
+        ["ES002", "E002", "S002", 3],
+        ["ES003", "E003", "S005", 2],
+        ["ES004", "E004", "S003", 5],
+        ["ES005", "E005", "S004", 3]
+      ]
+    },
+    {
+      "name": "Certifications",
+      "columns": ["certification_id", "employee_id", "name", "issue_date", "expiry_date"],
+      "column_descriptions": {
+        "certification_id": "Unique identifier for the certification",
+        "employee_id": "ID of the employee",
+        "name": "Name of the certification",
+        "issue_date": "Date of issue (YYYY-MM-DD)",
+        "expiry_date": "Date of expiry (YYYY-MM-DD)"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "certification_id",
+      "foreign_keys": [
+        "Certifications.employee_id = Employees.employee_id"
+      ],
+      "data": [
+        ["CT001", "E001", "AWS Certified Developer", "2020-06-01", "2023-06-01"],
+        ["CT002", "E002", "PMP", "2019-09-15", "2024-09-15"],
+        ["CT003", "E003", "Google Data Analyst", "2021-12-01", "2024-12-01"],
+        ["CT004", "E004", "Scrum Master", "2018-05-01", "2023-05-01"],
+        ["CT005", "E005", "Azure Fundamentals", "2022-03-01", "2025-03-01"]
+      ]
+    },
+    {
+      "name": "Performance_Reviews",
+      "columns": ["review_id", "employee_id", "review_date", "score"],
+      "column_descriptions": {
+        "review_id": "Unique identifier for the review",
+        "employee_id": "ID of the employee",
+        "review_date": "Date of the review (YYYY-MM-DD)",
+        "score": "Performance score (1-10)"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "review_id",
+      "foreign_keys": [
+        "Performance_Reviews.employee_id = Employees.employee_id"
+      ],
+      "data": [
+        ["R001", "E001", "2022-12-01", 8],
+        ["R002", "E002", "2021-12-01", 7],
+        ["R003", "E003", "2023-01-15", 6],
+        ["R004", "E004", "2020-12-01", 9],
+        ["R005", "E005", "2023-02-01", 7]
+      ]
+    },
+    {
+      "name": "Salaries",
+      "columns": ["salary_id", "employee_id", "amount_usd", "effective_date"],
+      "column_descriptions": {
+        "salary_id": "Unique identifier for the salary record",
+        "employee_id": "ID of the employee",
+        "amount_usd": "Annual salary in USD",
+        "effective_date": "Date the salary took effect (YYYY-MM-DD)"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "salary_id",
+      "foreign_keys": [
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "data": [
+        ["SL001", "E001", 120000, "2020-03-15"],
+        ["SL002", "E002", 110000, "2019-06-01"],
+        ["SL003", "E003", 95000, "2021-09-10"],
+        ["SL004", "E004", 130000, "2018-11-01"],
+        ["SL005", "E005", 105000, "2022-01-20"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_mr001",
+      "question": "Which employees hired before 2020 with Python skills worked on projects that ended after 2021 and earned more than $100,000 annually?",
+      "answer": ["Alice Smith"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Employees", "Employee_Skills", "Skills", "Project_Assignments", "Projects", "Salaries"],
+      "primary_keys": ["Employees.employee_id", "Employee_Skills.employee_skill_id", "Skills.skill_id", "Project_Assignments.assignment_id", "Projects.project_id", "Salaries.salary_id"],
+      "foreign_keys": [
+        "Employee_Skills.employee_id = Employees.employee_id",
+        "Employee_Skills.skill_id = Skills.skill_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id",
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Employees table for employees hired before '2020-01-01', addressing the temporal condition.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "name", "hire_date"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Employee_Skills and Skills to identify employees with Python skills.",
+          "tables": ["Employees", "Employee_Skills", "Skills"],
+          "columns": ["employee_id", "skill_id", "name"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Project_Assignments and Projects to find employees who worked on projects ending after '2021-12-31'.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "end_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Employees with Salaries to filter employees with salaries greater than $100,000, applying arithmetic logic.",
+          "tables": ["Employees", "Salaries"],
+          "columns": ["employee_id", "amount_usd"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr002",
+      "question": "Which employees under 35 years old in 2023 received performance scores above 7 in reviews conducted after their project assignments started?",
+      "answer": ["Alice Smith"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Employees", "Performance_Reviews", "Project_Assignments", "Projects"],
+      "primary_keys": ["Employees.employee_id", "Performance_Reviews.review_id", "Project_Assignments.assignment_id", "Projects.project_id"],
+      "foreign_keys": [
+        "Performance_Reviews.employee_id = Employees.employee_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate employee ages in 2023 by subtracting birth_year from 2023 and filter for those under 35, using arithmetic logic.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Performance_Reviews to find reviews with scores above 7.",
+          "tables": ["Employees", "Performance_Reviews"],
+          "columns": ["employee_id", "review_id", "score"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Project_Assignments and Projects to retrieve project start dates.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "start_date"]
+        },
+        {
+          "step": 4,
+          "description": "Filter for reviews where the review_date is after the project start_date, addressing temporal logic.",
+          "tables": ["Performance_Reviews", "Projects"],
+          "columns": ["review_date", "start_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr003",
+      "question": "Which projects with budgets over $300,000 employed engineers hired after 2019 with valid certifications in 2022?",
+      "answer": ["ML Model"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Projects", "Project_Assignments", "Employees", "Departments", "Certifications"],
+      "primary_keys": ["Projects.project_id", "Project_Assignments.assignment_id", "Employees.employee_id", "Departments.department_id", "Certifications.certification_id"],
+      "foreign_keys": [
+        "Project_Assignments.project_id = Projects.project_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Employees.department_id = Departments.department_id",
+        "Certifications.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Projects table for projects with budgets over $300,000, using arithmetic logic.",
+          "tables": ["Projects"],
+          "columns": ["project_id", "name", "budget_usd"]
+        },
+        {
+          "step": 2,
+          "description": "Join Projects with Project_Assignments and Employees to find employees assigned to these projects and hired after '2019-12-31'.",
+          "tables": ["Projects", "Project_Assignments", "Employees"],
+          "columns": ["project_id", "employee_id", "hire_date"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Departments to filter for employees in the Engineering department.",
+          "tables": ["Employees", "Departments"],
+          "columns": ["employee_id", "department_id", "name"]
+        },
+        {
+          "step": 4,
+          "description": "Join Employees with Certifications to ensure certifications were valid in 2022 (issue_date <= '2022-12-31' and expiry_date >= '2022-01-01').",
+          "tables": ["Employees", "Certifications"],
+          "columns": ["employee_id", "issue_date", "expiry_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr004",
+      "question": "Which employees worked more than 300 hours on projects started before their hire date plus 2 years and have salaries above $110,000?",
+      "answer": ["Alice Smith"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Employees", "Project_Assignments", "Projects", "Salaries"],
+      "primary_keys": ["Employees.employee_id", "Project_Assignments.assignment_id", "Projects.project_id", "Salaries.salary_id"],
+      "foreign_keys": [
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id",
+        "Salaries.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Employees with Project_Assignments to find employees and their assigned projects.",
+          "tables": ["Employees", "Project_Assignments"],
+          "columns": ["employee_id", "project_id", "hours_worked"]
+        },
+        {
+          "step": 2,
+          "description": "Filter Project_Assignments for employees who worked more than 300 hours.",
+          "tables": ["Project_Assignments"],
+          "columns": ["hours_worked"]
+        },
+        {
+          "step": 3,
+          "description": "Join with Projects and compute hire_date + 2 years, then filter for projects where start_date is before this date, using temporal and arithmetic logic.",
+          "tables": ["Employees", "Projects"],
+          "columns": ["hire_date", "start_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join with Salaries to filter employees with salaries above $110,000.",
+          "tables": ["Employees", "Salaries"],
+          "columns": ["employee_id", "amount_usd"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr005",
+      "question": "Which companies founded before 2010 had employees with Machine Learning skills who worked on projects ending after 2022 with budgets exceeding $200,000?",
+      "answer": ["TechCorp"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Companies", "Departments", "Employees", "Employee_Skills", "Skills", "Project_Assignments", "Projects"],
+      "primary_keys": ["Companies.company_id", "Departments.department_id", "Employees.employee_id", "Employee_Skills.employee_skill_id", "Skills.skill_id", "Project_Assignments.assignment_id", "Projects.project_id"],
+      "foreign_keys": [
+        "Departments.company_id = Companies.company_id",
+        "Employees.department_id = Departments.department_id",
+        "Employee_Skills.employee_id = Employees.employee_id",
+        "Employee_Skills.skill_id = Skills.skill_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Companies table for companies founded before 2010.",
+          "tables": ["Companies"],
+          "columns": ["company_id", "name", "founded_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Companies with Departments and Employees to find employees in these companies.",
+          "tables": ["Companies", "Departments", "Employees"],
+          "columns": ["company_id", "department_id", "employee_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Employee_Skills and Skills to filter for employees with Machine Learning skills.",
+          "tables": ["Employees", "Employee_Skills", "Skills"],
+          "columns": ["employee_id", "skill_id", "name"]
+        },
+        {
+          "step": 4,
+          "description": "Join Employees with Project_Assignments and Projects to find projects ending after '2022-12-31' with budgets over $200,000.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "end_date", "budget_usd"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr006",
+      "question": "Which employees with certifications issued after 2020 worked on projects with budgets per hour worked exceeding $1000 and were hired within 3 years of their company’s founding?",
+      "answer": ["Emma Davis"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Employees", "Certifications", "Project_Assignments", "Projects", "Companies", "Departments"],
+      "primary_keys": ["Employees.employee_id", "Certifications.certification_id", "Project_Assignments.assignment_id", "Projects.project_id", "Companies.company_id", "Departments.department_id"],
+      "foreign_keys": [
+        "Certifications.employee_id = Employees.employee_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id",
+        "Employees.department_id = Departments.department_id",
+        "Departments.company_id = Companies.company_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Employees with Certifications to find employees with certifications issued after '2020-12-31'.",
+          "tables": ["Employees", "Certifications"],
+          "columns": ["employee_id", "issue_date"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Project_Assignments and Projects to calculate budget per hour (budget_usd / hours_worked) and filter for values exceeding $1000.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "budget_usd", "hours_worked"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Departments and Companies to retrieve company founded_year.",
+          "tables": ["Employees", "Departments", "Companies"],
+          "columns": ["employee_id", "department_id", "company_id", "founded_year"]
+        },
+        {
+          "step": 4,
+          "description": "Filter for employees hired within 3 years of their company’s founding (hire_date year <= founded_year + 3).",
+          "tables": ["Employees", "Companies"],
+          "columns": ["hire_date", "founded_year"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr007",
+      "question": "Which employees with performance reviews in 2022 scored above 6 and worked on projects starting within 1 year of their hire date with budgets over $250,000?",
+      "answer": ["Alice Smith"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Employees", "Performance_Reviews", "Project_Assignments", "Projects"],
+      "primary_keys": ["Employees.employee_id", "Performance_Reviews.review_id", "Project_Assignments.assignment_id", "Projects.project_id"],
+      "foreign_keys": [
+        "Performance_Reviews.employee_id = Employees.employee_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Employees with Performance_Reviews to find employees with reviews in 2022 and scores above 6.",
+          "tables": ["Employees", "Performance_Reviews"],
+          "columns": ["employee_id", "review_date", "score"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Project_Assignments and Projects to find projects with budgets over $250,000.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "budget_usd"]
+        },
+        {
+          "step": 3,
+          "description": "Calculate the hire date plus 1 year for each employee.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "hire_date"]
+        },
+        {
+          "step": 4,
+          "description": "Filter for projects where the start_date is within 1 year of the hire_date, using temporal logic.",
+          "tables": ["Projects"],
+          "columns": ["start_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr008",
+      "question": "Which departments in companies founded after 2005 had employees with salaries increasing by more than 10% since 2020 and working on projects ending before 2022?",
+      "answer": ["Data Science"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Departments", "Companies", "Employees", "Salaries", "Project_Assignments", "Projects"],
+      "primary_keys": ["Departments.department_id", "Companies.company_id", "Employees.employee_id", "Salaries.salary_id", "Project_Assignments.assignment_id", "Projects.project_id"],
+      "foreign_keys": [
+        "Departments.company_id = Companies.company_id",
+        "Employees.department_id = Departments.department_id",
+        "Salaries.employee_id = Employees.employee_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Departments with Companies to filter for companies founded after 2005.",
+          "tables": ["Departments", "Companies"],
+          "columns": ["department_id", "company_id", "founded_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Departments with Employees and Salaries to find employees with salary records.",
+          "tables": ["Departments", "Employees", "Salaries"],
+          "columns": ["department_id", "employee_id", "amount_usd", "effective_date"]
+        },
+        {
+          "step": 3,
+          "description": "Compare salaries before and after 2020 to identify employees with a salary increase greater than 10%, using arithmetic logic.",
+          "tables": ["Salaries"],
+          "columns": ["employee_id", "amount_usd", "effective_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Employees with Project_Assignments and Projects to filter for projects ending before '2022-01-01'.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "end_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr009",
+      "question": "Which employees hired after 2018 with AWS skills worked on projects with durations longer than 18 months and had certifications expiring after 2023?",
+      "answer": ["Emma Davis"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Employees", "Employee_Skills", "Skills", "Project_Assignments", "Projects", "Certifications"],
+      "primary_keys": ["Employees.employee_id", "Employee_Skills.employee_skill_id", "Skills.skill_id", "Project_Assignments.assignment_id", "Projects.project_id", "Certifications.certification_id"],
+      "foreign_keys": [
+        "Employee_Skills.employee_id = Employees.employee_id",
+        "Employee_Skills.skill_id = Skills.skill_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id",
+        "Certifications.employee_id = Employees.employee_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Employees table for employees hired after '2018-12-31'.",
+          "tables": ["Employees"],
+          "columns": ["employee_id", "name", "hire_date"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Employee_Skills and Skills to find employees with AWS skills.",
+          "tables": ["Employees", "Employee_Skills", "Skills"],
+          "columns": ["employee_id", "skill_id", "name"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Project_Assignments and Projects, calculate project duration (end_date - start_date) in months, and filter for durations longer than 18 months.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "start_date", "end_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Employees with Certifications to filter for certifications expiring after '2023-12-31'.",
+          "tables": ["Employees", "Certifications"],
+          "columns": ["employee_id", "expiry_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr010",
+      "question": "Which employees with performance scores above 8 in reviews after 2021 worked on projects with budgets over $400,000 and were hired within 5 years of their department’s company founding?",
+      "answer": [],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Employees", "Performance_Reviews", "Project_Assignments", "Projects", "Departments", "Companies"],
+      "primary_keys": ["Employees.employee_id", "Performance_Reviews.review_id", "Project_Assignments.assignment_id", "Projects.project_id", "Departments.department_id", "Companies.company_id"],
+      "foreign_keys": [
+        "Performance_Reviews.employee_id = Employees.employee_id",
+        "Project_Assignments.employee_id = Employees.employee_id",
+        "Project_Assignments.project_id = Projects.project_id",
+        "Employees.department_id = Departments.department_id",
+        "Departments.company_id = Companies.company_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Employees with Performance_Reviews to find employees with scores above 8 in reviews after '2021-12-31'.",
+          "tables": ["Employees", "Performance_Reviews"],
+          "columns": ["employee_id", "review_date", "score"]
+        },
+        {
+          "step": 2,
+          "description": "Join Employees with Project_Assignments and Projects to find projects with budgets over $400,000.",
+          "tables": ["Employees", "Project_Assignments", "Projects"],
+          "columns": ["employee_id", "project_id", "budget_usd"]
+        },
+        {
+          "step": 3,
+          "description": "Join Employees with Departments and Companies to retrieve the company’s founded_year.",
+          "tables": ["Employees", "Departments", "Companies"],
+          "columns": ["employee_id", "department_id", "company_id", "founded_year"]
+        },
+        {
+          "step": 4,
+          "description": "Filter for employees hired within 5 years of the company’s founding (hire_date year <= founded_year + 5).",
+          "tables": ["Employees", "Companies"],
+          "columns": ["hire_date", "founded_year"]
+        }
+      ]
+    }
+  ]
+}
+

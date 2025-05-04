@@ -1,0 +1,487 @@
+{
+    "schema_id": "schema_fl003",
+    "domain": "Movies & Ratings",
+    "tables": [
+      {
+        "name": "movies",
+        "columns": [
+          "movieid",
+          "title",
+          "year",
+          "isEnglish",
+          "country",
+          "runningtime",
+          "avg_revenue"
+        ],
+        "column_descriptions": [
+          "Primary identifier for each movie",
+          "Movie title",
+          "Release year",
+          "1 = English-language, 0 = other",
+          "Country of origin",
+          "Running time in minutes",
+          "Average box-office revenue (in millions USD)"
+        ],
+        "challenge_types": [],
+        "primary_key": "movieid",
+        "foreign_keys": [],
+        "data": [
+          ["M1", "Funny Times", 2023, 1, "USA", 100, 80],
+          ["M2", "Laugh Riot", 2024, 1, "UK", 110, 90],
+          ["M3", "Deep Drama", 2018, 1, "USA", 150, 100],
+          ["M4", "Long Journey", 2019, 1, "UK", 130, 200],
+          ["M5", "Heart Story", 2021, 1, "UK", 140, 300],
+          ["M8", "Queen Quest", 2022, 1, "USA", 115, 70],
+          ["M9", "Girl Power", 2023, 1, "USA", 105, 60],
+          ["M10", "Sister Act", 2024, 1, "Canada", 112, 65],
+          ["M11", "Femme Force", 2021, 1, "USA", 118, 72],
+          ["M12", "Lady Luck", 2020, 1, "Australia", 108, 68],
+          ["M13", "She Hero", 2024, 1, "USA", 109, 69],
+          ["M14", "Her Saga", 2020, 1, "UK", 111, 66],
+          ["M15", "Bold Steps", 2022, 1, "Canada", 107, 63],
+          ["M16", "Fearless", 2024, 1, "USA", 113, 71],
+          ["M17", "Action Blast", 2021, 1, "USA", 125, 140],
+          ["M18", "Rapid Fire", 2023, 1, "USA", 127, 150],
+          ["M19", "Blockbuster", 2024, 1, "USA", 120, 150]
+        ]
+      },
+      {
+        "name": "actors",
+        "columns": ["actorid", "name", "gender", "a_quality"],
+        "column_descriptions": [
+          "Primary identifier for each actor",
+          "Actor name",
+          "Gender of the actor",
+          "Quality score assigned to the actor"
+        ],
+        "challenge_types": [],
+        "primary_key": "actorid",
+        "foreign_keys": [],
+        "data": [
+          ["A1", "John Smith", "M", 90],
+          ["A2", "Jane Doe", "F", 88],
+          ["A3", "Bob Brown", "M", 92],
+          ["A4", "Emily Clark", "F", 98],
+          ["A5", "Carlos Diaz", "M", 85],
+          ["A6", "Megan Lee", "F", 80]
+        ]
+      },
+      {
+        "name": "movies2directors",
+        "columns": ["movieid", "directorid", "genre"],
+        "column_descriptions": [
+          "Foreign key referencing movies",
+          "Identifier of the director",
+          "Primary genre of the movie"
+        ],
+        "challenge_types": [],
+        "primary_key": ["movieid", "directorid"],
+        "foreign_keys": ["movies2directors.movieid = movies.movieid"],
+        "data": [
+          ["M1", "D1", "comedy"],
+          ["M2", "D2", "comedy"],
+          ["M3", "D3", "drama"],
+          ["M4", "D2", "drama"],
+          ["M5", "D1", "drama"],
+          ["M8", "D1", "adventure"],
+          ["M9", "D1", "adventure"],
+          ["M10", "D2", "adventure"],
+          ["M11", "D2", "adventure"],
+          ["M12", "D3", "adventure"],
+          ["M13", "D1", "adventure"],
+          ["M14", "D1", "adventure"],
+          ["M15", "D2", "adventure"],
+          ["M16", "D3", "adventure"],
+          ["M17", "D5", "action"],
+          ["M18", "D5", "action"],
+          ["M19", "D4", "action"]
+        ]
+      },
+      {
+        "name": "movies2actors",
+        "columns": ["movieid", "actorid", "cast_num"],
+        "column_descriptions": [
+          "Foreign key referencing movies",
+          "Foreign key referencing actors",
+          "Numeric order of appearance in cast (1 = lead)"
+        ],
+        "challenge_types": [],
+        "primary_key": ["movieid", "actorid"],
+        "foreign_keys": [
+          "movies2actors.movieid = movies.movieid",
+          "movies2actors.actorid = actors.actorid"
+        ],
+        "data": [
+          ["M1", "A1", 1],
+          ["M1", "A2", 2],
+          ["M2", "A3", 1],
+          ["M2", "A1", 2],
+          ["M3", "A5", 1],
+          ["M4", "A4", 1],
+          ["M5", "A1", 1],
+          ["M8", "A4", 1],
+          ["M9", "A2", 1],
+          ["M10", "A4", 1],
+          ["M11", "A4", 1],
+          ["M12", "A2", 1],
+          ["M13", "A4", 1],
+          ["M14", "A4", 1],
+          ["M15", "A2", 1],
+          ["M16", "A4", 1],
+          ["M17", "A1", 1],
+          ["M17", "A2", 2],
+          ["M17", "A3", 3],
+          ["M17", "A4", 4],
+          ["M17", "A5", 5],
+          ["M18", "A1", 1],
+          ["M18", "A6", 2],
+          ["M18", "A3", 3],
+          ["M18", "A4", 4],
+          ["M18", "A2", 5],
+          ["M19", "A5", 1]
+        ]
+      },
+      {
+        "name": "users",
+        "columns": ["userid", "age", "occupation"],
+        "column_descriptions": [
+          "Primary identifier for each user",
+          "Age of the user",
+          "Occupation of the user"
+        ],
+        "challenge_types": [],
+        "primary_key": "userid",
+        "foreign_keys": [],
+        "data": [
+          ["U1", 28, "Engineer"],
+          ["U2", 30, "Student"],
+          ["U3", 27, "Engineer"],
+          ["U4", 40, "Teacher"]
+        ]
+      },
+      {
+        "name": "u2base",
+        "columns": ["userid", "movieid", "rating"],
+        "column_descriptions": [
+          "Foreign key referencing users",
+          "Foreign key referencing movies",
+          "Rating given by user (1-5 scale)"
+        ],
+        "challenge_types": [],
+        "primary_key": ["userid", "movieid"],
+        "foreign_keys": [
+          "u2base.userid = users.userid",
+          "u2base.movieid = movies.movieid"
+        ],
+        "data": [
+          ["U1", "M1", 4.5],
+          ["U2", "M1", 4.0],
+          ["U1", "M2", 4.8],
+          ["U2", "M2", 4.5],
+          ["U3", "M2", 4.7],
+          ["U3", "M19", 5.0],
+          ["U2", "M19", 4.2],
+          ["U1", "M4", 3.0],
+          ["U1", "M5", 3.5],
+          ["U2", "M5", 4.0]
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question_id": "question_fl018",
+        "question": "Which actor has the highest average rating for English comedy movies from the past 5 years?",
+        "answer": ["Bob Brown"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["movies", "movies2directors", "movies2actors", "actors", "u2base"],
+        "primary_keys": ["movies.movieid", "actors.actorid"],
+        "foreign_keys": [
+          "movies2directors.movieid = movies.movieid",
+          "movies2actors.movieid = movies.movieid",
+          "movies2actors.actorid = actors.actorid",
+          "u2base.movieid = movies.movieid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter movies where year ≥ 2020 and isEnglish = 1.",
+            "tables": ["movies"],
+            "columns": ["movieid", "year", "isEnglish"]
+          },
+          {
+            "step": 2,
+            "description": "Join with movies2directors and keep rows where genre = 'comedy'.",
+            "tables": ["movies2directors"],
+            "columns": ["movieid", "genre"]
+          },
+          {
+            "step": 3,
+            "description": "Join the result with movies2actors to obtain actorid for each movie.",
+            "tables": ["movies2actors"],
+            "columns": ["movieid", "actorid"]
+          },
+          {
+            "step": 4,
+            "description": "Join with u2base to fetch ratings and compute the average rating per actor; select actor with highest average.",
+            "tables": ["u2base"],
+            "columns": ["actorid", "rating"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl019",
+        "question": "Which country has produced the highest average revenue for drama movies longer than 120 minutes in the last 10 years?",
+        "answer": ["UK"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["movies", "movies2directors"],
+        "primary_keys": ["movies.movieid"],
+        "foreign_keys": ["movies2directors.movieid = movies.movieid"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter movies released in 2015 – 2025 with runningtime > 120.",
+            "tables": ["movies"],
+            "columns": ["movieid", "year", "runningtime"]
+          },
+          {
+            "step": 2,
+            "description": "Join with movies2directors and keep rows where genre = 'drama'.",
+            "tables": ["movies2directors"],
+            "columns": ["movieid", "genre"]
+          },
+          {
+            "step": 3,
+            "description": "Group by country and compute average of avg_revenue; choose country with highest average.",
+            "tables": ["movies"],
+            "columns": ["country", "avg_revenue"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl020",
+        "question": "Find the top 3 directors who have featured female actors in leading roles most frequently in the last 5 years.",
+        "answer": ["D1", "D2", "D3"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["movies", "movies2directors", "movies2actors", "actors"],
+        "primary_keys": ["movies.movieid", "movies2directors.directorid"],
+        "foreign_keys": [
+          "movies2directors.movieid = movies.movieid",
+          "movies2actors.movieid = movies.movieid",
+          "movies2actors.actorid = actors.actorid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter movies where year ≥ 2020.",
+            "tables": ["movies"],
+            "columns": ["movieid", "year"]
+          },
+          {
+            "step": 2,
+            "description": "Join with movies2directors to get directorid for each movie.",
+            "tables": ["movies2directors"],
+            "columns": ["movieid", "directorid"]
+          },
+          {
+            "step": 3,
+            "description": "Join with movies2actors and keep rows where cast_num = 1.",
+            "tables": ["movies2actors"],
+            "columns": ["movieid", "actorid", "cast_num"]
+          },
+          {
+            "step": 4,
+            "description": "Join with actors and filter for gender = 'F'; group by directorid, count female leads, order by count desc, pick top 3.",
+            "tables": ["actors"],
+            "columns": ["directorid", "actorid", "gender"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl021",
+        "question": "Among users aged 25 – 34, which genre has the highest average rating?",
+        "answer": ["comedy"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["users", "u2base", "movies2directors"],
+        "primary_keys": ["users.userid", "movies2directors.movieid"],
+        "foreign_keys": [
+          "u2base.userid = users.userid",
+          "u2base.movieid = movies2directors.movieid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter users with 25 ≤ age ≤ 34.",
+            "tables": ["users"],
+            "columns": ["userid", "age"]
+          },
+          {
+            "step": 2,
+            "description": "Join with u2base to obtain their ratings.",
+            "tables": ["u2base"],
+            "columns": ["userid", "movieid", "rating"]
+          },
+          {
+            "step": 3,
+            "description": "Join with movies2directors to fetch genre; group by genre, average rating, return top genre.",
+            "tables": ["movies2directors"],
+            "columns": ["genre", "rating"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl022",
+        "question": "Which actor has the highest a_quality among those who have starred in more than 3 English movies in the last 10 years?",
+        "answer": ["Emily Clark"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["movies", "movies2actors", "actors"],
+        "primary_keys": ["movies.movieid", "actors.actorid"],
+        "foreign_keys": [
+          "movies2actors.movieid = movies.movieid",
+          "movies2actors.actorid = actors.actorid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter movies with isEnglish = 1 and year ≥ 2015.",
+            "tables": ["movies"],
+            "columns": ["movieid", "isEnglish", "year"]
+          },
+          {
+            "step": 2,
+            "description": "Join with movies2actors to count distinct English movies per actor.",
+            "tables": ["movies2actors"],
+            "columns": ["actorid", "movieid"]
+          },
+          {
+            "step": 3,
+            "description": "Keep actors with count > 3.",
+            "tables": ["movies2actors"],
+            "columns": ["actorid", "movie_count"]
+          },
+          {
+            "step": 4,
+            "description": "Join with actors and choose actor with highest a_quality.",
+            "tables": ["actors"],
+            "columns": ["actorid", "a_quality"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl023",
+        "question": "Which user occupation gave the highest average rating for comedy movies in the past year?",
+        "answer": ["Engineer"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["movies", "movies2directors", "u2base", "users"],
+        "primary_keys": ["movies.movieid", "users.userid"],
+        "foreign_keys": [
+          "movies2directors.movieid = movies.movieid",
+          "u2base.movieid = movies.movieid",
+          "u2base.userid = users.userid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter movies from 2024 – 2025.",
+            "tables": ["movies"],
+            "columns": ["movieid", "year"]
+          },
+          {
+            "step": 2,
+            "description": "Join with movies2directors and keep genre = 'comedy'.",
+            "tables": ["movies2directors"],
+            "columns": ["movieid", "genre"]
+          },
+          {
+            "step": 3,
+            "description": "Join with u2base to get ratings for these movies.",
+            "tables": ["u2base"],
+            "columns": ["userid", "rating"]
+          },
+          {
+            "step": 4,
+            "description": "Join with users; group by occupation, average ratings, pick occupation with highest average.",
+            "tables": ["users"],
+            "columns": ["occupation", "rating"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl024",
+        "question": "List directors who have worked with at least 5 unique actors in action movies, sorted by the unique-actor count.",
+        "answer": ["D5", "D6"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["movies2directors", "movies2actors"],
+        "primary_keys": ["movies2directors.movieid"],
+        "foreign_keys": [
+          "movies2actors.movieid = movies2directors.movieid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Join movies2directors with movies2actors and keep rows where genre = 'action'.",
+            "tables": ["movies2directors", "movies2actors"],
+            "columns": ["directorid", "actorid"]
+          },
+          {
+            "step": 2,
+            "description": "Group by directorid and count distinct actorid.",
+            "tables": ["movies2directors"],
+            "columns": ["directorid", "unique_actor_count"]
+          },
+          {
+            "step": 3,
+            "description": "Filter directors with unique_actor_count ≥ 5 and order by count desc.",
+            "tables": ["movies2directors"],
+            "columns": ["directorid", "unique_actor_count"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl025",
+        "question": "Which user gave the highest rating for the movie with the largest avg_revenue among English movies released in the last year?",
+        "answer": ["U3"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["movies", "u2base", "users"],
+        "primary_keys": ["movies.movieid", "users.userid"],
+        "foreign_keys": [
+          "u2base.movieid = movies.movieid",
+          "u2base.userid = users.userid"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter English movies from 2024 – 2025.",
+            "tables": ["movies"],
+            "columns": ["movieid", "year", "avg_revenue"]
+          },
+          {
+            "step": 2,
+            "description": "Choose the movie with maximum avg_revenue.",
+            "tables": ["movies"],
+            "columns": ["movieid", "avg_revenue"]
+          },
+          {
+            "step": 3,
+            "description": "Join with u2base to fetch all ratings for that movie and select the highest rating.",
+            "tables": ["u2base"],
+            "columns": ["userid", "rating"]
+          },
+          {
+            "step": 4,
+            "description": "Return the userid associated with that highest rating.",
+            "tables": ["users"],
+            "columns": ["userid"]
+          }
+        ]
+      }
+    ]
+  }
+  

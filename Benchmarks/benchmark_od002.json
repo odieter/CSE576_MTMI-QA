@@ -1,0 +1,578 @@
+{
+  	"schema_id": "od002",
+	"domain": "Medicine",
+	"tables": [
+    {
+	  "name": "Patients",
+	  "columns": ["patient_id", "first_name", "last_name", "dob", "gender", "contact_number"],
+	  "column_descriptions": [
+		  "Primary Key, Unique patient identifier",
+		  "Patient's first name",
+		  "Patient's last name",
+		  "Patient's date of birth",
+		  "Patient's gender",
+		  "Patient's contact number"
+	  ],
+	  "challenge_types": ["format_variation"],
+		"primary_key": "patient_id",
+		"foreign_keys": [
+		],
+		"data": [
+		[
+		  "1",
+		  "John",
+		  "Doe",
+		  "1980-06-15",
+		  "Male",
+		  "123-456-7890"
+		],
+		[
+		  "2",
+		  "Mary",
+		  "Smith",
+		  "1990-12-01",
+		  "Female",
+		  "987-654-3210"
+		],
+		[
+		  "3",
+		  "James",
+		  "Brown",
+		  "20-03-1975",
+		  "Male",
+		  "555-123-4567"
+		],
+		[
+		  "4",
+		  "Patricia",
+		  "Taylor",
+		  "1985-08-30",
+		  "Female",
+		  "321-654-9870"
+		],
+		[
+		  "5",
+		  "Michael",
+		  "Johnson",
+		  "11/25/1992",
+		  "Male",
+		  "123-789-4561"
+		],
+		[
+		  "6",
+		  "Emma",
+		  "White",
+		  "14-04-1987",
+		  "Female",
+		  "234-567-8901"
+		],
+		[
+		  "7",
+		  "Daniel",
+		  "Lee",
+		  "1983-09-08",
+		  "Male",
+		  "321-456-7890"
+		],
+		[
+		  "8",
+		  "Olivia",
+		  "Harris",
+		  "02/19/2000",
+		  "Female",
+		  "432-765-9876"
+		],
+		[
+		  "9",
+		  "Benjamin",
+		  "Scott",
+		  "22-07-1972",
+		  "Male",
+		  "543-210-9876"
+		],
+		[
+		  "10",
+		  "Sophie",
+		  "Clark",
+		  "12/05/1995",
+		  "Female",
+		  "654-321-1234"
+		]
+	  ]
+	},
+    {
+	  "name": "Doctors",
+	  "columns": ["doctor_id", "first_name", "last_name", "specialization", "phone_number", "email"],
+	  "column_descriptions": [
+		"Primary Key, Unique doctor identifier",
+		"Doctor's first name",
+		"Doctor's last name",
+		"Doctor's medical specialization",
+		"Doctor's phone number",
+		"Doctor's email address"
+	  ],
+		"challenge_types": [],
+		"primary_key": "doctor_id",
+		"foreign_keys": [
+		],
+	  "data": [
+		[
+		  "101",
+		  "Sarah",
+		  "Johnson",
+		  "Cardiologist",
+		  "111-222-3333",
+		  "sarah.johnson@hospital.com"
+		],
+		[
+		  "102",
+		  "Michael",
+		  "Lee",
+		  "Pediatrician",
+		  "444-555-6666",
+		  "michael.lee@clinic.com"
+		],
+		[
+		  "103",
+		  "Emily",
+		  "Davis",
+		  "Orthopedist",
+		  "777-888-9999",
+		  "emily.davis@medcenter.com"
+		],
+		[
+		  "104",
+		  "John",
+		  "Wilson",
+		  "General Practitioner",
+		  "333-444-5555",
+		  "john.wilson@doctors.com"
+		],
+		[
+		  "105",
+		  "Jessica",
+		  "Carter",
+		  "Neurologist",
+		  "222-333-4444",
+		  "jessica.carter@hospital.com"
+		],
+		[
+		  "106",
+		  "David",
+		  "Moore",
+		  "Dermatologist",
+		  "555-666-7777",
+		  "david.moore@skincare.com"
+		],
+		[
+		  "107",
+		  "Linda",
+		  "Garcia",
+		  "Gastroenterologist",
+		  "888-999-0000",
+		  "linda.garcia@gastroclinic.com"
+		]
+	  ]
+	},
+    {
+	  "name": "Appointments",
+	  "columns": ["appointment_id", "patient_id", "doctor_id", "appointment_date", "appointment_type", "status"],
+	  "column_descriptions": [
+		  "Primary Key, Unique appointment identifier",
+		  "Foreign Key, references Patients(patient_id)",
+		  "Foreign Key, references Doctors(doctor_id)",
+		  "Date and time of the appointment",
+		  "Type of the appointment (e.g., consultation, follow-up)",
+		  "Appointment status (e.g., scheduled, completed, canceled)"
+	  ],
+		"challenge_types": ["format_variation"],
+		"primary_key": "appointment_id",
+		"foreign_keys": [
+			"Appointments.patient_id = Patients.patient_id",
+			"Appointments.doctor_id = Doctors.doctor_id"
+		],
+	  "data": [
+		[
+		  "1001",
+		  "1",
+		  "101",
+		  "2025-04-05 09:30",
+		  "Consultation",
+		  "Scheduled"
+		],
+		[
+		  "1002",
+		  "2",
+		  "102",
+		  "04/06/2025 14:00",
+		  "Check-up",
+		  "Completed"
+		],
+		[
+		  "1003",
+		  "3",
+		  "103",
+		  "06-04-2025 11:00",
+		  "Follow-up",
+		  "Canceled"
+		],
+		[
+		  "1004",
+		  "4",
+		  "104",
+		  "2025/04/08 10:00",
+		  "Consultation",
+		  "Scheduled"
+		],
+		[
+		  "1005",
+		  "5",
+		  "105",
+		  "09-04-2025 08:00",
+		  "Consultation",
+		  "Completed"
+		],
+		[
+		  "1006",
+		  "6",
+		  "106",
+		  "2025-04-10 15:00",
+		  "Skin Check",
+		  "Scheduled"
+		],
+		[
+		  "1007",
+		  "7",
+		  "107",
+		  "04/11/2025 12:30",
+		  "Gastro Check-up",
+		  "Scheduled"
+		],
+		[
+		  "1008",
+		  "8",
+		  "103",
+		  "2025/04/6 13:00",
+		  "Consultation",
+		  "Completed"
+		]
+	  ]
+	},
+    {
+	  "name": "Medications",
+	  "columns": ["medication_id", "medication_name", "dose", "frequency", "patient_id", "doctor_id"],
+	  "column_descriptions": [
+		 "Primary Key, Unique medication identifier",
+		 "Name of the medication",
+		 "Dosage information",
+		 "Frequency of administration (e.g., daily, weekly)",
+		 "Foreign Key, references Patients(patient_id)",
+		 "Foreign Key, references Doctors(doctor_id)"
+	  ],
+		"challenge_types": [],
+		"primary_key": "medication_id",
+		"foreign_keys": [
+			"Medications.patient_id = Patients.patient_id",
+			"Medications.doctor_id = Doctors.doctor_id"
+		],
+	  "data": [
+		[
+		  "2001",
+		  "Aspirin",
+		  "100mg",
+		  "Daily",
+		  "1",
+		  "101"
+		],
+		[
+		  "2002",
+		  "Amoxicillin",
+		  "250mg",
+		  "Twice a day",
+		  "2",
+		  "102"
+		],
+		[
+		  "2003",
+		  "Ibuprofen",
+		  "200mg",
+		  "Every 4 hours",
+		  "3",
+		  "103"
+		],
+		[
+		  "2004",
+		  "Metformin",
+		  "500mg",
+		  "Daily",
+		  "4",
+		  "104"
+		],
+		[
+		  "2005",
+		  "Paracetamol",
+		  "500mg",
+		  "Every 6 hours",
+		  "5",
+		  "105"
+		],
+		[
+		  "2006",
+		  "Lisinopril",
+		  "10mg",
+		  "Once a day",
+		  "6",
+		  "106"
+		],
+		[
+		  "2007",
+		  "Losartan",
+		  "50mg",
+		  "Once a day",
+		  "7",
+		  "107"
+		],
+		[
+		  "2008",
+		  "Cetirizine",
+		  "10mg",
+		  "Daily",
+		  "8",
+		  "101"
+		],
+		[
+		  "2009",
+		  "Metoprolol",
+		  "50mg",
+		  "Twice a day",
+		  "9",
+		  "102"
+		],
+		[
+		  "2010",
+		  "Prednisone",
+		  "5mg",
+		  "Every other day",
+		  "10",
+		  "103"
+		],
+		[
+		  "2011",
+		  "Omeprazole",
+		  "20mg",
+		  "Once a day",
+		  "11",
+		  "104"
+		],
+		[
+		  "2012",
+		  "Warfarin",
+		  "2mg",
+		  "Daily",
+		  "10",
+		  "105"
+		]
+	  ]
+	}
+	],
+	"questions": [
+    {
+      "question_id": "question_od001",
+      "question": "Which doctor prescribed medication to the patient named \"James Brown\"?",
+      "answer": ["Dr. Emily Davis"],
+      "challenge_types": ["multi-hop"],
+      "num_hops": 2,
+      "table_names": ["Patients", "Medications", "Doctors"],
+      "primary_keys": ["patient_id", "doctor_id"],
+      "foreign_keys": [
+        "Medications.patient_id = Patients.patient_id",
+        "Medications.doctor_id = Doctors.doctor_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Search the Patients table for first_name=James, last_name=Brown and find patient_id = 3.",
+          "tables": ["Patients"],
+          "columns": ["first_name","last_name","patient_id"]
+        },
+        {
+          "step": 2,
+          "description": "Look up the Medications table where patient_id = 3 and find doctor_id = 103.",
+          "tables": ["Medications"],
+          "columns": ["patient_id","doctor_id"]
+        },
+	  	{
+          "step": 3,
+          "description": "Look up the Doctors table to identify doctor_id = 103 as Dr. Emily Davis.",
+          "tables": ["Doctors"],
+          "columns": ["doctor_id","first_name","last_name"]
+        }
+      ]
+    },
+	{
+      "question_id": "question_od002",
+      "question": "How many scheduled appointments does Dr. Sarah Johnson have?",
+      "answer": ["1"],
+      "challenge_types": ["multi-hop", "conditional","arithmetic"],
+      "num_hops": 1,
+      "table_names": ["Doctors", "Appointments"],
+      "primary_keys": ["doctor_id"],
+      "foreign_keys": [
+        "Appointments.doctor_id = Doctors.doctor_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Search the Doctors table for first_name=Sarah last_name=Johnson and find doctor_id = 101.",
+          "tables": ["Doctors"],
+          "columns": ["doctor_id"]
+        },
+        {
+          "step": 2,
+          "description": "Get rows from the Appointments table with doctor_id = 101 and status = \"Scheduled\"",
+          "tables": ["Appointments"],
+          "columns": ["doctor_id","status"]
+        },
+		  {
+          "step": 3,
+          "description": "Count the number of rows found.",
+          "tables": ["Appointments"],
+          "columns": ["doctor_id","status"]
+        }
+      ]
+    },
+	{
+      "question_id": "question_od003",
+      "question": "Which patient has a scheduled consultation with Dr. John Wilson?",
+      "answer": ["Sophie Clark"],
+      "challenge_types": ["multi-hop", "conditional"],
+      "num_hops": 2,
+      "table_names": ["Doctors", "Appointments", "Patients"],
+      "primary_keys": ["doctor_id", "patient_id"],
+      "foreign_keys": [
+        "Appointments.doctor_id = Doctors.doctor_id",
+        "Appointments.patient_id = Patients.patient_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Search the Doctors table for first_name=John last_name=Wilson and find doctor_id = 104.",
+          "tables": ["Doctors"],
+          "columns": ["first_name","last_name","doctor_id"]
+        },
+        {
+          "step": 2,
+          "description": "Search the patient_id in Appointments table for doctor_id = 104 and appointment_type = \"Consultation\" and status = \"Scheduled\".",
+          "tables": ["Appointments"],
+          "columns": ["doctor_id","appointment_type","status","patient_id"]
+        },
+		  {
+          "step": 3,
+          "description": "Look up the patient_id in the Patients table to find the corresponding first_name=Sophie last_name=Clark.",
+          "tables": ["Patients"],
+          "columns": ["patient_id","first_name","last_name"]
+        }
+      ]
+    },
+	{
+      "question_id": "question_od004",
+      "question": "Which patients have appointments on April 6, 2025?",
+      "answer": ["Mary Smith", "James Brown", "Olivia Harris"],
+      "challenge_types": ["multi-hop", "aggregation", "comparison", "group_by",
+		  "conditional", "temporal", "date_format_inference", "arithmetic"],
+      "num_hops": 1,
+      "table_names": ["Appointments", "Patients"],
+      "primary_keys": ["patient_id"],
+      "foreign_keys": [
+        "Appointments.patient_id = Patients.patient_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Appointments table, find all rows with appointment_date corresponding to a date of April 6, 2025, and find their corresponding patient_id values",
+          "tables": ["Appointments"],
+          "columns": ["appointment_date","patient_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Patients table, find the first_name and last_name values for each patient_id",
+          "tables": ["Patients"],
+          "columns": ["patient_id","first_name","last_name"]
+        }
+      ]
+    },
+	{
+      "question_id": "question_od005",
+      "question": "Which patients has the Neurologist prescribed medicine to?",
+      "answer": ["Michael Johnson","Sophie Clark"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "conditional"],
+      "num_hops": 2,
+      "table_names": ["Doctors", "Medications", "Patients"],
+      "primary_keys": ["doctor_id", "patient_id"],
+      "foreign_keys": [
+        "Medications.doctor_id = Doctors.doctor_id",
+        "Medications.patient_id = Patients.patient_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Doctors table, find the doctor_id corresponding to specialization=Neurologist.",
+          "tables": ["Doctors"],
+          "columns": ["specialization","doctor_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Medications table, find each patient_id corresponding to the doctor_id.",
+          "tables": ["Medications"],
+          "columns": ["doctor_id","patient_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Patients table, find the first_name and last_name corresponding to each patient_id and list them.",
+          "tables": ["Patients"],
+          "columns": ["patient_id","first_name","last_name"]
+        }
+      ]
+},
+	{
+      "question_id": "question_od006",
+      "question": "What appointments has Dr. Emily Davis had with male patients?",
+      "answer": ["Follow-up on April 6 2025 at 11:00"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "conditional",
+        "date_format_inference", "commonsense", "ambiguous_question", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Doctors", "Appointments", "Patients"],
+      "primary_keys": ["doctor_id", "patient_id"],
+      "foreign_keys": [
+        "Appointments.doctor_id = Doctors.doctor_id",
+        "Appointments.patient_id = Patients.patient_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Doctors table, find the doctor_id corresponding to first_name=Emily and last_name=Davis.",
+          "tables": ["Doctors"],
+          "columns": ["first_name","last_name","doctor_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Appointments table, find the rows corresponding to the doctor_id.",
+          "tables": ["Appointments"],
+          "columns": ["doctor_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Patients table, find the gender corresponding to the patient_id for each candidate row, and keep the rows where the gender=Male.",
+          "tables": ["Appointments","Patients"],
+          "columns": ["gender","patient_id"]
+        },
+		  {
+          "step": 4,
+          "description": "Return the appointment_type and appointment_date for the kept rows.",
+          "tables": ["Appointments"],
+          "columns": ["appointment_type","appointment_date"]
+        }
+      ]
+    }
+	]
+}

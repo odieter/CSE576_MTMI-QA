@@ -1,0 +1,525 @@
+{
+  "schema_id": "schema_ss002",
+  "domain": "product details",
+  "tables": [
+    {
+      "name": "Products",
+      "columns": ["product_id", "product_name", "category", "brand"],
+      "column_descriptions": [
+        "Unique identifier for each product. Used as a primary key for referencing in reviews and promotions.",
+        "Name or title of the product. Examples include 'Smartphone X10', 'EcoBlend Pro'.",
+        "Category under which the product is classified, e.g., 'Electronics', 'Furniture'.",
+        "Brand or manufacturer of the product."
+      ],
+      "challenge_types": [],
+      "primary_key": "product_id",
+      "foreign_keys": [],
+      "data": [
+        ["P001", "Smartphone X10", "Electronics", "TechCorp"],
+        ["P002", "4K Ultra TV", "Electronics", "VisionTech"],
+        ["P003", "EcoBlend Pro", "Kitchen", "HomeTech"],
+        ["P004", "QuietBoil Kettle", "Kitchen", "SteamEase"],
+        ["P005", "PowerVac Turbo", "Home Appliances", "CleanMax"],
+        ["P006", "DeskMaster Ergonomic", "Furniture", "FurniCo"],
+        ["P007", "HydroPurify Ultra", "Water", "HydroLife"],
+        ["P008", "AirFresh 360", "Air Quality", "BreezeTech"],
+        ["P009", "SmartWatch FitPro", "Wearables", "GearX"],
+        ["P010", "NoiseCanceller Max", "Audio", "SoundBeat"]
+      ]
+    },
+    {
+      "name": "Customers",
+      "columns": ["customer_id", "full_name", "email", "signup_date"],
+      "column_descriptions": [
+        "Unique identifier assigned to each customer. Used as a primary key and referenced in reviews and orders.",
+        "Full name of customer, which may appear in formats like 'First Last' or 'Last, First'.",
+        "Customer's email address. Variations may include different domains and separators.",
+        "Date the customer signed up. Formats include 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'."
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "customer_id",
+      "foreign_keys": [],
+      "data": [
+        ["C001", "John Smith", "john.smith@example.com", "2021-01-15"],
+        ["C002", "Davis, Maria", "maria.davis@ex.co", "January 20, 2020"],
+        ["C003", "ALICE JOHNSON", "alice_johnson@example.com", "2019-06-10"],
+        ["C004", "Kevin Lee", "kevin.lee@ex.com", "07/25/2022"],
+        ["C005", "Sánchez, Camila", "camila.sanchez@mail.com", "2020-12-30"],
+        ["C006", "Carlos Rivera", "rivera.carlos@mail.net", "April 14, 2023"],
+        ["C007", "Fatima Khan", "fatima.k@khanmail.com", "2018-03-01"],
+        ["C008", "Nguyen, Minh", "m.nguyen@khanmail.com", "03/22/2017"],
+        ["C009", "Zhang Wei", "zhangwei@ex.org", "2019-11-18"],
+        ["C010", "EMILY TAYLOR", "e.taylor@ex.org", "October 5, 2020"]
+      ]
+    },
+    {
+      "name": "Reviews",
+      "columns": ["review_id", "customer_id", "product_id", "rating", "review_text"],
+      "column_descriptions": [
+        "Unique ID for each product review. Serves as the primary key for the review table.",
+        "Foreign key identifying the customer who wrote the review. ",
+        "Foreign key referencing the reviewed product.",
+        "Rating given to the product. May appear as float (4.5) or string ('4.5').",
+        "Textual content of the review. Provides qualitative feedback about the product."
+      ],
+      "challenge_types": ["null_values", "format_variation"],
+      "primary_key": "review_id",
+      "foreign_keys": [
+        "Reviews.customer_id = Customers.customer_id",
+        "Reviews.product_id = Products.product_id"
+      ],
+      "data": [
+        ["R001", "C001", "P001", 4.5, "Great performance and battery life."],
+        ["R002", "C002", "P002", "4.5", "Stunning visuals, love the display."],
+        ["R003", "C003", "P003", 3.8, "Useful for smoothies, a bit loud though."],
+        ["R004", "C005", "P005", 4.9, "Cleans carpets easily."],
+        ["R005", "C006", "P006", "4.9", "Really comfortable for long hours."],
+        ["R006", "C007", "P007", 3.0, "Purifies water quickly but noisy."],
+        ["R007", "C008", "P008", "3.0", "Fresh air noticeable within minutes."],
+        ["R008", "C009", "P009", 4.2, "Perfect for fitness tracking."],
+        ["R009", "C010", "P010", "4.2", "Blocks out all background noise."]
+      ]
+    },
+    {
+      "name": "Promotions",
+      "columns": ["promo_id", "product_id", "discount_percent", "valid_until"],
+      "column_descriptions": [
+        "Unique identifier for each promotion. Primary key used in orders referencing the discount.",
+        "Foreign key linking to the product on promotion.",
+        "Discount percentage applied to the product. Typically a float like 10.0 or 15.0.",
+        "End date of the promotion. Can be formatted as 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'."
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "promo_id",
+      "foreign_keys": [
+        "Promotions.product_id = Products.product_id"
+      ],
+      "data": [
+        ["PR001", "P001", 10.0, "2021-12-31"],
+        ["PR002", "P003", 15.0, "December 31, 2022"],
+        ["PR003", "P005", 20.0, "06/30/2023"],
+        ["PR004", "P007", 5.0, "2024-03-15"],
+        ["PR005", "P009", 10.0, "March 1, 2025"]
+      ]
+    },
+    {
+      "name": "Orders",
+      "columns": ["order_id", "customer_id", "order_date", "total_amount", "promo_id", "product_ids"],
+      "column_descriptions": [
+        "Unique identifier for the order.",
+        "Foreign key referencing the customer who placed the order.",
+        "Date the order was placed. May be formatted as 'YYYY-MM-DD', 'Month D, YYYY', or 'MM/DD/YYYY'.",
+        "Total monetary amount of the order. May appear as float or string, with formatting inconsistencies.",
+        "Foreign key referencing the applied promotion if any. Nullable field.",
+        "List of product IDs included in the order. Multiple products are grouped within a single order."
+      ],
+      "challenge_types": ["null_values", "format_variation"],
+      "primary_key": "order_id",
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id",
+        "Orders.promo_id = Promotions.promo_id"
+      ],
+      "data": [
+        ["O001", "C001", "2022-03-01", 199.99, "PR001", ["P001"]],
+        ["O002", "C002", "March 2, 2023", "599.99", "PR001", ["P001", "P002", "P004"]],
+        ["O003", "C003", "02/28/2023", 129.95, "PR002", ["P003", "P004"]],
+        ["O004", "C004", "2022-02-28", "89.98", null, ["P004", "P010"]],
+        ["O005", "C005", "01/15/2021", 249.99, "PR003", ["P005"]],
+        ["O006", "C006", "January 16, 2022", "349.98", "PR003", ["P005", "P006"]],
+        ["O007", "C007", "2023-03-10", 149.99, "PR004", ["P007", "P008", "P009"]],
+        ["O008", "C008", "10/03/2021", "69.49", null, ["P008"]],
+        ["O009", "C009", "03/12/2022", 89.00, "PR005", ["P009"]],
+        ["O010", "C010", "March 13, 2023", "134.99", "PR005", ["P009", "P010"]]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ss001",
+      "question": "Which product received the highest average rating from customers who signed up before 2020?",
+      "answer": ["SmartWatch FitPro"],
+      "challenge_types": ["multi-hop", "aggregation", "temporal", "date_format_inference"],
+      "num_hops": 2,
+      "table_names": ["Customers", "Reviews", "Products"],
+      "primary_keys": ["Customers.customer_id", "Reviews.review_id", "Products.product_id"],
+      "foreign_keys": [
+        "Reviews.customer_id = Customers.customer_id",
+        "Reviews.product_id = Products.product_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize the signup_date to year format.",
+          "tables": ["Customers"],
+          "columns": ["signup_date"]
+        },
+        {
+          "step": 2,
+          "description": "Identify customers whose signup_date is before 2020.",
+          "tables": ["Customers"],
+          "columns": ["customer_id", "signup_date"]
+        },
+        {
+          "step": 3,
+          "description": "Find all reviews written by the identified customer_ids.",
+          "tables": ["Reviews"],
+          "columns": ["review_id", "customer_id", "product_id", "rating"]
+        },
+        {
+          "step": 4,
+          "description": "Normalize the ratings from the reviews to float format.",
+          "tables": ["Reviews"],
+          "columns": ["rating"]
+        },
+        {
+          "step": 5,
+          "description": "Group reviews by product_id.",
+          "tables": ["Reviews"],
+          "columns": ["customer_id", "product_id", "rating"]
+        },
+        {
+          "step": 6,
+          "description": "Calculate the average rating per product.",
+          "tables": ["Reviews"],
+          "columns": ["product_id", "rating"]
+        },
+        {
+          "step": 7,
+          "description": "Retrieve the name for the product_id with the highest average rating.",
+          "tables": ["Products"],
+          "columns": ["product_id", "product_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss002",
+      "question": "Which product category has the most products that received reviews with ratings above 4.0?",
+      "answer": ["Electronics"],
+      "challenge_types": ["multi-hop", "group_by", "comparison", "format_variation"],
+      "num_hops": 2,
+      "table_names": ["Reviews", "Products"],
+      "primary_keys": ["Reviews.review_id", "Products.product_id"],
+      "foreign_keys": [
+        "Reviews.product_id = Products.product_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize the ratings from the reviews to float format.",
+          "tables": ["Reviews"],
+          "columns": ["rating"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve all product_ids where the rating is greater than 4.0.",
+          "tables": ["Reviews"],
+          "columns": ["product_id", "rating"]
+        },
+        {
+          "step": 3,
+          "description": "For each product_id, retrieve the corresponding category.",
+          "tables": ["Products"],
+          "columns": ["product_id", "category"]
+        },
+        {
+          "step": 4,
+          "description": "Group the product_ids by category and count the number of distinct products in each.",
+          "tables": ["Products"],
+          "columns": ["product_id", "category"]
+        },
+        {
+          "step": 5,
+          "description": "Identify the product category that has the highest count.",
+          "tables": ["Products"],
+          "columns": ["category"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss003",
+      "question": "What is the average total cost of orders by customers who reviewed a product with a rating above 4.0?",
+      "answer": ["270.66"],
+      "challenge_types": ["multi-hop", "aggregation", "derived_metric", "format_variation"],
+      "num_hops": 2,
+      "table_names": ["Reviews", "Customers", "Orders"],
+      "primary_keys": [
+        "Reviews.review_id",
+        "Customers.customer_id",
+        "Orders.order_id"
+      ],
+      "foreign_keys": [
+        "Reviews.customer_id = Customers.customer_id",
+        "Orders.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize review ratings to float values to account for format variation",
+          "tables": ["Reviews"],
+          "columns": ["rating"]
+        },
+        {
+          "step": 2,
+          "description": "Extract the unique customer_ids from reviews that have a rating above 4.0",
+          "tables": ["Reviews"],
+          "columns": ["customer_id", "rating"]
+        },
+        {
+          "step": 3,
+          "description": "Normalize total_amount to float values to account for format variation.",
+          "tables": ["Orders"],
+          "columns": ["total_amount"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the total_amounts for orders made by these customer_ids.",
+          "tables": ["Orders"],
+          "columns": ["order_id", "customer_id", "total_amount"]
+        },
+        {
+          "step": 5,
+          "description": "Calculate the average total_amount across all matching orders.",
+          "tables": ["Orders"],
+          "columns": ["order_id", "total_amount"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss004",
+      "question": "Which customers wrote reviews for the product that was ordered the most?",
+      "answer": ["Zhang Wei"],
+      "challenge_types": ["multi-hop", "aggregation", "requires_deduction"],
+      "num_hops": 3,
+      "table_names": ["Orders", "Reviews", "Products", "Customers"],
+      "primary_keys": [
+        "Orders.order_id",
+        "Reviews.review_id",
+        "Products.product_id"
+      ],
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id",
+        "Orders.promo_id = Promotions.promo_id",
+        "Reviews.product_id = Products.product_id",
+        "Reviews.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Extract all product_ids and count how many times each product_id appears.",
+          "tables": ["Orders"],
+          "columns": ["product_ids"]
+        },
+        {
+          "step": 2,
+          "description": "Filter reviews for the product_ids with the highest count.",
+          "tables": ["Orders", "Reviews"],
+          "columns": ["product_ids", "product_id"]
+        },
+        {
+          "step": 3,
+          "description": "Extract the customer_ids for each product_id.",
+          "tables": ["Reviews"],
+          "columns": ["customer_id", "product_id"]
+        },
+        {
+          "step": 4,
+          "description": "Retrieve the name of the customer using the customer_ids",
+          "tables": ["Customers"],
+          "columns": ["customer_id", "ful_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss005",
+      "question": "Which customers have purchased products in at least three different categories?",
+      "answer": ["Fatima Khan"],
+      "challenge_types": ["multi-hop", "group_by", "comparison"],
+      "num_hops": 2,
+      "table_names": ["Orders", "Products", "Customers"],
+      "primary_keys": [
+        "Orders.order_id",
+        "Products.product_id",
+        "Customers.customer_id"
+      ],
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id",
+        "Reviews.product_id = Products.product_id",
+        "Orders.promo_id = Promotions.promo_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Extract each product_id from the product_ids list for every order.",
+          "tables": ["Orders"],
+          "columns": ["product_ids"]
+        },
+        {
+          "step": 2,
+          "description": "Associate each product_id with its corresponding category.",
+          "tables": ["Products"],
+          "columns": ["product_id", "category"]
+        },
+        {
+          "step": 3,
+          "description": "Group purchases by customer_id and collect the set of unique product categories for each customer.",
+          "tables": ["Orders", "Products"],
+          "columns": ["customer_id", "product_ids", "product_id", "category"]
+        },
+        {
+          "step": 4,
+          "description": "Filter for customers who have purchased products in at least three distinct categories.",
+          "tables": ["Orders", "Products"],
+          "columns": ["customer_id", "category"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the name of the customer using the customer_ids",
+          "tables": ["Customers"],
+          "columns": ["customer_id", "ful_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss006",
+      "question": "Are there any brands whose products were bought but never reviewed?",
+      "answer": ["SteamEase"],
+      "challenge_types": ["multi-hop", "negation"],
+      "num_hops": 2,
+      "table_names": ["Orders", "Reviews", "Products"],
+      "primary_keys": [
+        "Orders.order_id",
+        "Reviews.review_id",
+        "Products.product_id"
+      ],
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id",
+        "Orders.promo_id = Promotions.promo_id",
+        "Reviews.product_id = Products.product_id",
+        "Reviews.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Extract each product_id from the product_ids list for every order.",
+          "tables": ["Orders"],
+          "columns": ["product_ids"]
+        },
+        {
+          "step": 2,
+          "description": "Extract all reviewed product_ids.",
+          "tables": ["Reviews"],
+          "columns": ["product_id"]
+        },
+        {
+          "step": 3,
+          "description": "Identify the product_ids that appear in Orders but not in Reviews.",
+          "tables": ["Orders", "Reviews"],
+          "columns": ["product_ids", "product_id"]
+        },
+        {
+          "step": 4,
+          "description": "For each unmatched product_id, retrieve the brand.",
+          "tables": ["Products"],
+          "columns": ["product_id", "brand"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss007",
+      "question": "How much have customers who signed up in 2019 spent in total and what are their names?",
+      "answer": ["218.95", "ALICE JOHNSON", "Zhang Wei"],
+      "challenge_types": ["multi-hop", "temporal", "aggregation", "format_variation"],
+      "num_hops": 2,
+      "table_names": ["Customers", "Orders"],
+      "primary_keys": [
+        "Customers.customer_id",
+        "Orders.order_id"
+      ],
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize the signup_date to year format.",
+          "tables": ["Customers"],
+          "columns": ["enrollment_date"]
+        },
+        {
+          "step": 2,
+          "description": "Filter customer_ids that have signup_date in 2019.",
+          "tables": ["Customers"],
+          "columns": ["customer_id", "signup_date"]
+        },
+        {
+          "step": 3,
+          "description": "Normalize the total_amount to float format.",
+          "tables": ["Orders"],
+          "columns": ["total_amount"]
+        },
+        {
+          "step": 4,
+          "description": "Extract orders where the customer_id matches.",
+          "tables": ["Orders"],
+          "columns": ["customer_id", "total_amount"]
+        },
+        {
+          "step": 5,
+          "description": "Sum the total_amount values of all matching orders.",
+          "tables": ["Orders"],
+          "columns": ["total_amount"]
+        },
+        {
+          "step": 6,
+          "description": "Retrieve the name of the customer using the filtered customer_ids",
+          "tables": ["Customers"],
+          "columns": ["customer_id", "ful_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss008",
+      "question": "Which brands have products that were ordered the most but do not have active promotions?",
+      "answer": ["SteamEase"],
+      "challenge_types": ["multi-hop", "aggregation", "negation", "comparison"],
+      "num_hops": 2,
+      "table_names": ["Orders", "Products", "Promotions"],
+      "primary_keys": [
+        "Orders.order_id",
+        "Products.product_id",
+        "Promotions.promo_id"
+      ],
+      "foreign_keys": [
+        "Orders.customer_id = Customers.customer_id",
+        "Orders.promo_id = Promotions.promo_id",
+        "Products.product_id = Promotions.product_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Extract each product_id from the product_ids list for every order.",
+          "tables": ["Orders"],
+          "columns": ["product_ids"]
+        },
+        {
+          "step": 2,
+          "description": "Identify the product_ids with the highest count.",
+          "tables": ["Orders"],
+          "columns": ["product_ids"]
+        },
+        {
+          "step": 3,
+          "description": "Find the product_ids that have do not have active promotions out of all product_ids.",
+          "tables": ["Promotions", "Products"],
+          "columns": ["product_id"]
+        },
+        {
+          "step": 4,
+          "description": "Identify the brand of product_ids that are shared between the product_ids collected in step 2 and 3.",
+          "tables": ["Products"],
+          "columns": ["product_id", "brand"]
+        }
+      ]
+    }
+  ]
+}

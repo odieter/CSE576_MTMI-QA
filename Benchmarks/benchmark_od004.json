@@ -1,0 +1,756 @@
+{
+  "schema_id": "od_004",
+  "tables": [
+    {
+	  "name": "Customers",
+	  "columns": ["customer_id", "first_name", "last_name", "email", "phone_number"],
+	  "column_descriptions": [
+		  "Primary Key, Unique customer identifier",
+		  "First name of the customer",
+		  "Last name of the customer",
+		  "Email address of the customer",
+		  "Phone number of the customer"
+	  ],
+		"challenge_types": [],
+		"primary_key": "customer_id",
+		"foreign_keys": [
+		],
+	  "data": [
+		[
+		  "1",
+		  "John",
+		  "Doe",
+		  "johndoe@email.com",
+		  "555-1234"
+		],
+		[
+		  "2",
+		  "Jane",
+		  "Smith",
+		  "janesmith@email.com",
+		  "555-5678"
+		],
+		[
+		  "3",
+		  "Alice",
+		  "Johnson",
+		  "alice.j@email.com",
+		  "555-8765"
+		],
+		[
+		  "4",
+		  "Bob",
+		  "Lee",
+		  "bob.lee@email.com",
+		  "555-4321"
+		],
+		[
+		  "5",
+		  "Charlie",
+		  "Brown",
+		  "charlie.brown@email.com",
+		  "555-6789"
+		],
+		[
+		  "6",
+		  "Emily",
+		  "Davis",
+		  "emily.davis@email.com",
+		  "555-2345"
+		],
+		[
+		  "7",
+		  "Michael",
+		  "Wilson",
+		  "michael.wilson@email.com",
+		  "555-3456"
+		],
+		[
+		  "8",
+		  "Sarah",
+		  "Lee",
+		  "sarah.lee@email.com",
+		  "555-4567"
+		],
+		[
+		  "9",
+		  "David",
+		  "Clark",
+		  "david.clark@email.com",
+		  "555-5679"
+		],
+		[
+		  "10",
+		  "Olivia",
+		  "White",
+		  "olivia.white@email.com",
+		  "555-6780"
+		],
+		[
+		  "11",
+		  "Brian",
+		  "Adams",
+		  "brian.adams@email.com",
+		  "555-7891"
+		],
+		[
+		  "12",
+		  "Jessica",
+		  "Martinez",
+		  "jessica.martinez@email.com",
+		  "555-8902"
+		],
+		[
+		  "13",
+		  "Daniel",
+		  "Gonzalez",
+		  "daniel.gonzalez@email.com",
+		  "555-9013"
+		],
+		[
+		  "14",
+		  "Laura",
+		  "Garcia",
+		  "laura.garcia@email.com",
+		  "555-0124"
+		],
+		[
+		  "15",
+		  "Kevin",
+		  "Thompson",
+		  "kevin.thompson@email.com",
+		  "555-1230"
+		]
+	  ]
+	},
+    {
+	  "name": "Accounts",
+	  "columns": ["account_id", "customer_id", "account_type", "balance", "date_opened"],
+	  "column_descriptions": [
+		  "Primary Key, Unique account identifier",
+		  "Foreign Key referencing Customers",
+		  "Type of the account (e.g., Checking, Savings, Credit)",
+		  "Current balance of the account",
+		  "Date when the account was opened"
+	  ],
+		"challenge_types": [],
+		"primary_key": "account_id",
+		"foreign_keys": [
+			"Account.account_id = Customers.customer_id"
+		],
+	  "data": [
+		[
+		  "101",
+		  "1",
+		  "Checking",
+		  "1200.50",
+		  "2023-01-15"
+		],
+		[
+		  "102",
+		  "2",
+		  "Savings",
+		  "5000.00",
+		  "2022-08-25"
+		],
+		[
+		  "103",
+		  "3",
+		  "Checking",
+		  "320.75",
+		  "2023-03-10"
+		],
+		[
+		  "104",
+		  "4",
+		  "Credit",
+		  "1500.00",
+		  "2022-11-05"
+		],
+		[
+		  "105",
+		  "5",
+		  "Savings",
+		  "8500.00",
+		  "2021-09-30"
+		],
+		[
+		  "106",
+		  "6",
+		  "Checking",
+		  "2200.00",
+		  "2023-02-12"
+		],
+		[
+		  "107",
+		  "7",
+		  "Savings",
+		  "7000.00",
+		  "2021-11-18"
+		],
+		[
+		  "108",
+		  "8",
+		  "Checking",
+		  "550.50",
+		  "2023-01-25"
+		],
+		[
+		  "109",
+		  "9",
+		  "Credit",
+		  "3200.00",
+		  "2022-07-30"
+		],
+		[
+		  "110",
+		  "10",
+		  "Savings",
+		  "13000.00",
+		  "2020-05-20"
+		],
+		[
+		  "111",
+		  "11",
+		  "Checking",
+		  "1800.75",
+		  "2022-10-05"
+		],
+		[
+		  "112",
+		  "12",
+		  "Credit",
+		  "4000.00",
+		  "2022-09-15"
+		],
+		[
+		  "113",
+		  "13",
+		  "Checking",
+		  "120.00",
+		  "2023-03-05"
+		],
+		[
+		  "114",
+		  "14",
+		  "Savings",
+		  "2500.00",
+		  "2022-12-10"
+		],
+		[
+		  "115",
+		  "15",
+		  "Checking",
+		  "950.00",
+		  "2023-02-28"
+		]
+	  ]
+	},
+    {
+	  "name": "Transactions",
+	  "columns": ["transaction_id", "account_id", "transaction_date", "amount", "transaction_type"],
+	  "column_descriptions": [
+		  "Primary Key, Unique transaction identifier",
+		  "Foreign Key referencing Accounts",
+		  "Date of the transaction",
+		  "Amount of the transaction",
+		  "Type of the transaction (e.g., Withdrawal, Deposit)"
+	  ],
+		"challenge_types": [],
+		"primary_key": "transaction_id",
+		"foreign_keys": [
+			"Transactions.account_id = Accounts.account_id"
+		],
+	  "data": [
+		[
+		  "1001",
+		  "101",
+		  "2023-03-01",
+		  "-50.00",
+		  "Withdrawal"
+		],
+		[
+		  "1002",
+		  "102",
+		  "2023-03-05",
+		  "300.00",
+		  "Deposit"
+		],
+		[
+		  "1003",
+		  "103",
+		  "2023-03-07",
+		  "-150.00",
+		  "Withdrawal"
+		],
+		[
+		  "1004",
+		  "104",
+		  "2023-02-28",
+		  "200.00",
+		  "Deposit"
+		],
+		[
+		  "1005",
+		  "105",
+		  "2023-03-10",
+		  "-500.00",
+		  "Withdrawal"
+		],
+		[
+		  "1006",
+		  "106",
+		  "2023-03-12",
+		  "-100.00",
+		  "Withdrawal"
+		],
+		[
+		  "1007",
+		  "107",
+		  "2023-03-15",
+		  "1200.00",
+		  "Deposit"
+		],
+		[
+		  "1008",
+		  "110",
+		  "2023-03-18",
+		  "-75.00",
+		  "Withdrawal"
+		],
+		[
+		  "1009",
+		  "109",
+		  "2023-03-20",
+		  "500.00",
+		  "Deposit"
+		],
+		[
+		  "1010",
+		  "110",
+		  "2023-03-25",
+		  "-250.00",
+		  "Withdrawal"
+		]
+	  ]
+	},
+    {
+	  "name": "Loans",
+	  "columns": ["loan_id", "customer_id", "loan_type", "loan_amount", "loan_date", "interest_rate"],
+	  "column_descriptions": [
+		  "Primary Key, Unique loan identifier",
+		  "Foreign Key referencing Customers",
+		  "Type of the loan (e.g., Personal, Mortgage, Auto)",
+		  "Total amount of the loan",
+		  "Date when the loan was issued",
+		  "Interest rate for the loan"
+	  ],
+		"challenge_types": ["format_variation"],
+		"primary_key": "loan_id",
+		"foreign_keys": [
+			"Loans.loan_id = Customers.customer_id"
+		],
+	  "data": [
+		[
+		  "201",
+		  "1",
+		  "Personal",
+		  "10000.00",
+		  "15/12/2022",
+		  "5.2"
+		],
+		[
+		  "202",
+		  "2",
+		  "Mortgage",
+		  "250000.00",
+		  "01/06/2021",
+		  "3.8"
+		],
+		[
+		  "203",
+		  "3",
+		  "Auto",
+		  "15000.00",
+		  "25/01/2023",
+		  "4.5"
+		],
+		[
+		  "204",
+		  "4",
+		  "Personal",
+		  "5000.00",
+		  "10/09/2022",
+		  "6.1"
+		],
+		[
+		  "205",
+		  "5",
+		  "Home Equity",
+		  "30000.00",
+		  "01/11/2021",
+		  "4.2"
+		],
+		[
+		  "206",
+		  "6",
+		  "Personal",
+		  "12000.00",
+		  "20/02/2023",
+		  "5.0"
+		],
+		[
+		  "207",
+		  "7",
+		  "Mortgage",
+		  "180000.00",
+		  "15/07/2022",
+		  "3.6"
+		],
+		[
+		  "208",
+		  "8",
+		  "Auto",
+		  "25000.00",
+		  "05/03/2023",
+		  "4.8"
+		],
+		[
+		  "209",
+		  "9",
+		  "Home Equity",
+		  "45000.00",
+		  "12/11/2022",
+		  "4.4"
+		],
+		[
+		  "210",
+		  "10",
+		  "Personal",
+		  "8000.00",
+		  "18/01/2023",
+		  "5.3"
+		]
+	  ]
+	},
+    {
+	  "name": "Payments",
+	  "columns": ["payment_id", "loan_id", "payment_date", "payment_amount", "payment_type"],
+	  "column_descriptions": [
+		  "Primary Key, Unique payment identifier",
+		  "Foreign Key referencing Loans",
+		  "Date of the payment",
+		  "Amount of the payment",
+		  "Type of the payment (e.g., Monthly, One-Time)"
+	  ],
+		"challenge_types": [],
+		"primary_key": "payment_id",
+		"foreign_keys": [
+			"Payments.loan_id = Loans.loan_id"
+		],
+	  "data": [
+		[
+		  "301",
+		  "201",
+		  "2023-03-01",
+		  "300.00",
+		  "Monthly"
+		],
+		[
+		  "302",
+		  "202",
+		  "2023-03-05",
+		  "1200.00",
+		  "Monthly"
+		],
+		[
+		  "303",
+		  "203",
+		  "2023-03-10",
+		  "400.00",
+		  "Monthly"
+		],
+		[
+		  "304",
+		  "204",
+		  "2023-03-01",
+		  "200.00",
+		  "One-Time"
+		],
+		[
+		  "305",
+		  "205",
+		  "2023-03-07",
+		  "500.00",
+		  "Monthly"
+		],
+		[
+		  "306",
+		  "206",
+		  "2023-03-12",
+		  "250.00",
+		  "Monthly"
+		],
+		[
+		  "307",
+		  "207",
+		  "2023-03-15",
+		  "900.00",
+		  "Monthly"
+		],
+		[
+		  "308",
+		  "208",
+		  "2023-03-18",
+		  "300.00",
+		  "One-Time"
+		],
+		[
+		  "309",
+		  "209",
+		  "2023-03-20",
+		  "650.00",
+		  "Monthly"
+		],
+		[
+		  "310",
+		  "210",
+		  "2023-03-25",
+		  "300.00",
+		  "Monthly"
+		],
+		[
+		  "311",
+		  "201",
+		  "2023-04-01",
+		  "300.00",
+		  "Monthly"
+		],
+		[
+		  "312",
+		  "203",
+		  "2023-04-05",
+		  "1200.00",
+		  "Monthly"
+		]
+	  ]
+	}
+  ],
+	"questions": [
+    {
+      "question_id": "question_od001",
+      "question": "When did the customer making $300 monthly payments open their account?",
+      "answer": ["January 15, 2023"],
+      "challenge_types": ["multi-hop", "conditional", "date_format_inference", "hybrid_reasoning"],
+      "num_hops": 2,
+      "table_names": ["Payments", "Loans", "Accounts"],
+      "primary_keys": ["loan_id"],
+      "foreign_keys": [
+        "Payments.loan_id = Loans.loan_id",
+        "Loans.customer_id = Accounts.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Payments table, find the loan_id corresponding to payment_amount=300.00 and payment_type=\"Monthly\".",
+          "tables": ["Payments"],
+          "columns": ["payment_amount","payment_type","loan_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Loans table, find the customer_id corresponding to the loan_id.",
+          "tables": ["Loans"],
+          "columns": ["loan_id","customer_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Accounts table, use the customer_id to find the corresponding date_opened.",
+          "tables": ["Accounts"],
+          "columns": ["customer_id","date_opened"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od002",
+      "question": "How much money would Charlie Brown still owe if they paid their entire account balance?",
+      "answer": ["$21,500"],
+      "challenge_types": ["multi-hop", "conditional", "arithmetic", "derived_metric", "commonsense",
+		  "implicit_logic", "indirect_reference", "ambiguous_question", "fuzzy_matching", "hybrid_reasoning","requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Customers", "Accounts", "Loans"],
+      "primary_keys": ["customer_id"],
+      "foreign_keys": [
+        "Accounts.customer_id = Customers.customer_id",
+        "Loans.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Customers table, find the customer_id corresponding to first_name=\"Charlie\" and last_name=\"Brown\".",
+          "tables": ["Customers"],
+          "columns": ["first_name","last_name","customer_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Accounts table, use the customer_id to find the corresponding balance.",
+          "tables": ["Accounts"],
+          "columns": ["customer_id","balance"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Loans table, use the customer_id to find the corresponding loan_amount.",
+          "tables": ["Loans"],
+          "columns": ["customer_id","loan_amount"]
+        },
+		  {
+          "step": 4,
+          "description": "Subtract the loan_amount from the balance.",
+          "tables": [ "Accounts","Loans"],
+          "columns": ["balance","loan_amount"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od003",
+      "question": "How much money has Olivia White withdrawn?",
+      "answer": ["$325.00"],
+      "challenge_types": ["multi-hop","aggregation", "group_by", "conditional",
+        "arithmetic", "hybrid_reasoning"],
+      "num_hops": 2,
+      "table_names": ["Customers", "Accounts", "Transactions"],
+      "primary_keys": ["customer_id", "account_id"],
+      "foreign_keys": [
+        "Accounts.customer_id = Customers.customer_id",
+        "Transactions.account_id = Accounts.account_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Customers table, find the customer_id corresponding to first_name=\"Olivia\" and last_name=\"White\".",
+          "tables": ["Customers"],
+          "columns": ["first_name","last_name","customer_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Accounts table, find the account_id corresponding to the customer_id.",
+          "tables": ["Accounts"],
+          "columns": ["customer_id","account_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Transactions table, find each amount value corresponding to the account_id and transaction_type=\"Withdrawal\" and add them.",
+          "tables": ["Transactions"],
+          "columns": ["account_id","transaction_type","amount"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od004",
+      "question": "How much time has elapsed between Alice Johnson opening an account and taking a loan?",
+      "answer": ["44 days"],
+      "challenge_types": ["multi-hop", "temporal", "date_format_inference",
+        "arithmetic", "commonsense", "implicit_logic", "indirect_reference",
+		  "hybrid_reasoning", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Customers", "Accounts", "Loans"],
+      "primary_keys": ["customer_id", "account_id"],
+      "foreign_keys": [
+        "Accounts.customer_id = Customers.customer_id",
+        "Loans.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Customers table, find the customer_id corresponding to first_name=\"Alice\" and last_name=\"Johnson\".",
+          "tables": ["Customers"],
+          "columns": ["first_name","last_name","customer_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Accounts table, find the account_id and date_opened corresponding to the customer_id.",
+          "tables": ["Accounts"],
+          "columns": ["customer_id","account_id","date_opened"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Loans table, find the loan_date corresponding to the customer_id.",
+          "tables": ["Loans"],
+          "columns": ["customer_id","loan_date"]
+        },
+		  {
+          "step": 4,
+          "description": "Determine the time difference between the two extracted dates.",
+          "tables": ["Accounts","Loans"],
+          "columns": ["date_opened","loan_date"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od005",
+      "question": "How much money has been paid in total for auto loans?",
+      "answer": ["$1900"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "conditional",
+        "arithmetic", "hybrid_reasoning"],
+      "num_hops": 1,
+      "table_names": ["Loans", "Payments"],
+      "primary_keys": ["loan_id"],
+      "foreign_keys": [
+        "Payments.loan_id = Loans.loan_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Loans table, find each loan_id corresponding to loan_type=\"Auto\".",
+          "tables": ["Loans"],
+          "columns": ["loan_type","loan_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Payments table, find the payment_amount values corresponding to each loan_id.",
+          "tables": ["Payments"],
+          "columns": ["loan_id","payment_amount"]
+        },
+		  {
+          "step": 3,
+          "description": "Add the payment_amount values together.",
+          "tables": ["Payments"],
+          "columns": ["payment_amount"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od006",
+      "question": "Who made a deposit in February?",
+      "answer": ["Bob Lee"],
+      "challenge_types": ["multi-hop", "aggregation", "conditional",
+       "temporal", "date_format_inference", "hybrid_reasoning"],
+      "num_hops": 2,
+      "table_names": ["Transactions", "Accounts", "Customers"],
+      "primary_keys": ["account_id", "customer_id"],
+      "foreign_keys": [
+        "Transactions.account_id = Accounts.account_id",
+        "Accounts.customer_id = Customers.customer_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Transactions table, find the account_id corresponding to the transaction_date taking place in February and transaction_type=\"Withdrawal\".",
+          "tables": ["Transactions"],
+          "columns": ["transaction_date","transaction_type","account_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Accounts table, use the account_id to find the corresponding customer_id.",
+          "tables": ["Accounts"],
+          "columns": ["account_id","customer_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Customers table, use the customer_id to get the corresponding first_name and last_name.",
+          "tables": ["Customers"],
+          "columns": ["customer_id","first_name","last_name"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "schema_id": "schema_r002",
+  "domain": "Flowers",
+  "tables": [
+      {
+      "name": "Flowers",
+      "columns": [
+          "flower_id",
+          "flower_name",
+          "color",
+          "size",
+          "vendor_name",
+          "price",
+          "location",
+          "description"
+      ],
+      "column_descriptions": [
+        "flower_id (integer) — Unique identifier for the flower; primary key used to distinguish individual flowers.",
+        "flower_name (string) — Name of the individual flower; may appear in multiple contexts but used as the identifier here.",
+        "color (string) — Color of the flower (e.g., \"Red\", \"Yellow\"); useful for visual classification or grouping.",
+        "size (float) — Size of the flower in centimeters; used in comparisons, averages, or filtering.",
+        "vendor_name (string) — Name of the vendor selling this flower.",
+        "price (float) — Price of the flower in USD; useful for price-based analysis and filtering.",
+        "location (string) — Location where the flower is typically found (e.g., \"Garden\", \"Forest\"); relevant for environment-based queries.",
+        "description (string) — Short description of the flower; may include appearance or contextual info."
+      ],
+      "challenge_types": [
+        "overlapping_column_names", "aliasing", "inconsistent_naming_style"
+      ],
+      "primary_key": "flower_id",
+      "foreign_keys": [
+      ],
+      "data": [
+          [1, "Red Rose", "Red", 30, "RoseWorld", 15, "Garden", "A vibrant red rose with thorns."],
+          [2, "Yellow Rose", "Yellow", 25, "PetalsPlus", 12, "Garden", "A soft yellow rose, delicate petals."],
+          [3, "White Lily", "White", 40, "BloomersInc", 20, "Forest", "Pure white lily, often seen in forests."],
+          [4, "Pink Tulip", "Pink", 20, "RoseWorld", 18, "Garden", "A beautiful pink tulip with smooth petals."],
+          [5, "Bluebell", "Blue", 15, "PetalsPlus", 10, "Garden", "A tiny blue flower with a sweet scent."],
+          [6, "Purple Iris", "Purple", 35, "BloomersInc", 25, "Garden", "A vibrant purple iris, known for its elegance."],
+          [7, "Orange Daisy", "Orange", 18, "PetalsPlus", 8, "Field", "A bright orange daisy, often found in fields."],
+          [8, "Black Orchid", "Black", 45, "BloomersInc", 50, "Tropical", "A rare black orchid with unique petals."],
+          [9, "White Dahlia", "White", 50, "RoseWorld", 30, "Garden", "A large, pure white dahlia in bloom."],
+          [10, "Yellow Tulip", "Yellow", 22, "PetalsPlus", 12, "Garden", "A cheerful yellow tulip, springtime favorite."],
+          [11, "Lavender", "Lavender", 30, "RoseWorld", 22, "Garden", "A fragrant lavender plant, purple flowers."],
+          [12, "Pink Peony", "Pink", 60, "BloomersInc", 40, "Garden", "Large pink peony flowers with lush petals."],
+          [13, "Red Carnation", "Red", 35, "PetalsPlus", 18, "Garden", "A deep red carnation with intricate petals."],
+          [14, "White Chrysanthemum", "White", 50, "RoseWorld", 25, "Garden", "Classic white chrysanthemums with large blooms."],
+          [15, "Purple Lavender", "Purple", 40, "PetalsPlus", 20, "Field", "Purple lavender, known for its calming scent."],
+          [16, "Blue Orchid", "Blue", 45, "BloomersInc", 35, "Tropical", "Exotic blue orchid with striking color."],
+          [17, "Pink Calla Lily", "Pink", 50, "RoseWorld", 27, "Garden", "Elegant pink calla lily, perfect for bouquets."],
+          [18, "Yellow Lily", "Yellow", 38, "BloomersInc", 23, "Garden", "Bright yellow lilies, known for their fragrance."],
+          [19, "Red Tulip", "Red", 25, "RoseWorld", 16, "Garden", "Classic red tulip, symbolizing love and passion."],
+          [20, "White Orchid", "White", 40, "PetalsPlus", 45, "Tropical", "Pure white orchid, rare and beautiful."]
+      ]
+      },
+      {
+      "name": "FlowerSpecies",
+      "columns": [
+          "species_name",
+          "average_height",
+          "native_region",
+          "habitat_type"
+      ],
+      "column_descriptions": [
+          "species_name (string) — Species classification of the flower; primary key used for joining with flowers.",
+          "average_height (float) — Average height of the flower species in centimeters; used for species-level size comparisons.",
+          "native_region (string) — Region where the species is natively found (e.g., \"Europe\", \"Asia\"); important for geographic reasoning.",
+          "habitat_type (string) — Preferred habitat type for the species (e.g., \"Garden\", \"Forest\"); used for ecological context."
+      ],
+      "challenge_types": [
+        "mixed_units", "format_variation", "ambiguous_column_name"
+      ],
+      "primary_key": "species_name",
+      "foreign_keys": [
+      ],
+      "data": [
+          ["Rose", 50, "Europe", "Garden"],
+          ["Lily", 60, "Asia", "Forest"],
+          ["Tulip", 30, "Europe", "Garden"],
+          ["Iris", 40, "Europe", "Garden"],
+          ["Bluebell", 15, "Europe", "Garden"],
+          ["Daisy", 25, "Europe", "Field"],
+          ["Orchid", 45, "Tropical", "Tropical"],
+          ["Peony", 60, "Asia", "Garden"],
+          ["Carnation", 40, "Europe", "Garden"],
+          ["Chrysanthemum", 50, "Asia", "Garden"],
+          ["Calla Lily", 50, "Africa", "Garden"]
+      ]
+      },
+      {
+      "name": "FlowerColors",
+      "columns": [
+          "color_name",
+          "common_flowers",
+          "color_meaning"
+      ],
+      "column_descriptions": [
+          "color_name (string) — Name of the flower color; primary key used to categorize flowers by color.",
+          "common_flowers (string) — Comma-separated list of flower types commonly associated with this color; helps map color to species or varieties.",
+          "color_meaning (string) — Common cultural meaning or symbolism of the color (e.g., \"Love\", \"Happiness\"); useful for thematic analysis."
+      ],
+      "challenge_types": [
+        "duplicate_records", "null_values"
+      ],
+      "primary_key": "color_name",
+      "foreign_keys": [
+      ],
+      "data": [
+          ["Red", "Rose, Tulip, Carnation", "Love"],
+          ["Yellow", "Rose, Tulip, Lily", "Happiness"],
+          ["White", "Lily, Orchid, Dahlia", "Purity"],
+          ["Pink", "Tulip, Peony, Calla Lily", "Friendship"],
+          ["Blue", "Bluebell, Orchid", "Serenity"],
+          ["Purple", "Iris, Lavender, Orchid", "Royalty"],
+          ["Orange", "Daisy", "Energy"],
+          ["Black", "Orchid", "Mystery"]
+      ]
+      },
+      {
+      "name": "FlowerVendors",
+      "columns": [
+          "vendor_name",
+          "region",
+          "price_range"
+      ],
+      "column_descriptions": [
+          "vendor_name (string) — Unique name of the vendor; primary key used to join with Flowers.",
+          "region (string) — Geographic area where the vendor operates (e.g., \"North America\", \"Europe\"); useful for regional filtering.",
+          "price_range (string) — Price category for the vendor's flowers (e.g., \"Low\", \"Medium\", \"High\"); allows for vendor-level pricing analysis."
+      ],
+      "challenge_types": [
+        "inconsistent_naming_style", "ambiguous_column_name", "overlapping_column_names"
+      ],
+      "primary_key": "vendor_name",
+      "foreign_keys": [
+      ],
+      "data": [
+          ["RoseWorld", "North America", "Medium"],
+          ["PetalsPlus", "Europe", "Low"],
+          ["BloomersInc", "Asia", "High"],
+          ["FlowerHub", "North America", "Low"],
+          ["PetalPower", "Europe", "Medium"],
+          ["OrchidWorld", "Asia", "High"]
+      ]
+      }
+  ],
+  "questions": [
+    {
+      "question_id": "question_fl001",
+      "question": "What is the flower species with the smallest average size that is sold by a vendor in North America?",
+      "answer": ["Bluebell"],
+      "challenge_types": ["multi-hop", "conditional", "aggregation", "superlative", "group_by"],
+      "num_hops": 3,
+      "table_names": ["FlowerVendors", "Flowers", "FlowerSpecies"],
+      "primary_keys": ["FlowerVendors.vendor_name", "Flowers.flower_id", "FlowerSpecies.species_name"],
+      "foreign_keys": [
+        "Flowers.vendor_name = FlowerVendors.vendor_name",
+        "Flowers.flower_name = FlowerSpecies.species_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter FlowerVendors for vendors operating in North America.",
+          "tables": ["FlowerVendors"],
+          "columns": ["FlowerVendors.vendor_name", "FlowerVendors.region"]
+        },
+        {
+          "step": 2,
+          "description": "Use vendor names to find flowers in the Flowers table.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.vendor_name"]
+        },
+        {
+          "step": 3,
+          "description": "Map flower_name to species_name, then retrieve species and return the one with the smallest average_height from FlowerSpecies.",
+          "tables": ["FlowerSpecies"],
+          "columns": ["FlowerSpecies.species_name", "FlowerSpecies.average_height"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl002",
+      "question": "What is the average flower size of all flowers that are native to both Europe and Asia, and what is the most common flower color among them?",
+      "answer": ["Average size: 45 cm", "Most common color: White"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "comparison", "boolean_logic"],
+      "num_hops": 3,
+      "table_names": ["FlowerSpecies", "Flowers", "FlowerColors"],
+      "primary_keys": ["FlowerSpecies.species_name", "Flowers.flower_id", "FlowerColors.color_name"],
+      "foreign_keys": [
+        "Flowers.flower_name = FlowerSpecies.species_name",
+        "Flowers.color = FlowerColors.color_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify species native to both Europe and Asia from FlowerSpecies.",
+          "tables": ["FlowerSpecies"],
+          "columns": ["FlowerSpecies.species_name", "FlowerSpecies.native_region"]
+        },
+        {
+          "step": 2,
+          "description": "Find flowers in Flowers table with those species, compute average size.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.size"]
+        },
+        {
+          "step": 3,
+          "description": "From those flowers, identify the most common color via FlowerColors.",
+          "tables": ["FlowerColors"],
+          "columns": ["FlowerColors.color_name", "FlowerColors.common_flowers"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl003",
+      "question": "What is the most common flower color found in flowers that are sold by European vendors?",
+      "answer": ["Yellow"],
+      "challenge_types": ["multi-hop", "group_by", "aggregation"],
+      "num_hops": 2,
+      "table_names": ["FlowerVendors", "Flowers", "FlowerColors"],
+      "primary_keys": ["FlowerVendors.vendor_name", "Flowers.flower_id", "FlowerColors.color_name"],
+      "foreign_keys": [
+        "Flowers.vendor_name = FlowerVendors.vendor_name",
+        "Flowers.color = FlowerColors.color_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter FlowerVendors for vendors in Europe.",
+          "tables": ["FlowerVendors"],
+          "columns": ["FlowerVendors.vendor_name", "FlowerVendors.region"]
+        },
+        {
+          "step": 2,
+          "description": "Find flowers sold by those vendors and count the most common color using FlowerColors.",
+          "tables": ["Flowers", "FlowerColors"],
+          "columns": ["Flowers.flower_name", "Flowers.vendor_name", "FlowerColors.color"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl004",
+      "question": "Among the flowers sold by BloomersInc, which one has the largest size and is from a species not native to the region where the vendor operates?",
+      "answer": ["White Lotus"],
+      "challenge_types": ["multi-hop", "conditional", "comparison", "filtering"],
+      "num_hops": 3,
+      "table_names": ["FlowerVendors", "Flowers", "FlowerSpecies"],
+      "primary_keys": ["FlowerVendors.vendor_name", "Flowers.flower_id", "FlowerSpecies.species_name"],
+      "foreign_keys": [
+        "Flowers.vendor_name = FlowerVendors.vendor_name",
+        "Flowers.flower_name = FlowerSpecies.species_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the region where BloomersInc operates using FlowerVendors.",
+          "tables": ["FlowerVendors"],
+          "columns": ["FlowerVendors.vendor_name", "FlowerVendors.region"]
+        },
+        {
+          "step": 2,
+          "description": "Identify flowers sold by BloomersInc in Flowers table.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.vendor_name", "Flowers.size"]
+        },
+        {
+          "step": 3,
+          "description": "Use species_name to check native_region in FlowerSpecies and filter for non-native ones, then return the flower with the largest size.",
+          "tables": ["FlowerSpecies"],
+          "columns": ["FlowerSpecies.species_name", "FlowerSpecies.native_region"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl005",
+      "question": "Which flower species sold by vendors in Europe have the widest range of flower sizes across all their varieties?",
+      "answer": ["Orchid"],
+      "challenge_types": ["multi-hop", "aggregation", "superlative", "group_by"],
+      "num_hops": 3,
+      "table_names": ["FlowerVendors", "Flowers"],
+      "primary_keys": ["FlowerVendors.vendor_name", "Flowers.flower_id"],
+      "foreign_keys": [
+        "Flowers.vendor_name = FlowerVendors.vendor_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify vendors operating in Europe using FlowerVendors.",
+          "tables": ["FlowerVendors"],
+          "columns": ["FlowerVendors.vendor_name", "FlowerVendors.region"]
+        },
+        {
+          "step": 2,
+          "description": "Find all flowers sold by those vendors in Flowers and group by species_name.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.vendor_name", "Flowers.size"]
+        },
+        {
+          "step": 3,
+          "description": "For each species, calculate the range (max - min) in size and return the one with the widest range.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.size"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl006",
+      "question": "Among the flowers grown in gardens, which color is most frequently associated with species that have an average size under 30 cm?",
+      "answer": ["Yellow"],
+      "challenge_types": ["multi-hop", "filtering", "aggregation", "group_by"],
+      "num_hops": 3,
+      "table_names": ["Flowers", "FlowerSpecies", "FlowerColors"],
+      "primary_keys": ["Flowers.flower_id", "FlowerSpecies.species_name", "FlowerColors.color_name"],
+      "foreign_keys": [
+        "Flowers.flower_name = FlowerSpecies.species_name",
+        "Flowers.color = FlowerColors.color_name"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Flowers where location = 'Garden'.",
+          "tables": ["Flowers"],
+          "columns": ["Flowers.flower_name", "Flowers.location", "Flowers.color"]
+        },
+        {
+          "step": 2,
+          "description": "From those, get the species_name and filter FlowerSpecies where average_height < 30 cm.",
+          "tables": ["FlowerSpecies"],
+          "columns": ["FlowerSpecies.species_name", "FlowerSpecies.average_height"]
+        },
+        {
+          "step": 3,
+          "description": "From the remaining flowers, find the most frequent color using FlowerColors.",
+          "tables": ["FlowerColors"],
+          "columns": ["FlowerColors.color_name"]
+        }
+      ]
+    }
+  ]
+}

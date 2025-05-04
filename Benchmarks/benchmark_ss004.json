@@ -1,0 +1,564 @@
+{
+  "schema_id": "schema_ss004",
+  "domain": "census data and demographics",
+  "tables": [
+    {
+      "name": "Regions",
+      "columns": ["region_code", "region_name", "state", "population"],
+      "column_descriptions": [
+        "Unique code for the geographic region (e.g., 'REG-AZ01')",
+        "Name of the region (e.g., 'Maricopa County'); inconsistent capitalization or punctuation may appear",
+        "Name of the state, which may appear as a full name (e.g., 'Arizona') or abbreviation (e.g., 'AZ')",
+        "Estimated total population of the region, represented as an integer"
+      ],
+      "challenge_types": ["format_variation", "inconsistent_naming_style"],
+      "primary_key": "region_code",
+      "foreign_keys": [],
+      "data": [
+        ["REG-AZ01", "Maricopa County", "Arizona", 4410800],
+        ["REG-CA07", "los angeles county", "CA", 10039107],
+        ["REG-TX12", "Harris County", "Texas", 4713325],
+        ["REG-FL05", "Miami-dade county", "FL", 2716940]
+      ]
+    },
+    {
+      "name": "Households",
+      "columns": ["household_id", "address", "region_code", "number_of_members"],
+      "column_descriptions": [
+        "Unique identifier for each household (e.g., 'HH-123')",
+        "Street address of the household (e.g., '123 Elm St, Springfield')",
+        "Code referencing the region where the household is located",
+        "Number of individuals in the household; may be null in some cases"
+      ],
+      "challenge_types": ["null_values"],
+      "primary_key": "household_id",
+      "foreign_keys": ["Households.region_code = Regions.region_code"],
+      "data": [
+        ["HH-001", "123 Elm St, Phoenix", "REG-AZ01", 4],
+        ["HH-002", "456 Oak Rd, Los Angeles", "REG-CA07", 3],
+        ["HH-003", "789 Maple Ave, Houston", "REG-TX12", null],
+        ["HH-004", "321 Pine Blvd, Miami", "REG-FL05", 1],
+        ["HH-005", "654 Cedar Ln, Phoenix", "REG-AZ01", 2]
+      ]
+    },
+    {
+      "name": "Individuals",
+      "columns": ["individual_id", "full_name", "date_of_birth", "household_id"],
+      "column_descriptions": [
+        "Unique identifier for each individual (e.g., 'IND-001')",
+        "Full name of the individual, formatted as 'First Last' or 'Last, First'",
+        "Birthdate in formats such as 'YYYY-MM-DD', 'MM/DD/YYYY', or 'Month D, YYYY'",
+        "Identifier for the household this individual belongs to"
+      ],
+      "challenge_types": ["format_variation"],
+      "primary_key": "individual_id",
+      "foreign_keys": ["Individuals.household_id = Households.household_id"],
+      "data": [
+        ["IND-001", "John Smith", "1990-05-14", "HH-001"],
+        ["IND-002", "Doe, Jane", "June 1, 1985", "HH-001"],
+        ["IND-003", "Emily Johnson", "07/30/1998", "HH-002"],
+        ["IND-004", "Brown, Charlie", "1982-12-11", "HH-003"],
+        ["IND-005", "Liu Chen", "2000-03-22", "HH-004"],
+        ["IND-006", "Nguyen, Minh", "1995-09-15", "HH-005"],
+        ["IND-007", "Maria Garcia", "March 10, 1993", "HH-002"],
+        ["IND-008", "O'Neil, Sean", "1988-11-23", "HH-004"],
+        ["IND-009", "Alice Walker", "02/17/1979", "HH-003"],
+        ["IND-010", "Patel, Raj", "1992-08-05", "HH-005"]
+      ]
+    },
+    {
+      "name": "Employment",
+      "columns": ["employment_id", "individual_id", "employment_status", "annual_income"],
+      "column_descriptions": [
+        "Unique identifier for the employment record (e.g., 'EMP-001')",
+        "Individual associated with this employment record",
+        "Employment status (e.g., 'Employed', 'Unemployed', 'Retired'); may be interpreted ambiguously",
+        "Annual income reported in USD (e.g., 45000.00 or '45k'); may include different units or be missing"
+      ],
+      "challenge_types": ["ambiguous_column_name", "mixed_units"],
+      "primary_key": "employment_id",
+      "foreign_keys": ["Employment.individual_id = Individuals.individual_id"],
+      "data": [
+        ["EMP-001", "IND-001", "Employed", 52000.00],
+        ["EMP-002", "IND-002", "Unemployed", null],
+        ["EMP-003", "IND-003", "Employed", "48,000"],
+        ["EMP-004", "IND-004", "Retired", 73500],
+        ["EMP-005", "IND-005", "Student", 0.0],
+        ["EMP-006", "IND-006", "Employed", "45k"],
+        ["EMP-007", "IND-007", "Part-time", 25000],
+        ["EMP-008", "IND-008", "Freelancer", "74k"],
+        ["EMP-009", "IND-009", "Part-time", 17000],
+        ["EMP-010", "IND-010", "Student", 10000]
+      ]
+    },
+    {
+      "name": "Education",
+      "columns": ["education_id", "individual_id", "highest_degree", "graduation_year"],
+      "column_descriptions": [
+        "Unique identifier for the education record (e.g., 'EDU-123')",
+        "Individual associated with this educational history",
+        "Highest degree earned (e.g., 'High School', 'Bachelor's'); may be interpreted in multiple ways",
+        "Year the degree was completed, represented as a 4-digit integer"
+      ],
+      "challenge_types": ["ambiguous_column_name", "format_variation"],
+      "primary_key": "education_id",
+      "foreign_keys": ["Education.individual_id = Individuals.individual_id"],
+      "data": [
+        ["EDU-101", "IND-001", "Bachelor's", 2012],
+        ["EDU-102", "IND-002", "PhD", 2003],
+        ["EDU-103", "IND-003", "Master's", 2020],
+        ["EDU-104", "IND-004", "Ph.D.", 2010],
+        ["EDU-105", "IND-005", "Associate", 2019],
+        ["EDU-106", "IND-006", "Bachelor", 2016],
+        ["EDU-107", "IND-007", "Master", 2011],
+        ["EDU-108", "IND-008", "Associate", 2013],
+        ["EDU-109", "IND-009", "Bachelor's", 2000],
+        ["EDU-110", "IND-010", "High School", 2010]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ss001",
+      "question": "Which individuals live in Maricopa County and are currently employed?",
+      "answer": ["John Smith", "Nguyen, Minh"],
+      "challenge_types": ["multi-hop", "format_variation"],
+      "num_hops": 3,
+      "table_names": ["Regions", "Households", "Individuals", "Employment"],
+      "primary_keys": ["Regions.region_code", "Households.household_id", "Individuals.individual_id", "Employment.employment_id"],
+      "foreign_keys": [
+        "Households.region_code = Regions.region_code",
+        "Individuals.household_id = Households.household_id",
+        "Employment.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify the region_code for the region_name 'Maricopa County'.",
+          "tables": ["Regions"],
+          "columns": ["region_code", "region_name"]
+        },
+        {
+          "step": 2,
+          "description": "Find all household_ids with the identified region_code.",
+          "tables": ["Households"],
+          "columns": ["household_id", "region_code"]
+        },
+        {
+          "step": 3,
+          "description": "Collect the individual_ids that are associated with any of the household_ids.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "full_name", "household_id"]
+        },
+        {
+          "step": 4,
+          "description": "Identify the individual_ids where employment_status is 'Employed'.",
+          "tables": ["Employment"],
+          "columns": ["individual_id", "employment_status"]
+        },
+        {
+          "step": 5,
+          "description": "Retrieve the full_name for each individual_id.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss002",
+      "question": "How many households in the state of Texas have at least one unemployed member?",
+      "answer": ["0"],
+      "challenge_types": ["multi-hop", "aggregation", "null_values"],
+      "num_hops": 3,
+      "table_names": ["Regions", "Households", "Individuals", "Employment"],
+      "primary_keys": ["Regions.region_code", "Households.household_id", "Individuals.individual_id", "Employment.employment_id"],
+      "foreign_keys": [
+        "Households.region_code = Regions.region_code",
+        "Individuals.household_id = Households.household_id",
+        "Employment.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize all state values to consistent format.",
+          "tables": ["Regions"],
+          "columns": ["state"]
+        },
+        {
+          "step": 2,
+          "description": "Identify all region_codes where the state is 'Texas'.",
+          "tables": ["Regions"],
+          "columns": ["region_code", "state"]
+        },
+        {
+          "step": 3,
+          "description": "Find all household_ids that are located in these region_codes.",
+          "tables": ["Households"],
+          "columns": ["household_id", "region_code"]
+        },
+        {
+          "step": 4,
+          "description": "Collect individual_ids asssociated with each household_id.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "household_id"]
+        },
+        {
+          "step": 5,
+          "description": "Count the number of individual_ids for each household_id that have employment_status of 'Unemployed'.",
+          "tables": ["Employment"],
+          "columns": ["employment_status"]
+        },
+        {
+          "step": 6,
+          "description": "Count the number of household_ids that have more than one for the count from step 5.",
+          "tables": ["Individuals"],
+          "columns": ["household_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss003",
+      "question": "Who is the youngest individual in Los Angeles County with a Master's degree?",
+      "answer": ["Emily Johnson"],
+      "challenge_types": ["multi-hop", "superlative", "temporal", "date_format_inference"],
+      "num_hops": 3,
+      "table_names": ["Regions", "Households", "Individuals", "Education"],
+      "primary_keys": ["Regions.region_code", "Households.household_id", "Individuals.individual_id", "Education.education_id"],
+      "foreign_keys": [
+        "Households.region_code = Regions.region_code",
+        "Individuals.household_id = Households.household_id",
+        "Education.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the region_code where the region_name is 'Los Angeles County'.",
+          "tables": ["Regions"],
+          "columns": ["region_code", "region_name"]
+        },
+        {
+          "step": 2,
+          "description": "Identify all household_ids that belong to this region_code.",
+          "tables": ["Households"],
+          "columns": ["household_id", "region_code"]
+        },
+        {
+          "step": 3,
+          "description": "Retrieve all individual_ids who associated with each household_id.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "household_id"]
+        },
+        {
+          "step": 4,
+          "description": "Filter retrieved individual_ids by highest_degree of 'Master'.",
+          "tables": ["Education"],
+          "columns": ["individual_id", "highest_degree"]
+        },
+        {
+          "step": 5,
+          "description": "Normalize date_of_birth values to consistent format.",
+          "tables": ["Individuals"],
+          "columns": ["date_of_birth"]
+        },
+        {
+          "step": 6,
+          "description": "Identify the individual_id with the most recent date_of_birth.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "date_of_birth"]
+        },
+        {
+          "step": 7,
+          "description": "Return the full_name of the youngest matching individual.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss004",
+      "question": "Which individuals born before 1990 are living in Florida?",
+      "answer": ["Liu Chen", "O'Neil, Sean"],
+      "challenge_types": ["multi-hop", "temporal", "format_variation"],
+      "num_hops": 2,
+      "table_names": ["Individuals", "Households", "Regions"],
+      "primary_keys": ["Individuals.individual_id", "Households.household_id", "Regions.region_code"],
+      "foreign_keys": [
+        "Individuals.household_id = Households.household_id",
+        "Households.region_code = Regions.region_code"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize date_of_birth values to consistent format.",
+          "tables": ["Individuals"],
+          "columns": ["date_of_birth"]
+        },
+        {
+          "step": 2,
+          "description": "Identify individual_id whose date_of_birth is before the year 1990.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "date_of_birth"]
+        },
+        {
+          "step": 3,
+          "description": "Find the household_ids corresponding to the identified individual_ids.",
+          "tables": ["Households"],
+          "columns": ["household_id", "individual_id", "region_code"]
+        },
+        {
+          "step": 4,
+          "description": "Normalize all state values to consistent format.",
+          "tables": ["Regions"],
+          "columns": ["state"]
+        },
+        {
+          "step": 5,
+          "description": "Identify the region_code for state of 'Florida' or 'FL'.",
+          "tables": ["Households", "Regions"],
+          "columns": ["household_id", "individual_id", "state"]
+        },
+        {
+          "step": 6,
+          "description": "Return the full_name of individuals that have the identified region_code.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss005",
+      "question": "How many individuals in Phoenix households have a Ph.D.?",
+      "answer": ["1"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by"],
+      "num_hops": 2,
+      "table_names": ["Households", "Individuals", "Education"],
+      "primary_keys": ["Households.household_id", "Individuals.individual_id", "Education.education_id"],
+      "foreign_keys": [
+        "Individuals.household_id = Households.household_id",
+        "Education.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter households where the address contains the substring 'Phoenix'.",
+          "tables": ["Households"],
+          "columns": ["household_id", "address"]
+        },
+        {
+          "step": 2,
+          "description": "Identify individual_ids who live in those household_ids.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "household_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join by individual_id and filter where highest_degree is 'Ph.D.'.",
+          "tables": ["Education"],
+          "columns": ["individual_id", "highest_degree"]
+        },
+        {
+          "step": 4,
+          "description": "Count the number of individuals who satisfy all above conditions.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss006",
+      "question": "Who are the employed individuals that graduated after 2015?",
+      "answer": ["Emily Johnson", "Nguyen, Minh"],
+      "challenge_types": ["multi-hop", "temporal", "hybrid_reasoning"],
+      "num_hops": 2,
+      "table_names": ["Individuals", "Employment", "Education"],
+      "primary_keys": ["Individuals.individual_id", "Employment.employment_id", "Education.education_id"],
+      "foreign_keys": [
+        "Employment.individual_id = Individuals.individual_id",
+        "Education.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify individuals whose employment_status is 'Employed'.",
+          "tables": ["Employment"],
+          "columns": ["individual_id", "employment_status"]
+        },
+        {
+          "step": 2,
+          "description": "Filter individual_ids with graduation_year after 2015.",
+          "tables": ["Education"],
+          "columns": ["individual_id", "graduation_year"]
+        },
+        {
+          "step": 3,
+          "description": "Return the full_name of remaining individual_ids.",
+          "tables": ["Individuals"],
+          "columns": ["full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss007",
+      "question": "List all households with members holding different types of degrees.",
+      "answer": ["HH-001", "HH-003"],
+      "challenge_types": ["multi-hop", "group_by", "aggregation"],
+      "num_hops": 2,
+      "table_names": ["Individuals", "Education", "Households"],
+      "primary_keys": ["Individuals.individual_id", "Education.education_id", "Households.household_id"],
+      "foreign_keys": [
+        "Education.individual_id = Individuals.individual_id",
+        "Individuals.household_id = Households.household_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Normalize highest_degree values to consistent format.",
+          "tables": ["Education"],
+          "columns": ["highest_degree"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve the highest_degree for each individual_id.",
+          "tables": ["Individuals", "Education"],
+          "columns": ["individual_id", "household_id", "highest_degree"]
+        },
+        {
+          "step": 3,
+          "description": "Group individuals by their household_id.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "household_id",  "highest_degree"]
+        },
+        {
+          "step": 4,
+          "description": "Count the number of unique highest_degree values for each household group.",
+          "tables": ["Individuals", "Education"],
+          "columns": ["household_id", "highest_degree"]
+        },
+        {
+          "step": 5,
+          "description": "Select household_ids that have count of more than one.",
+          "tables": ["Households"],
+          "columns": ["household_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss008",
+      "question": "What are the states with households that have more recorded individuals than the reported number_of_members?",
+      "answer": ["Texas", "FL"],
+      "challenge_types": ["multi-hop", "comparison", "incomplete_data"],
+      "num_hops": 2,
+      "table_names": ["Individuals", "Households", "Regions"],
+      "primary_keys": ["Individuals.individual_id", "Households.household_id", "Regions.region_code"],
+      "foreign_keys": [
+        "Individuals.household_id = Households.household_id",
+        "Households.region_code = Regions.region_code"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Count how many individuals are associated with each household using household_id.",
+          "tables": ["Individuals"],
+          "columns": ["household_id"]
+        },
+        {
+          "step": 2,
+          "description": "Filter household_ids where the count of individuals is greater than number_of_member.",
+          "tables": ["Households"],
+          "columns": ["household_id", "region_code", "number_of_members"]
+        },
+        {
+          "step": 3,
+          "description": "Return the state associated with each region_code.",
+          "tables": ["Households"],
+          "columns": ["Households.household_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss009",
+      "question": "Which individuals have both a listed income and a Ph.D. degree?",
+      "answer": ["Brown, Charlie"],
+      "challenge_types": ["multi-hop", "null_values", "ambiguous_column_name"],
+      "num_hops": 2,
+      "table_names": ["Individuals", "Employment", "Education"],
+      "primary_keys": ["Individuals.individual_id", "Employment.employment_id", "Education.education_id"],
+      "foreign_keys": [
+        "Employment.individual_id = Individuals.individual_id",
+        "Education.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify all individuals whose highest_degree is 'Ph.D.'.",
+          "tables": ["Education"],
+          "columns": ["individual_id", "highest_degree"]
+        },
+        {
+          "step": 2,
+          "description": "Filter individual_ids with non-null values for annual_income.",
+          "tables": ["Employment"],
+          "columns": ["individual_id", "annual_income"]
+        },
+        {
+          "step": 3,
+          "description": "Return the full_name of the filtered individual_ids.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "full_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ss010",
+      "question": "Which region has the highest number of employed individuals?",
+      "answer": ["Maricopa County"],
+      "challenge_types": ["multi-hop", "aggregation", "superlative"],
+      "num_hops": 3,
+      "table_names": ["Individuals", "Households", "Regions", "Employment"],
+      "primary_keys": ["Individuals.individual_id", "Households.household_id", "Regions.region_code", "Employment.employment_id"],
+      "foreign_keys": [
+        "Individuals.household_id = Households.household_id",
+        "Households.region_code = Regions.region_code",
+        "Employment.individual_id = Individuals.individual_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter individual_ids where employment_status is 'Employed'.",
+          "tables": ["Employment"],
+          "columns": ["individual_id", "employment_status"]
+        },
+        {
+          "step": 2,
+          "description": "Retrieve the household_id for each individual_id.",
+          "tables": ["Individuals"],
+          "columns": ["individual_id", "household_id"]
+        },
+        {
+          "step": 3,
+          "description": "Get the region_code for each household.",
+          "tables": ["Individuals", "Households"],
+          "columns": ["individual_id", "household_id", "region_code"]
+        },
+        {
+          "step": 4,
+          "description": "Count how many individuals belong to each region_code.",
+          "tables": ["Regions"],
+          "columns": ["region_code"]
+        },
+        {
+          "step": 5,
+          "description": "Sum the count for each unique region_code.",
+          "tables": ["Regions"],
+          "columns": ["region_code"]
+        },
+        {
+          "step": 6,
+          "description": "Select the region_name with the highest count.",
+          "tables": ["Regions"],
+          "columns": ["region_code", "region_name"]
+        }
+      ]
+    }
+  ]
+}

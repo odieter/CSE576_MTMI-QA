@@ -1,0 +1,536 @@
+{
+  "schema_id": "schema_mr001",
+  "domain": "Scientific Research",
+  "tables": [
+    {
+      "name": "Papers",
+      "columns": ["paper_id", "title", "publication_year", "journal_id", "author_id"],
+      "column_descriptions": {
+        "paper_id": "Unique identifier for the paper",
+        "title": "Title of the paper",
+        "publication_year": "Year of publication",
+        "journal_id": "ID of the journal or conference",
+        "author_id": "ID of the primary author"
+      },
+      "challenge_types": ["inconsistent_naming_style", "ambiguous_column_name"],
+      "primary_key": "paper_id",
+      "foreign_keys": [
+        "Papers.author_id = Authors.author_id",
+        "Papers.journal_id = Journals.journal_id"
+      ],
+      "data": [
+        ["P001", "Quantum Neural Networks", 2020, "J001", "A001"],
+        ["P002", "Exoplanet Detection", 2021, "J002", "A002"],
+        ["P003", "Synthetic Biology Advances", 2022, "J003", "A003"],
+        ["P004", "Dark Matter Simulations", 2019, "J004", "A001"],
+        ["P005", "AI Ethics Framework", 2023, "J005", "A004"]
+      ]
+    },
+    {
+      "name": "Authors",
+      "columns": ["author_id", "name", "institution_id", "birth_year"],
+      "column_descriptions": {
+        "author_id": "Unique identifier for the author",
+        "name": "Full name of the author",
+        "institution_id": "ID of the affiliated institution",
+        "birth_year": "Year of birth"
+      },
+      "challenge_types": ["format_variation"],
+      "primary_key": "author_id",
+      "foreign_keys": [
+        "Authors.institution_id = Institutions.institution_id"
+      ],
+      "data": [
+        ["A001", "Dr. Alice Chen", "I001", 1980],
+        ["A002", "Dr. Bob Singh", "I002", 1975],
+        ["A003", "Dr. Clara Diaz", "I003", 1985],
+        ["A004", "Dr. David Lee", "I004", 1990],
+        ["A005", "Dr. Emma Wong", "I005", 1982]
+      ]
+    },
+    {
+      "name": "Experiments",
+      "columns": ["experiment_id", "paper_id", "dataset_id", "start_date", "duration_months"],
+      "column_descriptions": {
+        "experiment_id": "Unique identifier for the experiment",
+        "paper_id": "ID of the associated paper",
+        "dataset_id": "ID of the dataset used",
+        "start_date": "Start date of the experiment",
+        "duration_months": "Duration in months"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "experiment_id",
+      "foreign_keys": [
+        "Experiments.paper_id = Papers.paper_id",
+        "Experiments.dataset_id = Datasets.dataset_id"
+      ],
+      "data": [
+        ["E001", "P001", "D001", "2019-06-01", 12],
+        ["E002", "P002", "D002", "2020-03-15", 8],
+        ["E003", "P003", "D003", "2021-09-01", 6],
+        ["E004", "P004", "D004", "2018-11-01", 18],
+        ["E005", "P002", "D002", "2020-07-01", 5]
+      ]
+    },
+    {
+      "name": "Datasets",
+      "columns": ["dataset_id", "name", "creation_year", "size_mb"],
+      "column_descriptions": {
+        "dataset_id": "Unique identifier for the dataset",
+        "name": "Name of the dataset",
+        "creation_year": "Year the dataset was created",
+        "size_mb": "Size in megabytes"
+      },
+      "challenge_types": ["mixed_units"],
+      "primary_key": "dataset_id",
+      "foreign_keys": [],
+      "data": [
+        ["D001", "Quantum Simulations", 2019, 500],
+        ["D002", "Exoplanet Spectra", 2020, 1200],
+        ["D003", "Synthetic DNA Sequences", 2021, 300],
+        ["D004", "Dark Matter Models", 2018, 2000],
+        ["D005", "AI Ethics Survey", 2022, 50]
+      ]
+    },
+    {
+      "name": "Journals",
+      "columns": ["journal_id", "name", "impact_factor"],
+      "column_descriptions": {
+        "journal_id": "Unique identifier for the journal",
+        "name": "Name of the journal",
+        "impact_factor": "Journal impact factor"
+      },
+      "challenge_types": [],
+      "primary_key": "journal_id",
+      "foreign_keys": [],
+      "data": [
+        ["J001", "Nature", 50.5],
+        ["J002", "Astrophysical Journal", 7.8],
+        ["J003", "Science", 47.7],
+        ["J004", "Physical Review", 8.2],
+        ["J005", "Ethics in AI", 3.5]
+      ]
+    },
+    {
+      "name": "Institutions",
+      "columns": ["institution_id", "name", "country"],
+      "column_descriptions": {
+        "institution_id": "Unique identifier for the institution",
+        "name": "Name of the institution",
+        "country": "Country of the institution"
+      },
+      "challenge_types": [],
+      "primary_key": "institution_id",
+      "foreign_keys": [],
+      "data": [
+        ["I001", "MIT", "USA"],
+        ["I002", "Caltech", "USA"],
+        ["I003", "Stanford", "USA"],
+        ["I004", "Oxford", "UK"],
+        ["I005", "Harvard", "USA"]
+      ]
+    },
+    {
+      "name": "Citations",
+      "columns": ["citation_id", "paper_id", "cited_paper_id"],
+      "column_descriptions": {
+        "citation_id": "Unique identifier for the citation",
+        "paper_id": "ID of the citing paper",
+        "cited_paper_id": "ID of the cited paper"
+      },
+      "challenge_types": ["self_referential"],
+      "primary_key": "citation_id",
+      "foreign_keys": [
+        "Citations.paper_id = Papers.paper_id",
+        "Citations.cited_paper_id = Papers.paper_id"
+      ],
+      "data": [
+        ["C001", "P002", "P001"],
+        ["C002", "P003", "P001"],
+        ["C003", "P005", "P003"],
+        ["C004", "P004", "P002"],
+        ["C005", "P001", "P004"]
+      ]
+    },
+    {
+      "name": "Grants",
+      "columns": ["grant_id", "paper_id", "amount_usd", "grant_year"],
+      "column_descriptions": {
+        "grant_id": "Unique identifier for the grant",
+        "paper_id": "ID of the funded paper",
+        "amount_usd": "Grant amount in USD",
+        "grant_year": "Year the grant was awarded"
+      },
+      "challenge_types": [],
+      "primary_key": "grant_id",
+      "foreign_keys": [
+        "Grants.paper_id = Papers.paper_id"
+      ],
+      "data": [
+        ["G001", "P001", 100000, 2019],
+        ["G002", "P002", 75000, 2020],
+        ["G003", "P003", 50000, 2021],
+        ["G004", "P004", 120000, 2018],
+        ["G005", "P005", 30000, 2022]
+      ]
+    },
+    {
+      "name": "Conferences",
+      "columns": ["conference_id", "name", "year", "paper_id"],
+      "column_descriptions": {
+        "conference_id": "Unique identifier for the conference",
+        "name": "Name of the conference",
+        "year": "Year of the conference",
+        "paper_id": "ID of the presented paper"
+      },
+      "challenge_types": [],
+      "primary_key": "conference_id",
+      "foreign_keys": [
+        "Conferences.paper_id = Papers.paper_id"
+      ],
+      "data": [
+        ["CF001", "NeurIPS", 2020, "P001"],
+        ["CF002", "AAS Meeting", 2021, "P002"],
+        ["CF003", "Synthetic Biology Summit", 2022, "P003"],
+        ["CF004", "CosmoConf", 2019, "P004"],
+        ["CF005", "AI Ethics Workshop", 2023, "P005"]
+      ]
+    },
+    {
+      "name": "Collaborators",
+      "columns": ["collaborator_id", "paper_id", "author_id"],
+      "column_descriptions": {
+        "collaborator_id": "Unique identifier for the collaboration",
+        "paper_id": "ID of the paper",
+        "author_id": "ID of the collaborating author"
+      },
+      "challenge_types": [],
+      "primary_key": "collaborator_id",
+      "foreign_keys": [
+        "Collaborators.paper_id = Papers.paper_id",
+        "Collaborators.author_id = Authors.author_id"
+      ],
+      "data": [
+        ["CL001", "P001", "A002"],
+        ["CL002", "P002", "A003"],
+        ["CL003", "P003", "A004"],
+        ["CL004", "P004", "A005"],
+        ["CL005", "P005", "A001"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_mr001",
+      "question": "Which authors from US institutions published papers cited by papers published in 2022?",
+      "answer": ["Dr. Alice Chen", "Dr. Clara Diaz"],
+      "challenge_types": ["multi-hop", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Papers", "Citations", "Authors", "Institutions"],
+      "primary_keys": ["Papers.paper_id", "Citations.citation_id", "Authors.author_id", "Institutions.institution_id"],
+      "foreign_keys": [
+        "Citations.cited_paper_id = Papers.paper_id",
+        "Papers.author_id = Authors.author_id",
+        "Authors.institution_id = Institutions.institution_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter the Papers table to identify papers published in 2022, addressing the temporal condition in the question.",
+          "tables": ["Papers"],
+          "columns": ["paper_id", "publication_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join the Citations table with the filtered Papers to find cited_paper_id matching the papers from 2022, handling the self-referential nature of Citations.",
+          "tables": ["Citations", "Papers"],
+          "columns": ["citation_id", "cited_paper_id", "paper_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join the Citations table with the Papers table again to retrieve the author_id of the cited papers, using the foreign key relationship.",
+          "tables": ["Citations", "Papers"],
+          "columns": ["cited_paper_id", "author_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Papers with Authors and Institutions to filter authors affiliated with US institutions, ensuring the country condition is met.",
+          "tables": ["Papers", "Authors", "Institutions"],
+          "columns": ["author_id", "name", "institution_id", "country"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr002",
+      "question": "Find the youngest author who published a paper with 'Quantum' in the title and is over 30 years old in 2025.",
+      "answer": ["Dr. Alice Chen"],
+      "challenge_types": ["hybrid_reasoning", "commonsense", "superlative", "fuzzy_matching", "arithmetic"],
+      "num_hops": 1,
+      "table_names": ["Papers", "Authors"],
+      "primary_keys": ["Papers.paper_id", "Authors.author_id"],
+      "foreign_keys": [
+        "Papers.author_id = Authors.author_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate the age of authors in 2025 by subtracting birth_year from 2025 and filter for those over 30, requiring arithmetic computation.",
+          "tables": ["Authors"],
+          "columns": ["author_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Authors with Papers to find papers with 'Quantum' in the title, then select the youngest author, addressing the superlative and fuzzy matching challenges.",
+          "tables": ["Papers", "Authors"],
+          "columns": ["paper_id", "title", "author_id", "birth_year"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr003",
+      "question": "Which datasets were used in experiments that started after January 1, 2020?",
+      "answer": ["Exoplanet Spectra", "Synthetic DNA Sequences"],
+      "challenge_types": ["temporal", "date_format_inference"],
+      "num_hops": 1,
+      "table_names": ["Experiments", "Datasets"],
+      "primary_keys": ["Experiments.experiment_id", "Datasets.dataset_id"],
+      "foreign_keys": [
+        "Experiments.dataset_id = Datasets.dataset_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter the Experiments table for experiments with start_date after '2020-01-01', handling date format inference.",
+          "tables": ["Experiments"],
+          "columns": ["experiment_id", "dataset_id", "start_date"]
+        },
+        {
+          "step": 2,
+          "description": "Join Experiments with Datasets to retrieve the names of datasets used in these experiments.",
+          "tables": ["Experiments", "Datasets"],
+          "columns": ["dataset_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr004",
+      "question": "How many papers were published per journal with an impact factor above 10?",
+      "answer": [{"journal": "Nature", "count": 1}, {"journal": "Science", "count": 1}],
+      "challenge_types": ["aggregation", "group_by", "conditional"],
+      "num_hops": 1,
+      "table_names": ["Journals", "Papers"],
+      "primary_keys": ["Journals.journal_id", "Papers.paper_id"],
+      "foreign_keys": [
+        "Papers.journal_id = Journals.journal_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter the Journals table to include only journals with an impact_factor greater than 10.",
+          "tables": ["Journals"],
+          "columns": ["journal_id", "name", "impact_factor"]
+        },
+        {
+          "step": 2,
+          "description": "Join Journals with Papers to count the number of papers per journal, grouping by journal name to address aggregation and group-by requirements.",
+          "tables": ["Journals", "Papers"],
+          "columns": ["journal_id", "name", "paper_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr005",
+      "question": "Which authors published papers in Nature but not in Science?",
+      "answer": ["Dr. Alice Chen"],
+      "challenge_types": ["boolean_logic", "negation", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Papers", "Journals", "Authors"],
+      "primary_keys": ["Papers.paper_id", "Journals.journal_id", "Authors.author_id"],
+      "foreign_keys": [
+        "Papers.journal_id = Journals.journal_id",
+        "Papers.author_id = Authors.author_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify papers published in Nature (journal_id = J001) by joining Papers with Journals.",
+          "tables": ["Papers", "Journals"],
+          "columns": ["paper_id", "journal_id", "author_id"]
+        },
+        {
+          "step": 2,
+          "description": "Identify papers published in Science (journal_id = J003) by joining Papers with Journals.",
+          "tables": ["Papers", "Journals"],
+          "columns": ["paper_id", "journal_id", "author_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Papers with Authors and exclude authors who published in Science from those who published in Nature, addressing negation and boolean logic.",
+          "tables": ["Papers", "Authors"],
+          "columns": ["author_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr006",
+      "question": "Which paper received the highest grant funding?",
+      "answer": ["Dark Matter Simulations"],
+      "challenge_types": ["superlative", "aggregation"],
+      "num_hops": 1,
+      "table_names": ["Grants", "Papers"],
+      "primary_keys": ["Grants.grant_id", "Papers.paper_id"],
+      "foreign_keys": [
+        "Grants.paper_id = Papers.paper_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify the maximum grant amount from the Grants table to address the superlative requirement.",
+          "tables": ["Grants"],
+          "columns": ["grant_id", "paper_id", "amount_usd"]
+        },
+        {
+          "step": 2,
+          "description": "Join Grants with Papers to retrieve the title of the paper associated with the maximum grant amount.",
+          "tables": ["Grants", "Papers"],
+          "columns": ["paper_id", "title"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr007",
+      "question": "Find authors who collaborated on the most recently published paper.",
+      "answer": ["Dr. David Lee", "Dr. Alice Chen"],
+      "challenge_types": ["implicit_logic", "superlative", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Papers", "Collaborators", "Authors"],
+      "primary_keys": ["Papers.paper_id", "Collaborators.collaborator_id", "Authors.author_id"],
+      "foreign_keys": [
+        "Collaborators.paper_id = Papers.paper_id",
+        "Collaborators.author_id = Authors.author_id",
+        "Papers.author_id = Authors.author_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Identify the paper with the maximum publication_year from the Papers table to find the most recent paper.",
+          "tables": ["Papers"],
+          "columns": ["paper_id", "publication_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Papers with Collaborators to retrieve the author_ids of collaborators for the most recent paper.",
+          "tables": ["Papers", "Collaborators"],
+          "columns": ["paper_id", "collaborator_id", "author_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Collaborators with Authors to get the names of collaborating authors, and include the primary author from Papers, addressing implicit logic.",
+          "tables": ["Collaborators", "Authors", "Papers"],
+          "columns": ["author_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr008",
+      "question": "Which papers presented at a conference share an author with a paper in a high-impact journal?",
+      "answer": ["Quantum Neural Networks", "Exoplanet Detection", "Synthetic Biology Advances", "Dark Matter Simulations", "AI Ethics Framework"],
+      "challenge_types": ["ambiguous_question", "multi-hop", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Journals", "Papers", "Conferences", "Authors", "Collaborators"],
+      "primary_keys": ["Journals.journal_id", "Papers.paper_id", "Conferences.conference_id", "Authors.author_id", "Collaborators.collaborator_id"],
+      "foreign_keys": [
+        "Papers.journal_id = Journals.journal_id",
+        "Conferences.paper_id = Papers.paper_id",
+        "Papers.author_id = Authors.author_id",
+        "Collaborators.author_id = Authors.author_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Journals with impact_factor > 10 to define high-impact journals, addressing the ambiguous term 'high-impact'.",
+          "tables": ["Journals"],
+          "columns": ["journal_id", "impact_factor"]
+        },
+        {
+          "step": 2,
+          "description": "Join Journals with Papers to identify papers published in high-impact journals.",
+          "tables": ["Journals", "Papers"],
+          "columns": ["journal_id", "paper_id", "author_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Conferences with Papers to identify papers presented at conferences.",
+          "tables": ["Conferences", "Papers"],
+          "columns": ["conference_id", "paper_id", "author_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join the two sets of papers with Authors and Collaborators to find papers sharing authors, handling deep joins.",
+          "tables": ["Papers", "Authors", "Collaborators"],
+          "columns": ["paper_id", "author_id", "title"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr009",
+      "question": "Which authors have never collaborated on a paper?",
+      "answer": [],
+      "challenge_types": ["negation", "boolean_logic"],
+      "num_hops": 1,
+      "table_names": ["Authors", "Collaborators"],
+      "primary_keys": ["Authors.author_id", "Collaborators.collaborator_id"],
+      "foreign_keys": [
+        "Collaborators.author_id = Authors.author_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Retrieve all authors from the Authors table.",
+          "tables": ["Authors"],
+          "columns": ["author_id", "name"]
+        },
+        {
+          "step": 2,
+          "description": "Exclude authors who appear in the Collaborators table to identify those who have never collaborated, addressing negation.",
+          "tables": ["Authors", "Collaborators"],
+          "columns": ["author_id"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr010",
+      "question": "List papers that used datasets larger than 1000 MB and were published before 2021.",
+      "answer": ["Dark Matter Simulations"],
+      "challenge_types": ["conditional", "multi-hop"],
+      "num_hops": 2,
+      "table_names": ["Datasets", "Experiments", "Papers"],
+      "primary_keys": ["Datasets.dataset_id", "Experiments.experiment_id", "Papers.paper_id"],
+      "foreign_keys": [
+        "Experiments.dataset_id = Datasets.dataset_id",
+        "Experiments.paper_id = Papers.paper_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter the Datasets table for datasets with size_mb greater than 1000.",
+          "tables": ["Datasets"],
+          "columns": ["dataset механиз_id", "size_mb"]
+        },
+        {
+          "step": 2,
+          "description": "Join Datasets with Experiments to find paper_ids associated with these large datasets.",
+          "tables": ["Datasets", "Experiments"],
+          "columns": ["dataset_id", "paper_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Experiments with Papers to filter for papers published before 2021 and retrieve their titles.",
+          "tables": ["Experiments", "Papers"],
+          "columns": ["paper_id", "publication_year", "title"]
+        }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,467 @@
+{
+  "schema_id": "schema_fl001",
+  "domain": "academic_records",
+  "tables": [
+    {
+      "name": "Students",
+      "columns": ["Student ID", "Name", "Major", "Year", "Advisor ID", "Dept ID"],
+      "column_descriptions": [
+        "Unique identifier for each student",
+        "Full name of the student",
+        "Student’s major field of study",
+        "Current academic year (1–4)",
+        "Identifier of the student’s faculty advisor",
+        "Identifier of the department the student belongs to"
+      ],
+      "challenge_types": ["numeric_comparison", "foreign_key_reasoning"],
+      "primary_key": "Student ID",
+      "foreign_keys": [
+        "Students.Advisor ID = Professors.Professor ID",
+        "Students.Dept ID = Departments.Dept ID"
+      ],
+      "data": [
+        ["1001", "Alice Green", "CS", "3", "2001", "D01"],
+        ["1002", "Bob Smith", "Physics", "2", "2002", "D02"],
+        ["1003", "Clara Wu", "Biology", "4", "2004", "D03"],
+        ["1004", "Daniel Kim", "CS", "1", "2001", "D01"],
+        ["1005", "Elena Park", "Math", "3", "2003", "D04"],
+        ["1006", "Faisal Khan", "Chemistry", "2", "2005", "D03"],
+        ["1007", "Grace Li", "Physics", "4", "2002", "D02"],
+        ["1008", "Henry Zhao", "Math", "1", "2003", "D04"],
+        ["1009", "Ivy Patel", "CS", "2", "2001", "D01"]
+      ]
+    },
+    {
+      "name": "Professors",
+      "columns": ["Professor ID", "Name", "Department", "Title", "Hired Year"],
+      "column_descriptions": [
+        "Unique identifier for each professor",
+        "Full name of the professor",
+        "Department affiliation",
+        "Academic title",
+        "Year the professor was hired"
+      ],
+      "challenge_types": ["temporal"],
+      "primary_key": "Professor ID",
+      "foreign_keys": [],
+      "data": [
+        ["2001", "Dr. Liu", "CS", "Associate Prof.", "2015"],
+        ["2002", "Dr. Singh", "Physics", "Professor", "2010"],
+        ["2003", "Dr. O’Malley", "Math", "Assistant Prof.", "2018"],
+        ["2004", "Dr. Rivera", "Biology", "Associate Prof.", "2014"],
+        ["2005", "Dr. Zhang", "Chemistry", "Professor", "2011"],
+        ["2006", "Dr. Lee", "CS", "Assistant Prof.", "2020"],
+        ["2007", "Dr. White", "Physics", "Professor", "2008"]
+      ]
+    },
+    {
+      "name": "Courses",
+      "columns": ["Course ID", "Name", "Credits", "Taught By", "Dept ID"],
+      "column_descriptions": [
+        "Unique identifier for each course",
+        "Course title",
+        "Number of credit hours",
+        "Professor ID of instructor",
+        "Department offering the course"
+      ],
+      "challenge_types": [],
+      "primary_key": "Course ID",
+      "foreign_keys": [
+        "Courses.Taught By = Professors.Professor ID",
+        "Courses.Dept ID = Departments.Dept ID"
+      ],
+      "data": [
+        ["C101", "Algorithms", "4", "2001", "D01"],
+        ["C102", "Quantum Physics", "3", "2002", "D02"],
+        ["C103", "Cell Biology", "4", "2004", "D03"],
+        ["C104", "Linear Algebra", "3", "2003", "D04"],
+        ["C105", "Organic Chem", "4", "2005", "D03"],
+        ["C106", "Machine Learning", "4", "2006", "D01"],
+        ["C107", "Thermodynamics", "3", "2007", "D02"],
+        ["C108", "Statistics", "3", "2003", "D04"]
+      ]
+    },
+    {
+      "name": "Enrollment",
+      "columns": ["Student ID", "Course ID", "Grade"],
+      "column_descriptions": [
+        "Identifier of enrolled student",
+        "Identifier of course enrolled in",
+        "Letter grade received"
+      ],
+      "challenge_types": ["aggregation"],
+      "primary_key": null,
+      "foreign_keys": [
+        "Enrollment.Student ID = Students.Student ID",
+        "Enrollment.Course ID = Courses.Course ID"
+      ],
+      "data": [
+        ["1001", "C101", "A"],
+        ["1001", "C106", "A-"],
+        ["1002", "C102", "B+"],
+        ["1003", "C103", "A"],
+        ["1003", "C105", "B"],
+        ["1004", "C106", "A"],
+        ["1005", "C104", "A"],
+        ["1005", "C108", "B+"],
+        ["1006", "C105", "A-"],
+        ["1007", "C107", "A"],
+        ["1008", "C104", "B"],
+        ["1009", "C106", "B+"]
+      ]
+    },
+    {
+      "name": "Publications",
+      "columns": ["Paper ID", "Professor ID", "Title"],
+      "column_descriptions": [
+        "Unique paper identifier",
+        "Identifier of authoring professor",
+        "Title of the publication"
+      ],
+      "challenge_types": [],
+      "primary_key": "Paper ID",
+      "foreign_keys": [
+        "Publications.Professor ID = Professors.Professor ID"
+      ],
+      "data": [
+        ["P001", "2001", "Graph Theory in CS"],
+        ["P002", "2002", "Quantum Fluctuations"],
+        ["P003", "2004", "Gene Mapping"],
+        ["P004", "2005", "Reaction Mechanisms"],
+        ["P005", "2003", "Probability in Math"],
+        ["P006", "2006", "Deep Learning Models"],
+        ["P007", "2002", "Particle Interactions"],
+        ["P008", "2001", "Search Algorithms"]
+      ]
+    },
+    {
+      "name": "Grants",
+      "columns": ["Grant ID", "Professor ID", "Amount", "Year"],
+      "column_descriptions": [
+        "Unique grant identifier",
+        "Identifier of PI professor",
+        "Award amount in USD",
+        "Year awarded"
+      ],
+      "challenge_types": ["numeric_comparison", "temporal"],
+      "primary_key": "Grant ID",
+      "foreign_keys": [
+        "Grants.Professor ID = Professors.Professor ID"
+      ],
+      "data": [
+        ["G01", "2001", "100000", "2021"],
+        ["G02", "2002", "120000", "2020"],
+        ["G03", "2004", "90000", "2019"],
+        ["G04", "2003", "85000", "2022"],
+        ["G05", "2005", "110000", "2021"],
+        ["G06", "2006", "95000", "2023"]
+      ]
+    },
+    {
+      "name": "Departments",
+      "columns": ["Dept ID", "Name", "Location"],
+      "column_descriptions": [
+        "Unique department identifier",
+        "Name of the department",
+        "Building location"
+      ],
+      "challenge_types": [],
+      "primary_key": "Dept ID",
+      "foreign_keys": [],
+      "data": [
+        ["D01", "Computer Science", "Building A"],
+        ["D02", "Physics", "Building B"],
+        ["D03", "Biology", "Building C"],
+        ["D04", "Mathematics", "Building D"]
+      ]
+    },
+    {
+      "name": "Research Groups",
+      "columns": ["Group ID", "Name", "Led By"],
+      "column_descriptions": [
+        "Unique group identifier",
+        "Name of the research group",
+        "Professor ID of group leader"
+      ],
+      "challenge_types": [],
+      "primary_key": "Group ID",
+      "foreign_keys": [
+        "Research Groups.Led By = Professors.Professor ID"
+      ],
+      "data": [
+        ["RG1", "AI Lab", "2006"],
+        ["RG2", "Quantum Research", "2002"],
+        ["RG3", "Genomics Group", "2004"],
+        ["RG4", "Statistical Modelling", "2003"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_fl001",
+      "question": "Which student has the highest number of A-grade courses?",
+      "answer": ["Alice Green"],
+      "challenge_types": ["aggregation", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Enrollment", "Students"],
+      "primary_keys": ["Students.Student ID", "Enrollment.Student ID,Course ID"],
+      "foreign_keys": ["Enrollment.Student ID = Students.Student ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter the Enrollment table for grades 'A' or 'A-' and count occurrences per student.",
+          "tables": ["Enrollment"],
+          "columns": ["Student ID", "Grade"]
+        },
+        {
+          "step": 2,
+          "description": "Identify the Student ID with the maximum count and look up the student’s name in Students.",
+          "tables": ["Students"],
+          "columns": ["Student ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl002",
+      "question": "Who received the most recent grant and what is their field?",
+      "answer": ["Dr. Lee", "Computer Science"],
+      "challenge_types": ["temporal", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Grants", "Professors"],
+      "primary_keys": ["Grants.Grant ID", "Professors.Professor ID"],
+      "foreign_keys": ["Grants.Professor ID = Professors.Professor ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find the grant with the latest Year in Grants.",
+          "tables": ["Grants"],
+          "columns": ["Grant ID", "Year", "Professor ID"]
+        },
+        {
+          "step": 2,
+          "description": "Join to Professors on Professor ID to retrieve the name and department.",
+          "tables": ["Professors"],
+          "columns": ["Professor ID", "Name", "Department"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl003",
+      "question": "Which course has the highest number of enrolled students?",
+      "answer": ["Machine Learning (C106)"],
+      "challenge_types": ["aggregation", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Enrollment", "Courses"],
+      "primary_keys": ["Enrollment.Student ID,Course ID", "Courses.Course ID"],
+      "foreign_keys": ["Enrollment.Course ID = Courses.Course ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Count the number of Enrollment rows per Course ID.",
+          "tables": ["Enrollment"],
+          "columns": ["Course ID"]
+        },
+        {
+          "step": 2,
+          "description": "Select the Course ID with the highest count and lookup its name in Courses.",
+          "tables": ["Courses"],
+          "columns": ["Course ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl004",
+      "question": "What is the location of the department with the most professors?",
+      "answer": ["Building A", "Building B"],
+      "challenge_types": ["aggregation", "join", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Professors", "Departments"],
+      "primary_keys": ["Professors.Professor ID", "Departments.Dept ID"],
+      "foreign_keys": ["Professors.Department = Departments.Dept ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Count professors per Department value in Professors.",
+          "tables": ["Professors"],
+          "columns": ["Department"]
+        },
+        {
+          "step": 2,
+          "description": "Identify department(s) with max count and join to Departments to get locations.",
+          "tables": ["Departments"],
+          "columns": ["Dept ID", "Location"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl005",
+      "question": "Who is the advisor for the student with the highest year (senior)?",
+      "answer": ["Dr. Rivera"],
+      "challenge_types": ["comparison", "join", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Students", "Professors"],
+      "primary_keys": ["Students.Student ID", "Professors.Professor ID"],
+      "foreign_keys": ["Students.Advisor ID = Professors.Professor ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find student(s) in Students with the maximum Year value.",
+          "tables": ["Students"],
+          "columns": ["Student ID", "Year", "Advisor ID"]
+        },
+        {
+          "step": 2,
+          "description": "Join their Advisor ID to Professors to retrieve the advisor’s name.",
+          "tables": ["Professors"],
+          "columns": ["Professor ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl006",
+      "question": "Which professor teaches a course and also leads a research group?",
+      "answer": ["Dr. Lee"],
+      "challenge_types": ["join", "filtering", "multi_hop"],
+      "num_hops": 2,
+      "table_names": ["Courses", "Research Groups", "Professors"],
+      "primary_keys": ["Courses.Course ID", "Research Groups.Group ID", "Professors.Professor ID"],
+      "foreign_keys": [
+        "Courses.Taught By = Professors.Professor ID",
+        "Research Groups.Led By = Professors.Professor ID"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Courses to get all Professor IDs that teach at least one course.",
+          "tables": ["Courses"],
+          "columns": ["Taught By"]
+        },
+        {
+          "step": 2,
+          "description": "Filter Research Groups to get all Professor IDs that lead a group, then intersect with the teaching IDs.",
+          "tables": ["Research Groups"],
+          "columns": ["Led By"]
+        },
+        {
+          "step": 3,
+          "description": "Lookup the Professor ID in Professors to get the name.",
+          "tables": ["Professors"],
+          "columns": ["Professor ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl007",
+      "question": "Which student majoring in Chemistry received an A- grade?",
+      "answer": ["Faisal Khan"],
+      "challenge_types": ["join", "filtering", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Students", "Enrollment"],
+      "primary_keys": ["Students.Student ID", "Enrollment.Student ID,Course ID"],
+      "foreign_keys": ["Enrollment.Student ID = Students.Student ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Students for Major = 'Chemistry' and get their Student ID.",
+          "tables": ["Students"],
+          "columns": ["Student ID", "Major"]
+        },
+        {
+          "step": 2,
+          "description": "Filter Enrollment for those Student IDs with Grade = 'A-'.",
+          "tables": ["Enrollment"],
+          "columns": ["Student ID", "Grade"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl008",
+      "question": "Which department has students enrolled in the highest number of distinct courses?",
+      "answer": ["Mathematics"],
+      "challenge_types": ["aggregation", "join", "multi_hop"],
+      "num_hops": 3,
+      "table_names": ["Students", "Enrollment", "Courses", "Departments"],
+      "primary_keys": [
+        "Students.Student ID",
+        "Enrollment.Student ID,Course ID",
+        "Courses.Course ID",
+        "Departments.Dept ID"
+      ],
+      "foreign_keys": [
+        "Enrollment.Student ID = Students.Student ID",
+        "Courses.Dept ID = Departments.Dept ID"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Students to Enrollment to map each student to their courses.",
+          "tables": ["Students", "Enrollment"],
+          "columns": ["Students.Student ID", "Enrollment.Course ID"]
+        },
+        {
+          "step": 2,
+          "description": "Group by Students.Dept ID and count distinct Course IDs per department.",
+          "tables": ["Enrollment"],
+          "columns": ["Course ID"]
+        },
+        {
+          "step": 3,
+          "description": "Join to Departments to get the department name/location for the Dept ID with the highest count.",
+          "tables": ["Departments"],
+          "columns": ["Dept ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl009",
+      "question": "Who published both 'Graph Theory in CS' and 'Search Algorithms'?",
+      "answer": ["Dr. Liu"],
+      "challenge_types": ["filtering", "multi_hop"],
+      "num_hops": 1,
+      "table_names": ["Publications", "Professors"],
+      "primary_keys": ["Publications.Paper ID", "Professors.Professor ID"],
+      "foreign_keys": ["Publications.Professor ID = Professors.Professor ID"],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Publications for Title in the set {'Graph Theory in CS','Search Algorithms'} and group by Professor ID having count=2.",
+          "tables": ["Publications"],
+          "columns": ["Professor ID", "Title"]
+        },
+        {
+          "step": 2,
+          "description": "Lookup the Professor ID in Professors to retrieve the name.",
+          "tables": ["Professors"],
+          "columns": ["Professor ID", "Name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_fl010",
+      "question": "Which research group is led by a professor who also received a grant in 2021?",
+      "answer": ["None"],
+      "challenge_types": ["join", "filtering", "multi_hop"],
+      "num_hops": 2,
+      "table_names": ["Grants", "Research Groups", "Professors"],
+      "primary_keys": ["Grants.Grant ID", "Research Groups.Group ID", "Professors.Professor ID"],
+      "foreign_keys": [
+        "Grants.Professor ID = Professors.Professor ID",
+        "Research Groups.Led By = Professors.Professor ID"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Grants for Year = 2021 and collect Professor IDs.",
+          "tables": ["Grants"],
+          "columns": ["Professor ID", "Year"]
+        },
+        {
+          "step": 2,
+          "description": "Filter Research Groups where Led By matches those Professor IDs.",
+          "tables": ["Research Groups"],
+          "columns": ["Led By"]
+        }
+      ]
+    }
+  ]
+}

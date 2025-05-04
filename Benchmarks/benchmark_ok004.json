@@ -1,0 +1,416 @@
+{
+    "schema_id": "schema_fl004",
+    "domain": "Fuel Retail",
+    "tables": [
+      {
+        "name": "gasstations",
+        "columns": ["GasStationID", "ChainID", "Country", "Segment"],
+        "column_descriptions": [
+          "Primary identifier of the station",
+          "Parent chain to which the station belongs",
+          "Country where the station operates",
+          "Business segment (Urban / Highway / Rural)"
+        ],
+        "challenge_types": [],
+        "primary_key": "GasStationID",
+        "foreign_keys": [],
+        "data": [
+          ["GS1", "ChainA", "USA", "Urban"],
+          ["GS2", "ChainB", "Canada", "Rural"],
+          ["GS3", "ChainA", "USA", "Highway"],
+          ["GS4", "ChainC", "UK", "Urban"]
+        ]
+      },
+      {
+        "name": "customers",
+        "columns": ["CustomerID", "Segment"],
+        "column_descriptions": [
+          "Primary identifier of the customer",
+          "Customer segment classification (Retail / Commercial)"
+        ],
+        "challenge_types": [],
+        "primary_key": "CustomerID",
+        "foreign_keys": [],
+        "data": [
+          ["C1", "Retail"],
+          ["C2", "Commercial"],
+          ["C3", "Retail"],
+          ["C4", "Commercial"],
+          ["C5", "Retail"],
+          ["C6", "Retail"]
+        ]
+      },
+      {
+        "name": "products",
+        "columns": ["ProductID", "Description"],
+        "column_descriptions": [
+          "Primary identifier of the product",
+          "Fuel-type or service description"
+        ],
+        "challenge_types": [],
+        "primary_key": "ProductID",
+        "foreign_keys": [],
+        "data": [
+          ["P1", "Diesel"],
+          ["P2", "Premium Gasoline"],
+          ["P3", "Electric Charging"]
+        ]
+      },
+      {
+        "name": "transactions",
+        "columns": [
+          "TransID",
+          "Date",
+          "GasStationID",
+          "CustomerID",
+          "ProductID",
+          "Amount",
+          "Price",
+          "CardID"
+        ],
+        "column_descriptions": [
+          "Transaction identifier",
+          "Date of purchase",
+          "Foreign key referencing gasstations",
+          "Foreign key referencing customers",
+          "Foreign key referencing products",
+          "Quantity of product purchased",
+          "Unit price",
+          "Payment-card identifier"
+        ],
+        "challenge_types": [],
+        "primary_key": "TransID",
+        "foreign_keys": [
+          "transactions.GasStationID = gasstations.GasStationID",
+          "transactions.CustomerID = customers.CustomerID",
+          "transactions.ProductID = products.ProductID"
+        ],
+        "data": [
+          ["T1", "2024-12-01", "GS1", "C1", "P1", 100, 4.00, "Card1"],
+          ["T2", "2025-01-15", "GS3", "C2", "P2",  80, 5.00, "Card2"],
+          ["T3", "2025-02-10", "GS3", "C3", "P1",  90, 4.20, "Card1"],
+          ["T4", "2025-03-05", "GS2", "C4", "P1",  50, 3.90, "Card3"],
+          ["T5", "2025-03-20", "GS4", "C5", "P3",  30, 0.30, "Card2"],
+          ["T6", "2025-04-01", "GS1", "C6", "P3",  60, 0.28, "Card1"]
+        ]
+      },
+      {
+        "name": "transactions_1k",
+        "columns": [
+          "TransID",
+          "Date",
+          "GasStationID",
+          "CustomerID",
+          "ProductID",
+          "Amount",
+          "Price"
+        ],
+        "column_descriptions": [
+          "Same layout as transactions but sampled at 1 000-row scale"
+        ],
+        "challenge_types": [],
+        "primary_key": "TransID",
+        "foreign_keys": [
+          "transactions_1k.GasStationID = gasstations.GasStationID",
+          "transactions_1k.CustomerID = customers.CustomerID",
+          "transactions_1k.ProductID = products.ProductID"
+        ],
+        "data": [
+          ["U1", "2024-06-15", "GS1", "C1", "P1", 500, 4.10],
+          ["U2", "2024-07-18", "GS2", "C2", "P1", 400, 4.00],
+          ["U3", "2024-08-05", "GS3", "C3", "P1", 300, 4.05],
+          ["U4", "2024-09-12", "GS2", "C4", "P1", 200, 3.95],
+          ["U5", "2024-10-20", "GS1", "C5", "P1", 100, 4.15],
+          ["U6", "2025-02-25", "GS4", "C6", "P2",  60, 5.20]
+        ]
+      },
+      {
+        "name": "yearmonth",
+        "columns": ["CustomerID", "Date", "Consumption"],
+        "column_descriptions": [
+          "Customer identifier",
+          "Month-end date (YYYY-MM-01 style)",
+          "Total consumption for that customer & month"
+        ],
+        "challenge_types": [],
+        "primary_key": ["CustomerID", "Date"],
+        "foreign_keys": ["yearmonth.CustomerID = customers.CustomerID"],
+        "data": [
+          ["C1", "2025-02-01", 600],
+          ["C1", "2025-03-01", 550],
+          ["C2", "2025-02-01", 300],
+          ["C2", "2025-03-01", 310],
+          ["C3", "2025-02-01", 400],
+          ["C3", "2025-03-01", 380],
+          ["C4", "2025-02-01", 150],
+          ["C5", "2025-02-01", 120],
+          ["C6", "2025-02-01", 200]
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question_id": "question_fl026",
+        "question": "Which gas-station chain received the highest total spending in the last 6 months?",
+        "answer": ["ChainA"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["transactions", "gasstations"],
+        "primary_keys": ["transactions.GasStationID", "gasstations.ChainID"],
+        "foreign_keys": ["transactions.GasStationID = gasstations.GasStationID"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions.Date ≥ 2024-10-01 (≈ 6 months back).",
+            "tables": ["transactions"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Compute spending = Price × Amount and join with gasstations to get ChainID.",
+            "tables": ["transactions", "gasstations"],
+            "columns": ["GasStationID", "Price", "Amount", "ChainID"]
+          },
+          {
+            "step": 3,
+            "description": "Group by ChainID, sum spending, order desc, pick top.",
+            "tables": ["transactions"],
+            "columns": ["ChainID", "spending"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl027",
+        "question": "Find the top 5 customers who purchased the largest total quantity of Diesel in the past year.",
+        "answer": ["C1", "C2", "C3", "C4", "C5"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 3,
+        "table_names": ["transactions_1k", "products", "customers"],
+        "primary_keys": ["transactions_1k.CustomerID"],
+        "foreign_keys": [
+          "transactions_1k.ProductID = products.ProductID",
+          "transactions_1k.CustomerID = customers.CustomerID"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions_1k.Date ≥ 2024-04-25.",
+            "tables": ["transactions_1k"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Join with products and keep Description = 'Diesel'; sum Amount per CustomerID.",
+            "tables": ["products"],
+            "columns": ["CustomerID", "Amount"]
+          },
+          {
+            "step": 3,
+            "description": "Order sums desc, limit 5.",
+            "tables": ["transactions_1k"],
+            "columns": ["CustomerID", "total_amount"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl028",
+        "question": "For each customer segment, how many distinct product types were purchased in each country during the last quarter?",
+        "answer": ["Retail-USA → 2", "Commercial-Canada → 1"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions", "customers", "gasstations", "products"],
+        "primary_keys": ["customers.CustomerID"],
+        "foreign_keys": [
+          "transactions.CustomerID = customers.CustomerID",
+          "transactions.GasStationID = gasstations.GasStationID",
+          "transactions.ProductID = products.ProductID"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions for 2025-01-01 ≤ Date < 2025-04-01.",
+            "tables": ["transactions"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Bring in Segment via customers, Country via gasstations, and product Description.",
+            "tables": ["customers", "gasstations", "products"],
+            "columns": ["Segment", "Country", "Description"]
+          },
+          {
+            "step": 3,
+            "description": "Group by (Segment, Country) and COUNT DISTINCT products.Description.",
+            "tables": ["transactions"],
+            "columns": ["Segment", "Country", "product_count"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl029",
+        "question": "Determine the average monthly consumption for each customer who bought at least one Premium Gasoline product.",
+        "answer": ["C3 → 390", "C6 → 200"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions_1k", "products", "yearmonth"],
+        "primary_keys": ["transactions_1k.CustomerID"],
+        "foreign_keys": [
+          "transactions_1k.ProductID = products.ProductID",
+          "yearmonth.CustomerID = transactions_1k.CustomerID"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Join transactions_1k with products and keep Premium Gasoline.",
+            "tables": ["transactions_1k", "products"],
+            "columns": ["CustomerID"]
+          },
+          {
+            "step": 2,
+            "description": "Get distinct CustomerIDs that match.",
+            "tables": ["transactions_1k"],
+            "columns": ["CustomerID"]
+          },
+          {
+            "step": 3,
+            "description": "For those customers, average yearmonth.Consumption.",
+            "tables": ["yearmonth"],
+            "columns": ["CustomerID", "Consumption"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl030",
+        "question": "List customers whose 3-month transactions.Amount differs from yearmonth.Consumption by more than 10 percent.",
+        "answer": ["C2"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions", "yearmonth"],
+        "primary_keys": ["transactions.CustomerID"],
+        "foreign_keys": ["transactions.CustomerID = yearmonth.CustomerID"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Sum Amount from transactions where Date ≥ 2025-01-25.",
+            "tables": ["transactions"],
+            "columns": ["CustomerID", "Amount"]
+          },
+          {
+            "step": 2,
+            "description": "Sum Consumption from yearmonth for Feb & Mar 2025.",
+            "tables": ["yearmonth"],
+            "columns": ["CustomerID", "Consumption"]
+          },
+          {
+            "step": 3,
+            "description": "Compute |trans − cons| ÷ cons × 100 > 10%.",
+            "tables": ["transactions", "yearmonth"],
+            "columns": ["CustomerID", "pct_diff"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl031",
+        "question": "Which CardID had the most transactions at each gas-station segment in the last 30 days?",
+        "answer": ["Urban → Card2", "Highway → Card1", "Rural → Card3"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions", "gasstations"],
+        "primary_keys": ["transactions.TransID"],
+        "foreign_keys": ["transactions.GasStationID = gasstations.GasStationID"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions.Date ≥ 2025-03-26.",
+            "tables": ["transactions"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Join with gasstations to fetch Segment.",
+            "tables": ["gasstations"],
+            "columns": ["Segment"]
+          },
+          {
+            "step": 3,
+            "description": "Group by (Segment, CardID) counting transactions, then pick CardID with max count per Segment.",
+            "tables": ["transactions"],
+            "columns": ["Segment", "CardID", "txn_count"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl032",
+        "question": "Which country has the highest average fuel price for Diesel and Premium Gasoline in the current year?",
+        "answer": ["USA"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions_1k", "products", "gasstations"],
+        "primary_keys": ["transactions_1k.TransID"],
+        "foreign_keys": [
+          "transactions_1k.ProductID = products.ProductID",
+          "transactions_1k.GasStationID = gasstations.GasStationID"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions_1k.Date ≥ 2025-01-01.",
+            "tables": ["transactions_1k"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Join with products; keep Description IN ('Diesel','Premium Gasoline').",
+            "tables": ["products"],
+            "columns": ["ProductID", "Description"]
+          },
+          {
+            "step": 3,
+            "description": "Join with gasstations to fetch Country; average Price per Country, select highest.",
+            "tables": ["gasstations"],
+            "columns": ["Country", "Price"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl033",
+        "question": "Top 3 gas-station chains by Electric-Charging revenue in the last 12 months.",
+        "answer": ["ChainC", "ChainA", "ChainB"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 4,
+        "table_names": ["transactions", "products", "gasstations"],
+        "primary_keys": ["transactions.TransID"],
+        "foreign_keys": [
+          "transactions.ProductID = products.ProductID",
+          "transactions.GasStationID = gasstations.GasStationID"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter transactions.Date ≥ 2024-04-25.",
+            "tables": ["transactions"],
+            "columns": ["Date"]
+          },
+          {
+            "step": 2,
+            "description": "Join with products; keep Description = 'Electric Charging'.",
+            "tables": ["products"],
+            "columns": ["ProductID", "Description"]
+          },
+          {
+            "step": 3,
+            "description": "Compute revenue = Price × Amount, join with gasstations to get ChainID.",
+            "tables": ["gasstations"],
+            "columns": ["ChainID", "revenue"]
+          },
+          {
+            "step": 4,
+            "description": "Group by ChainID, sum revenue, order desc, limit 3.",
+            "tables": ["transactions"],
+            "columns": ["ChainID", "total_revenue"]
+          }
+        ]
+      }
+    ]
+  }
+  

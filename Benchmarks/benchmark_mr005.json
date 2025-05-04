@@ -1,0 +1,623 @@
+{
+  "schema_id": "schema_mr002",
+  "domain": "Travel & Logistics",
+  "tables": [
+    {
+      "name": "Flights",
+      "columns": ["flight_id", "flight_number", "departure_airport_id", "arrival_airport_id", "departure_time", "duration_minutes"],
+      "column_descriptions": {
+        "flight_id": "Unique identifier for the flight",
+        "flight_number": "Flight number (e.g., AA123)",
+        "departure_airport_id": "ID of the departure airport",
+        "arrival_airport_id": "ID of the arrival airport",
+        "departure_time": "Scheduled departure time (YYYY-MM-DD HH:MM:SS)",
+        "duration_minutes": "Flight duration in minutes"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "flight_id",
+      "foreign_keys": [
+        "Flights.departure_airport_id = Airports.airport_id",
+        "Flights.arrival_airport_id = Airports.airport_id"
+      ],
+      "data": [
+        ["F001", "AA123", "A001", "A002", "2023-06-01 08:00:00", 180],
+        ["F002", "DL456", "A002", "A003", "2023-06-02 10:00:00", 240],
+        ["F003", "UA789", "A003", "A001", "2023-06-03 12:00:00", 150],
+        ["F004", "AA101", "A001", "A004", "2023-06-04 14:00:00", 300],
+        ["F005", "DL202", "A004", "A002", "2023-06-05 16:00:00", 200]
+      ]
+    },
+    {
+      "name": "Passengers",
+      "columns": ["passenger_id", "name", "birth_year", "nationality"],
+      "column_descriptions": {
+        "passenger_id": "Unique identifier for the passenger",
+        "name": "Full name of the passenger",
+        "birth_year": "Year of birth",
+        "nationality": "Passenger's nationality"
+      },
+      "challenge_types": ["format_variation"],
+      "primary_key": "passenger_id",
+      "foreign_keys": [],
+      "data": [
+        ["P001", "John Doe", 1985, "USA"],
+        ["P002", "Jane Smith", 1990, "Canada"],
+        ["P003", "Alice Brown", 1978, "UK"],
+        ["P004", "Bob Lee", 1995, "USA"],
+        ["P005", "Emma Chen", 1982, "China"]
+      ]
+    },
+    {
+      "name": "Bookings",
+      "columns": ["booking_id", "passenger_id", "flight_id", "booking_date", "seat_number"],
+      "column_descriptions": {
+        "booking_id": "Unique identifier for the booking",
+        "passenger_id": "ID of the passenger",
+        "flight_id": "ID of the booked flight",
+        "booking_date": "Date of booking (YYYY-MM-DD)",
+        "seat_number": "Assigned seat number"
+      },
+      "challenge_types": ["format_variation", "date_format_inference"],
+      "primary_key": "booking_id",
+      "foreign_keys": [
+        "Bookings.passenger_id = Passengers.passenger_id",
+        "Bookings.flight_id = Flights.flight_id"
+      ],
+      "data": [
+        ["B001", "P001", "F001", "2023-05-20", "12A"],
+        ["B002", "P002", "F002", "2023-05-21", "15B"],
+        ["B003", "P003", "F003", "2023-05-22", "20C"],
+        ["B004", "P004", "F001", "2023-05-23", "10D"],
+        ["B005", "P005", "F004", "2023-05-24", "18E"]
+      ]
+    },
+    {
+      "name": "Airports",
+      "columns": ["airport_id", "name", "city", "country"],
+      "column_descriptions": {
+        "airport_id": "Unique identifier for the airport",
+        "name": "Name of the airport",
+        "city": "City where the airport is located",
+        "country": "Country of the airport"
+      },
+      "challenge_types": [],
+      "primary_key": "airport_id",
+      "foreign_keys": [],
+      "data": [
+        ["A001", "JFK International", "New York", "USA"],
+        ["A002", "LAX International", "Los Angeles", "USA"],
+        ["A003", "Heathrow", "London", "UK"],
+        ["A004", "Changi", "Singapore", "Singapore"],
+        ["A005", "Pearson", "Toronto", "Canada"]
+      ]
+    },
+    {
+      "name": "Airlines",
+      "columns": ["airline_id", "name", "headquarters_country"],
+      "column_descriptions": {
+        "airline_id": "Unique identifier for the airline",
+        "name": "Name of the airline",
+        "headquarters_country": "Country where the airline is headquartered"
+      },
+      "challenge_types": [],
+      "primary_key": "airline_id",
+      "foreign_keys": [],
+      "data": [
+        ["AL001", "American Airlines", "USA"],
+        ["AL002", "Delta Air Lines", "USA"],
+        ["AL003", "United Airlines", "USA"],
+        ["AL004", "British Airways", "UK"],
+        ["AL005", "Singapore Airlines", "Singapore"]
+      ]
+    },
+    {
+      "name": "Flight_Operators",
+      "columns": ["operator_id", "flight_id", "airline_id"],
+      "column_descriptions": {
+        "operator_id": "Unique identifier for the flight operator record",
+        "flight_id": "ID of the flight",
+        "airline_id": "ID of the operating airline"
+      },
+      "challenge_types": [],
+      "primary_key": "operator_id",
+      "foreign_keys": [
+        "Flight_Operators.flight_id = Flights.flight_id",
+        "Flight_Operators.airline_id = Airlines.airline_id"
+      ],
+      "data": [
+        ["O001", "F001", "AL001"],
+        ["O002", "F002", "AL002"],
+        ["O003", "F003", "AL003"],
+        ["O004", "F004", "AL001"],
+        ["O005", "F005", "AL002"]
+      ]
+    },
+    {
+      "name": "Luggage",
+      "columns": ["luggage_id", "booking_id", "weight_kg", "checked_in"],
+      "column_descriptions": {
+        "luggage_id": "Unique identifier for the luggage",
+        "booking_id": "ID of the associated booking",
+        "weight_kg": "Weight of the luggage in kilograms",
+        "checked_in": "Whether the luggage is checked in (true/false)"
+      },
+      "challenge_types": ["mixed_units"],
+      "primary_key": "luggage_id",
+      "foreign_keys": [
+        "Luggage.booking_id = Bookings.booking_id"
+      ],
+      "data": [
+        ["L001", "B001", 23.5, true],
+        ["L002", "B002", 15.0, false],
+        ["L003", "B003", 20.0, true],
+        ["L004", "B004", 25.0, true],
+        ["L005", "B005", 18.0, false]
+      ]
+    },
+    {
+      "name": "Tickets",
+      "columns": ["ticket_id", "booking_id", "price_usd", "class"],
+      "column_descriptions": {
+        "ticket_id": "Unique identifier for the ticket",
+        "booking_id": "ID of the associated booking",
+        "price_usd": "Ticket price in USD",
+        "class": "Travel class (Economy, Business, First)"
+      },
+      "challenge_types": [],
+      "primary_key": "ticket_id",
+      "foreign_keys": [
+        "Tickets.booking_id = Bookings.booking_id"
+      ],
+      "data": [
+        ["T001", "B001", 500, "Economy"],
+        ["T002", "B002", 800, "Business"],
+        ["T003", "B003", 600, "Economy"],
+        ["T004", "B004", 450, "Economy"],
+        ["T005", "B005", 1200, "First"]
+      ]
+    },
+    {
+      "name": "Cancellations",
+      "columns": ["cancellation_id", "booking_id", "cancellation_date", "refund_amount_usd"],
+      "column_descriptions": {
+        "cancellation_id": "Unique identifier for the cancellation",
+        "booking_id": "ID of the cancelled booking",
+        "cancellation_date": "Date of cancellation (YYYY-MM-DD)",
+        "refund_amount_usd": "Refund amount in USD"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "cancellation_id",
+      "foreign_keys": [
+        "Cancellations.booking_id = Bookings.booking_id"
+      ],
+      "data": [
+        ["C001", "B001", "2023-05-25", 400],
+        ["C002", "B003", "2023-05-26", 500],
+        ["C003", "B004", "2023-05-27", 300]
+      ]
+    },
+    {
+      "name": "Connections",
+      "columns": ["connection_id", "passenger_id", "first_flight_id", "second_flight_id", "layover_airport_id"],
+      "column_descriptions": {
+        "connection_id": "Unique identifier for the flight connection",
+        "passenger_id": "ID of the passenger",
+        "first_flight_id": "ID of the first flight",
+        "second_flight_id": "ID of the second flight",
+        "layover_airport_id": "ID of the layover airport"
+      },
+      "challenge_types": ["self_referential"],
+      "primary_key": "connection_id",
+      "foreign_keys": [
+        "Connections.passenger_id = Passengers.passenger_id",
+        "Connections.first_flight_id = Flights.flight_id",
+        "Connections.second_flight_id = Flights.flight_id",
+        "Connections.layover_airport_id = Airports.airport_id"
+      ],
+      "data": [
+        ["CN001", "P001", "F001", "F002", "A002"],
+        ["CN002", "P002", "F003", "F004", "A001"],
+        ["CN003", "P003", "F004", "F005", "A004"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_mr001",
+      "question": "Which passengers from the USA booked flights that were cancelled and operated by airlines headquartered in the USA?",
+      "answer": ["John Doe", "Bob Lee"],
+      "challenge_types": ["multi-hop", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Passengers", "Bookings", "Cancellations", "Flight_Operators", "Airlines"],
+      "primary_keys": ["Passengers.passenger_id", "Bookings.booking_id", "Cancellations.cancellation_id", "Flight_Operators.operator_id", "Airlines.airline_id"],
+      "foreign_keys": [
+        "Bookings.passenger_id = Passengers.passenger_id",
+        "Cancellations.booking_id = Bookings.booking_id",
+        "Flight_Operators.flight_id = Bookings.flight_id",
+        "Flight_Operators.airline_id = Airlines.airline_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Passengers table for passengers with nationality 'USA'.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "name", "nationality"]
+        },
+        {
+          "step": 2,
+          "description": "Join Passengers with Bookings to find bookings made by US passengers.",
+          "tables": ["Passengers", "Bookings"],
+          "columns": ["passenger_id", "booking_id", "flight_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Cancellations to identify bookings that were cancelled.",
+          "tables": ["Bookings", "Cancellations"],
+          "columns": ["booking_id", "cancellation_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Bookings with Flight_Operators and Airlines to filter flights operated by airlines headquartered in the USA.",
+          "tables": ["Bookings", "Flight_Operators", "Airlines"],
+          "columns": ["flight_id", "airline_id", "headquarters_country"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr002",
+      "question": "Which airports in the USA served as layover points for passengers who booked business class tickets on flights departing after June 1, 2023?",
+      "answer": ["LAX International"],
+      "challenge_types": ["multi-hop", "deep_join", "temporal", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Connections", "Bookings", "Tickets", "Flights", "Airports"],
+      "primary_keys": ["Connections.connection_id", "Bookings.booking_id", "Tickets.ticket_id", "Flights.flight_id", "Airports.airport_id"],
+      "foreign_keys": [
+        "Connections.first_flight_id = Flights.flight_id",
+        "Bookings.flight_id = Flights.flight_id",
+        "Tickets.booking_id = Bookings.booking_id",
+        "Connections.layover_airport_id = Airports.airport_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Flights table for flights departing after '2023-06-01', handling date format inference.",
+          "tables": ["Flights"],
+          "columns": ["flight_id", "departure_time"]
+        },
+        {
+          "step": 2,
+          "description": "Join Flights with Bookings and Tickets to identify bookings with business class tickets.",
+          "tables": ["Flights", "Bookings", "Tickets"],
+          "columns": ["flight_id", "booking_id", "class"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Connections to find connections involving these flights as first_flight_id.",
+          "tables": ["Bookings", "Connections"],
+          "columns": ["flight_id", "first_flight_id", "layover_airport_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Connections with Airports to filter layover airports located in the USA.",
+          "tables": ["Connections", "Airports"],
+          "columns": ["layover_airport_id", "name", "country"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr003",
+      "question": "Which passengers born after 1980 checked in luggage heavier than 20 kg on flights operated by Delta Air Lines?",
+      "answer": ["Jane Smith", "Bob Lee"],
+      "challenge_types": ["multi-hop", "conditional", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Passengers", "Bookings", "Luggage", "Flight_Operators", "Airlines"],
+      "primary_keys": ["Passengers.passenger_id", "Bookings.booking_id", "Luggage.luggage_id", "Flight_Operators.operator_id", "Airlines.airline_id"],
+      "foreign_keys": [
+        "Bookings.passenger_id = Passengers.passenger_id",
+        "Luggage.booking_id = Bookings.booking_id",
+        "Flight_Operators.flight_id = Bookings.flight_id",
+        "Flight_Operators.airline_id = Airlines.airline_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Passengers table for passengers born after 1980.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Passengers with Bookings to find their bookings.",
+          "tables": ["Passengers", "Bookings"],
+          "columns": ["passenger_id", "booking_id", "flight_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Luggage to filter for luggage heavier than 20 kg and checked in.",
+          "tables": ["Bookings", "Luggage"],
+          "columns": ["booking_id", "weight_kg", "checked_in"]
+        },
+        {
+          "step": 4,
+          "description": "Join Bookings with Flight_Operators and Airlines to filter flights operated by Delta Air Lines.",
+          "tables": ["Bookings", "Flight_Operators", "Airlines"],
+          "columns": ["flight_id", "airline_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr004",
+      "question": "Which flights departing from US airports were booked by passengers who also booked flights arriving at UK airports?",
+      "answer": ["AA123", "AA101"],
+      "challenge_types": ["multi-hop", "self_referential", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Flights", "Bookings", "Passengers", "Airports"],
+      "primary_keys": ["Flights.flight_id", "Bookings.booking_id", "Passengers.passenger_id", "Airports.airport_id"],
+      "foreign_keys": [
+        "Bookings.flight_id = Flights.flight_id",
+        "Bookings.passenger_id = Passengers.passenger_id",
+        "Flights.departure_airport_id = Airports.airport_id",
+        "Flights.arrival_airport_id = Airports.airport_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Flights with Airports to identify flights arriving at UK airports.",
+          "tables": ["Flights", "Airports"],
+          "columns": ["flight_id", "arrival_airport_id", "country"]
+        },
+        {
+          "step": 2,
+          "description": "Join these flights with Bookings to find passengers who booked them.",
+          "tables": ["Flights", "Bookings"],
+          "columns": ["flight_id", "passenger_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Flights again to find other flights booked by these passengers.",
+          "tables": ["Bookings", "Flights"],
+          "columns": ["passenger_id", "flight_id", "departure_airport_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Flights with Airports to filter flights departing from US airports.",
+          "tables": ["Flights", "Airports"],
+          "columns": ["flight_id", "flight_number", "departure_airport_id", "country"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr005",
+      "question": "Which passengers received refunds greater than $400 for cancelled bookings on flights longer than 200 minutes?",
+      "answer": ["John Doe", "Alice Brown"],
+      "challenge_types": ["multi-hop", "conditional", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Cancellations", "Bookings", "Flights"],
+      "primary_keys": ["Cancellations.cancellation_id", "Bookings.booking_id", "Flights.flight_id"],
+      "foreign_keys": [
+        "Cancellations.booking_id = Bookings.booking_id",
+        "Bookings.flight_id = Flights.flight_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Cancellations table for refunds greater than $400.",
+          "tables": ["Cancellations"],
+          "columns": ["cancellation_id", "booking_id", "refund_amount_usd"]
+        },
+        {
+          "step": 2,
+          "description": "Join Cancellations with Bookings to find associated flights and passengers.",
+          "tables": ["Cancellations", "Bookings"],
+          "columns": ["booking_id", "flight_id", "passenger_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Flights to filter flights with duration longer than 200 minutes and retrieve passenger names via Passengers.",
+          "tables": ["Bookings", "Flights", "Passengers"],
+          "columns": ["flight_id", "duration_minutes", "passenger_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr006",
+      "question": "Which airlines operated flights that were booked by passengers who also had layovers in Singapore?",
+      "answer": ["American Airlines", "Delta Air Lines"],
+      "challenge_types": ["multi-hop", "deep_join", "self_referential"],
+      "num_hops": 4,
+      "table_names": ["Connections", "Bookings", "Flight_Operators", "Airlines", "Airports"],
+      "primary_keys": ["Connections.connection_id", "Bookings.booking_id", "Flight_Operators.operator_id", "Airlines.airline_id", "Airports.airport_id"],
+      "foreign_keys": [
+        "Connections.layover_airport_id = Airports.airport_id",
+        "Bookings.passenger_id = Connections.passenger_id",
+        "Flight_Operators.flight_id = Bookings.flight_id",
+        "Flight_Operators.airline_id = Airlines.airline_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Connections with Airports to find connections with layovers in Singapore.",
+          "tables": ["Connections", "Airports"],
+          "columns": ["connection_id", "layover_airport_id", "country"]
+        },
+        {
+          "step": 2,
+          "description": "Join Connections with Bookings to find bookings made by passengers with these connections.",
+          "tables": ["Connections", "Bookings"],
+          "columns": ["passenger_id", "booking_id", "flight_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Flight_Operators to identify the flights' operators.",
+          "tables": ["Bookings", "Flight_Operators"],
+          "columns": ["flight_id", "operator_id", "airline_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Flight_Operators with Airlines to retrieve the names of the operating airlines.",
+          "tables": ["Flight_Operators", "Airlines"],
+          "columns": ["airline_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr007",
+      "question": "Which passengers booked flights departing from the same airport as their layover airport on a different flight?",
+      "answer": ["John Doe"],
+      "challenge_types": ["multi-hop", "self_referential", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Connections", "Flights", "Bookings", "Passengers"],
+      "primary_keys": ["Connections.connection_id", "Flights.flight_id", "Bookings.booking_id", "Passengers.passenger_id"],
+      "foreign_keys": [
+        "Connections.first_flight_id = Flights.flight_id",
+        "Connections.layover_airport_id = Flights.departure_airport_id",
+        "Bookings.flight_id = Flights.flight_id",
+        "Bookings.passenger_id = Passengers.passenger_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Connections with Flights to identify layover airports for each connection.",
+          "tables": ["Connections", "Flights"],
+          "columns": ["connection_id", "first_flight_id", "layover_airport_id"]
+        },
+        {
+          "step": 2,
+          "description": "Join Connections with Flights again to find flights where the departure airport matches the layover airport.",
+          "tables": ["Connections", "Flights"],
+          "columns": ["layover_airport_id", "departure_airport_id", "flight_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Flights with Bookings to find passengers who booked these flights.",
+          "tables": ["Flights", "Bookings"],
+          "columns": ["flight_id", "booking_id", "passenger_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Bookings with Passengers to retrieve the names of passengers, ensuring the passenger matches the connection's passenger_id.",
+          "tables": ["Bookings", "Passengers"],
+          "columns": ["passenger_id", "name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr008",
+      "question": "Which flights had passengers who booked tickets costing more than $700 and also had checked-in luggage?",
+      "answer": ["DL456", "AA101"],
+      "challenge_types": ["multi-hop", "conditional", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Tickets", "Bookings", "Luggage", "Flights"],
+      "primary_keys": ["Tickets.ticket_id", "Bookings.booking_id", "Luggage.luggage_id", "Flights.flight_id"],
+      "foreign_keys": [
+        "Tickets.booking_id = Bookings.booking_id",
+        "Luggage.booking_id = Bookings.booking_id",
+        "Bookings.flight_id = Flights.flight_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Tickets table for tickets costing more than $700.",
+          "tables": ["Tickets"],
+          "columns": ["ticket_id", "booking_id", "price_usd"]
+        },
+        {
+          "step": 2,
+          "description": "Join Tickets with Bookings and Luggage to find bookings with checked-in luggage.",
+          "tables": ["Tickets", "Bookings", "Luggage"],
+          "columns": ["booking_id", "checked_in"]
+        },
+        {
+          "step": 3,
+          "description": "Join Bookings with Flights to retrieve the flight numbers of flights associated with these bookings.",
+          "tables": ["Bookings", "Flights"],
+          "columns": ["flight_id", "flight_number"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr009",
+      "question": "Which passengers from Canada booked flights that were not cancelled and departed from airports in the USA?",
+      "answer": ["Jane Smith"],
+      "challenge_types": ["multi-hop", "negation", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Passengers", "Bookings", "Cancellations", "Flights", "Airports"],
+      "primary_keys": ["Passengers.passenger_id", "Bookings.booking_id", "Cancellations.cancellation_id", "Flights.flight_id", "Airports.airport_id"],
+      "foreign_keys": [
+        "Bookings.passenger_id = Passengers.passenger_id",
+        "Cancellations.booking_id = Bookings.booking_id",
+        "Bookings.flight_id = Flights.flight_id",
+        "Flights.departure_airport_id = Airports.airport_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Passengers table for passengers with nationality 'Canada'.",
+          "tables": ["Passengers"],
+          "columns": ["passenger_id", "name", "nationality"]
+        },
+        {
+          "step": 2,
+          "description": "Join Passengers with Bookings to find their bookings.",
+          "tables": ["Passengers", "Bookings"],
+          "columns": ["passenger_id", "booking_id", "flight_id"]
+        },
+        {
+          "step": 3,
+          "description": "Left join Bookings with Cancellations and filter for bookings that were not cancelled (null cancellation_id).",
+          "tables": ["Bookings", "Cancellations"],
+          "columns": ["booking_id", "cancellation_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Bookings with Flights and Airports to filter flights departing from US airports.",
+          "tables": ["Bookings", "Flights", "Airports"],
+          "columns": ["flight_id", "departure_airport_id", "country"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr010",
+      "question": "Which airlines operated flights booked by passengers who also booked first-class tickets on flights arriving in Singapore?",
+      "answer": ["American Airlines"],
+      "challenge_types": ["multi-hop", "deep_join", "conditional"],
+      "num_hops": 4,
+      "table_names": ["Tickets", "Bookings", "Flights", "Airports", "Flight_Operators", "Airlines"],
+      "primary_keys": ["Tickets.ticket_id", "Bookings.booking_id", "Flights.flight_id", "Airports.airport_id", "Flight_Operators.operator_id", "Airlines.airline_id"],
+      "foreign_keys": [
+        "Tickets.booking_id = Bookings.booking_id",
+        "Bookings.flight_id = Flights.flight_id",
+        "Flights.arrival_airport_id = Airports.airport_id",
+        "Flight_Operators.flight_id = Flights.flight_id",
+        "Flight_Operators.airline_id = Airlines.airline_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Tickets with Bookings and Flights to find bookings for first-class tickets on flights arriving in Singapore.",
+          "tables": ["Tickets", "Bookings", "Flights", "Airports"],
+          "columns": ["booking_id", "flight_id", "class", "arrival_airport_id", "country"]
+        },
+        {
+          "step": 2,
+          "description": "Join these bookings with Passengers to identify the passengers.",
+          "tables": ["Bookings", "Passengers"],
+          "columns": ["booking_id", "passenger_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Passengers with Bookings and Flights to find other flights booked by these passengers.",
+          "tables": ["Passengers", "Bookings", "Flights"],
+          "columns": ["passenger_id", "booking_id", "flight_id"]
+        },
+        {
+          "step": 4,
+          "description": "Join Flights with Flight_Operators and Airlines to retrieve the names of the operating airlines.",
+          "tables": ["Flights", "Flight_Operators", "Airlines"],
+          "columns": ["flight_id", "airline_id", "name"]
+        }
+      ]
+    }
+  ]
+}
+

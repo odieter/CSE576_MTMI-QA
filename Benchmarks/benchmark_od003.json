@@ -1,0 +1,753 @@
+{
+	"schema_id": "od_003",
+	"domain": "Education",
+  "tables": [
+    {
+	  "name": "Students",
+	  "columns": ["student_id", "first_name", "last_name", "date_of_birth", "email"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for students",
+		  "First name of the student",
+		  "Last name of the student",
+		  "Date of birth of the student",
+		  "Email address of the student"
+	  ],
+		"challenge_types": [],
+		"primary_key": "student_id",
+		"foreign_keys": [
+		],
+	  "data": [
+		[
+		  "1",
+		  "John",
+		  "Doe",
+		  "2001-05-15",
+		  "john.doe@email.com"
+		],
+		[
+		  "2",
+		  "Alice",
+		  "Smith",
+		  "2000-11-22",
+		  "alice.smith@email.com"
+		],
+		[
+		  "3",
+		  "Bob",
+		  "Brown",
+		  "2002-07-30",
+		  "bob.brown@email.com"
+		],
+		[
+		  "4",
+		  "Sarah",
+		  "White",
+		  "2003-03-05",
+		  "sarah.white@email.com"
+		],
+		[
+		  "5",
+		  "Michael",
+		  "Johnson",
+		  "2001-09-12",
+		  "michael.johnson@email.com"
+		],
+		[
+		  "6",
+		  "Emily",
+		  "Clark",
+		  "2000-02-18",
+		  "emily.clark@email.com"
+		],
+		[
+		  "7",
+		  "David",
+		  "Lee",
+		  "2002-04-25",
+		  "david.lee@email.com"
+		],
+		[
+		  "8",
+		  "Rachel",
+		  "Harris",
+		  "2001-10-10",
+		  "rachel.harris@email.com"
+		],
+		[
+		  "9",
+		  "Daniel",
+		  "Lewis",
+		  "2000-08-20",
+		  "daniel.lewis@email.com"
+		],
+		[
+		  "10",
+		  "Jessica",
+		  "Wilson",
+		  "2003-01-30",
+		  "jessica.wilson@email.com"
+		],
+		[
+		  "11",
+		  "Ethan",
+		  "Martinez",
+		  "2001-12-17",
+		  "ethan.martinez@email.com"
+		],
+		[
+		  "12",
+		  "Olivia",
+		  "Perez",
+		  "2002-06-09",
+		  "olivia.perez@email.com"
+		],
+		[
+		  "13",
+		  "James",
+		  "Garcia",
+		  "2000-04-22",
+		  "james.garcia@email.com"
+		],
+		[
+		  "14",
+		  "Sophia",
+		  "Kim",
+		  "2001-11-01",
+		  "sophia.kim@email.com"
+		],
+		[
+		  "15",
+		  "Benjamin",
+		  "Anderson",
+		  "2003-07-07",
+		  "benjamin.anderson@email.com"
+		]
+	  ]
+	},
+    {
+	  "name": "Enrollments",
+	  "columns": ["enrollment_id", "student_id", "course_id", "enrollment_date"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for enrollment",
+		  "Foreign Key referencing Students",
+		  "Foreign Key referencing Courses",
+		  "Date when the student enrolled in the course"
+	  ],
+		"challenge_types": [],
+		"primary_key": "enrollment_id",
+		"foreign_keys": [
+			"Enrollments.enrollment_id = Students.student_id",
+			"Enrollments.course_id = Courses.course_id"
+		],
+	  "data": [
+		[
+		  "1001",
+		  "1",
+		  "101",
+		  "2024-01-15"
+		],
+		[
+		  "1002",
+		  "2",
+		  "102",
+		  "2024-02-10"
+		],
+		[
+		  "1003",
+		  "3",
+		  "103",
+		  "2024-03-20"
+		],
+		[
+		  "1004",
+		  "4",
+		  "104",
+		  "2024-01-25"
+		],
+		[
+		  "1005",
+		  "5",
+		  "105",
+		  "2024-02-15"
+		],
+		[
+		  "1006",
+		  "6",
+		  "106",
+		  "2024-03-05"
+		],
+		[
+		  "1007",
+		  "7",
+		  "107",
+		  "2024-04-01"
+		],
+		[
+		  "1008",
+		  "8",
+		  "108",
+		  "2024-02-22"
+		],
+		[
+		  "1009",
+		  "9",
+		  "109",
+		  "2024-03-18"
+		],
+		[
+		  "1010",
+		  "10",
+		  "110",
+		  "2024-01-30"
+		],
+		[
+		  "1011",
+		  "1",
+		  "102",
+		  "2024-02-05"
+		],
+		[
+		  "1012",
+		  "8",
+		  "103",
+		  "2024-03-10"
+		],
+		[
+		  "1013",
+		  "3",
+		  "104",
+		  "2024-04-02"
+		],
+		[
+		  "1014",
+		  "4",
+		  "105",
+		  "2024-02-28"
+		],
+		[
+		  "1015",
+		  "5",
+		  "106",
+		  "2024-03-15"
+		],
+		[
+		  "1016",
+		  "6",
+		  "107",
+		  "2024-04-10"
+		]
+	  ]
+	},
+    {
+	  "name": "Courses",
+	  "columns": ["course_id", "course_name", "course_description", "instructor_id"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for courses",
+		  "Name of the course",
+		  "A brief description of the course",
+		  "Foreign Key referencing Instructors"
+	  ],
+		"challenge_types": [],
+		"primary_key": "course_id",
+		"foreign_keys": [
+			"Courses.instructor_id = Instructors.instructor_id"
+		],
+	  "data": [
+		[
+		  "101",
+		  "Introduction to AI",
+		  "Basics of artificial intelligence",
+		  "1"
+		],
+		[
+		  "102",
+		  "Data Structures",
+		  "Fundamental data structures in programming",
+		  "2"
+		],
+		[
+		  "103",
+		  "Modern Physics",
+		  "Concepts in modern theoretical physics",
+		  "3"
+		],
+		[
+		  "104",
+		  "Calculus I",
+		  "Introduction to differential and integral calculus",
+		  "2"
+		],
+		[
+		  "105",
+		  "Web Development",
+		  "Introduction to building web applications using HTML, CSS, and JavaScript",
+		  "1"
+		],
+		[
+		  "106",
+		  "Operating Systems",
+		  "Principles of operating systems and system programming",
+		  "3"
+		],
+		[
+		  "107",
+		  "Quantum Mechanics",
+		  "Advanced topics in quantum physics",
+		  "3"
+		],
+		[
+		  "108",
+		  "Machine Learning",
+		  "Introduction to supervised and unsupervised learning algorithms",
+		  "1"
+		],
+		[
+		  "109",
+		  "Computer Networks",
+		  "Basics of computer networks, protocols, and architecture",
+		  "2"
+		],
+		[
+		  "110",
+		  "Organic Chemistry",
+		  "Fundamentals of organic chemistry, including reactions and structures",
+		  "3"
+		]
+	  ]
+	},
+    {
+	  "name": "Instructors",
+	  "columns": ["instructor_id", "first_name", "last_name", "department"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for instructors",
+		  "First name of the instructor",
+		  "Last name of the instructor",
+		  "Department the instructor belongs to"
+	  ],
+		"challenge_types": [],
+		"primary_key": "instructor_id",
+		"foreign_keys": [
+		],
+	  "data": [
+		[
+		  "1",
+		  "Emily",
+		  "Clark",
+		  "Computer Science"
+		],
+		[
+		  "2",
+		  "David",
+		  "Jones",
+		  "Mathematics"
+		],
+		[
+		  "3",
+		  "Laura",
+		  "Johnson",
+		  "Physics"
+		],
+		[
+		  "4",
+		  "James",
+		  "Williams",
+		  "Computer Science"
+		],
+		[
+		  "5",
+		  "Olivia",
+		  "Miller",
+		  "Engineering"
+		],
+		[
+		  "6",
+		  "Samuel",
+		  "Taylor",
+		  "Mathematics"
+		],
+		[
+		  "7",
+		  "Angela",
+		  "White",
+		  "Chemistry"
+		],
+		[
+		  "8",
+		  "Robert",
+		  "Harris",
+		  "Physics"
+		],
+		[
+		  "9",
+		  "Sophie",
+		  "Martin",
+		  "Computer Science"
+		],
+		[
+		  "10",
+		  "Benjamin",
+		  "Lee",
+		  "Biology"
+		]
+	  ]
+	},
+    {
+	  "name": "Classrooms",
+	  "columns": ["classroom_id", "room_number", "building_name", "capacity"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for classrooms",
+		  "Room number or identifier",
+		  "Name of the building",
+		  "Seating capacity of the classroom"
+	  ],
+		"challenge_types": [],
+		"primary_key": "classroom_id",
+		"foreign_keys": [
+		],
+	  "data": [
+		[
+		  "201",
+		  "A101",
+		  "Main Building",
+		  "40"
+		],
+		[
+		  "202",
+		  "B202",
+		  "Science Block",
+		  "30"
+		],
+		[
+		  "203",
+		  "C303",
+		  "Engineering Hall",
+		  "50"
+		],
+		[
+		  "204",
+		  "D404",
+		  "Library Building",
+		  "35"
+		],
+		[
+		  "205",
+		  "E505",
+		  "Arts Center",
+		  "60"
+		],
+		[
+		  "206",
+		  "F606",
+		  "Business Hall",
+		  "45"
+		],
+		[
+		  "207",
+		  "G707",
+		  "Humanities Building",
+		  "40"
+		]
+	  ]
+	},
+    {
+	  "name": "Course_Schedule",
+	  "columns": ["schedule_id", "course_id", "instructor_id", "classroom_id", "schedule_time"],
+	  "column_descriptions": [
+		  "Primary Key, Unique ID for the schedule",
+		  "Foreign Key referencing Courses",
+		  "Foreign Key referencing Instructors",
+		  "Foreign Key referencing Classrooms",
+		  "Day and time of the class"
+	  ],
+		"challenge_types": [],
+		"primary_key": "schedule_id",
+		"foreign_keys": [
+			"Course_Schedule.course_id = Courses.course_id",
+			"Course_Schedule.instructor_id = Instructors.instructor_id",
+			"Course_Schedule.classroom_id = Classrooms.classroom_id"
+		],
+	  "data": [
+		[
+		  "1",
+		  "101",
+		  "1",
+		  "201",
+		  "Monday 9:00 AM"
+		],
+		[
+		  "2",
+		  "102",
+		  "2",
+		  "202",
+		  "Wednesday 2:00 PM"
+		],
+		[
+		  "3",
+		  "103",
+		  "3",
+		  "203",
+		  "Friday 11:00 AM"
+		],
+		[
+		  "4",
+		  "104",
+		  "2",
+		  "204",
+		  "Tuesday 10:00 AM"
+		],
+		[
+		  "5",
+		  "105",
+		  "1",
+		  "205",
+		  "Thursday 1:00 PM"
+		],
+		[
+		  "6",
+		  "106",
+		  "3",
+		  "206",
+		  "Monday 3:00 PM"
+		],
+		[
+		  "7",
+		  "107",
+		  "4",
+		  "207",
+		  "Wednesday 4:00 PM"
+		],
+		[
+		  "8",
+		  "108",
+		  "2",
+		  "201",
+		  "Friday 9:00 AM"
+		],
+		[
+		  "9",
+		  "109",
+		  "4",
+		  "202",
+		  "Thursday 11:00 AM"
+		],
+		[
+		  "10",
+		  "110",
+		  "3",
+		  "203",
+		  "Tuesday 2:00 PM"
+		]
+	  ]
+	}
+  ],
+	"questions": [
+    {
+      "question_id": "question_od001",
+      "question": "What is the seating capacity of the classroom where \"Machine Learning\" is taught?",
+      "answer": ["40"],
+      "challenge_types": ["multi-hop"],
+      "num_hops": 2,
+      "table_names": ["Courses", "Course_Schedule", "Classrooms"],
+      "primary_keys": ["course_id", "classroom_id"],
+      "foreign_keys": [
+        "Course_Schedule.course_id = Courses.course_id",
+        "Course_Schedule.classroom_id = Classrooms.classroom_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In Courses table, find the course_id corresponding to course_name=\"Machine Learning\".",
+          "tables": ["Courses"],
+          "columns": ["course_name","course_id"]
+        },
+        {
+          "step": 2,
+          "description": "In Course_Schedule table, use the course_id find the corresponding classroom_id.",
+          "tables": ["Course_Schedule"],
+          "columns": ["course_id","classroom_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In Classrooms table, use the classroom_id to find the corresponding capacity.",
+          "tables": ["Classrooms"],
+          "columns": ["classroom_id","capacity"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od002",
+      "question": "Which courses are scheduled in \"Engineering Hall\"?",
+      "answer": ["Modern Physics","Organic Chemistry"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by"],
+      "num_hops": 2,
+      "table_names": ["Classrooms", "Course_Schedule", "Courses"],
+      "primary_keys": ["classroom_id", "course_id"],
+      "foreign_keys": [
+        "Course_Schedule.classroom_id = Classrooms.classroom_id",
+        "Course_Schedule.course_id = Courses.course_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In Classrooms table, find the classroom_id corresponding to building_name=\"Engineering Hall\".",
+          "tables": ["Classrooms"],
+          "columns": ["building_name","classroom_id"]
+        },
+        {
+          "step": 2,
+          "description": "In Course_Schedule table, use the classroom_id to get corresponding course_id values.",
+          "tables": ["Course_Schedule"],
+          "columns": ["classroom_id","course_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In Courses table, use the course_id values to get the corresponding course_name values and list them.",
+          "tables": ["Courses"],
+          "columns": ["course_id","course_name"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od003",
+      "question": "What is the building and room number for the course teaching about network protocols and architectures?",
+      "answer": ["Science Block B202"],
+      "challenge_types": ["multi-hop", "commonsense", "indirect_reference",
+        "ambiguous_question", "fuzzy_matching", "hybrid_reasoning", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Courses", "Course_Schedule", "Classrooms"],
+      "primary_keys": ["course_id", "classroom_id"],
+      "foreign_keys": [
+		  "Course_Schedule.course_id = Courses.course_id",
+		  "Course_Schedule.classroom_id = Classrooms.classroom_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Courses table, find the course_description with a value semantically similar to \"network protocols and architectures\" and get its corresponding course_id.",
+          "tables": ["Courses"],
+          "columns": ["course_description","course_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Course_Schedule table, use the course_id to find the corresponding classroom_id.",
+          "tables": ["Course_Schedule"],
+          "columns": ["course_id","classroom_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Classrooms table, use the classroom_id to get its corresponding room_number and building_name.",
+          "tables": ["Classrooms"],
+          "columns": ["classroom_id","room_number","building_name"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od004",
+      "question": "Which students does James Williams teach?",
+      "answer": ["David Lee","Daniel Lewis"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by"],
+      "num_hops": 3,
+      "table_names": ["Instructors", "Course_Schedule", "Enrollments", "Students"],
+      "primary_keys": ["instructor_id", "course_id", "student_id"],
+      "foreign_keys": [
+		  "Course_Schedule.instructor_id = Instructors.instructor_id",
+		  "Course_Schedule.course_id = Enrollments.course_id",
+		  "Enrollments.student_id = Students.student_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Instructors table, find the instructor_id corresponding to first_name=\"James\" and last_name=\"Williams\".",
+          "tables": ["Instructors"],
+          "columns": ["first_name","last_name","instructor_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Course_Schedule table, use the instructor_id to find the corresponding course_id values.",
+          "tables": ["Course_Schedule"],
+          "columns": ["instructor_id","course_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Enrollments table, use each course_id to find their corresponding student_id values.",
+          "tables": ["Enrollments"],
+          "columns": ["course_id","student_id"]
+        },
+		  {
+          "step": 4,
+          "description": "In the Students table, use each student_id to find the corresponding first_name and last_name values",
+          "tables": ["Students"],
+          "columns": ["student_id","first_name","last_name"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od005",
+      "question": "Which days and times does David Jones have to teach on?",
+      "answer": ["Wednesday 2:00 PM", "Tuesday 10:00 AM", "Friday 9:00 AM"],
+      "challenge_types": ["multi-hop", "aggregation","group_by", "conditional","date_format_inference",
+         "commonsense", "ambiguous_question", "fuzzy_matching", "hybrid_reasoning"],
+      "num_hops": 1,
+      "table_names": ["Instructors", "Course_Schedule"],
+      "primary_keys": ["instructor_id"],
+      "foreign_keys": [
+        "Course_Schedule.instructor_id = Instructors.instructor_id"
+	  ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Instructors table, find the instructor_id corresponding to first_name=\"David\" and last_name=\"Jones\".",
+          "tables": ["Instructors"],
+          "columns": ["first_name","last_name","instructor_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Course_Schedule table, find the schedule_time values corresponding to the instructor_id and list them.",
+          "tables": ["Course_Schedule"],
+          "columns": ["instructor_id","schedule_time"]
+        }
+      ]
+    },
+		{
+      "question_id": "question_od006",
+      "question": "Which buildings does Rachel Harris have to attend class in?",
+      "answer": ["Main Building","Engineering Hall"],
+      "challenge_types": ["multi-hop", "aggregation",  "group_by", "commonsense",
+		  "implicit_logic", "hybrid_reasoning"],
+      "num_hops": 3,
+      "table_names": ["Students", "Enrollments", "Course_Schedule", "Classrooms"],
+      "primary_keys": ["student_id", "course_id", "classroom_id"],
+      "foreign_keys": [
+		  "Enrollments.student_id = Students.student_id",
+		  "Enrollments.course_id = Course_Schedule.course_id",
+		  "Course_Schedule.classroom_id = Classrooms.classroom_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In the Students table, find the student_id corresponding to first_name=\"Rachel\" and last_name=\"Harris\".",
+          "tables": ["Students"],
+          "columns": ["first_name","last_name","student_id"]
+        },
+        {
+          "step": 2,
+          "description": "In the Enrollments table, use the student_id to find the corresponding course_id values.",
+          "tables": ["Enrollments"],
+          "columns": ["student_id","course_id"]
+        },
+		  {
+          "step": 3,
+          "description": "In the Course_Schedule table, use the course_id values to find the corresponding classroom_id values.",
+          "tables": ["Course_Schedule"],
+          "columns": ["course_id","classroom_id"]
+        },
+		  {
+          "step": 4,
+          "description": "In the Classrooms table, use the classroom_id values to find the corresponding building_name values and list them.",
+          "tables": ["Classrooms"],
+          "columns": ["classroom_id","building_name"]
+        }
+      ]
+    }
+  ]
+}

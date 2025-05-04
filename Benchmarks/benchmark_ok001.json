@@ -1,0 +1,312 @@
+{
+    "schema_id": "schema_fl001",
+    "domain": "University",
+    "tables": [
+      {
+        "name": "student",
+        "columns": ["student_id", "ranking", "intelligence", "sat"],
+        "column_descriptions": [
+          "Primary identifier for each student",
+          "Class ranking (lower is better)",
+          "Intelligence score of the student",
+          "SAT score (if recorded)"
+        ],
+        "challenge_types": [],
+        "primary_key": "student_id",
+        "foreign_keys": [],
+        "data": [
+          ["S1", "5", "140", "1450"],
+          ["S2", "42", "125", "1380"]
+        ]
+      },
+      {
+        "name": "prof",
+        "columns": ["prof_id", "popularity", "teachability"],
+        "column_descriptions": [
+          "Primary identifier for each professor",
+          "Popularity score of the professor",
+          "Teachability score of the professor"
+        ],
+        "challenge_types": [],
+        "primary_key": "prof_id",
+        "foreign_keys": [],
+        "data": [
+          ["P1", "90", "88"],
+          ["P2", "75", "91"]
+        ]
+      },
+      {
+        "name": "course",
+        "columns": ["course_id", "rating", "diff"],
+        "column_descriptions": [
+          "Primary identifier for each course",
+          "Course rating given by students",
+          "Difficulty level of the course"
+        ],
+        "challenge_types": [],
+        "primary_key": "course_id",
+        "foreign_keys": [],
+        "data": [
+          ["C1", "4.7", "Medium"],
+          ["C2", "4.2", "Hard"]
+        ]
+      },
+      {
+        "name": "registration",
+        "columns": ["reg_id", "course_id", "student_id", "grade"],
+        "column_descriptions": [
+          "Primary identifier for each registration record",
+          "Foreign key referencing course",
+          "Foreign key referencing student",
+          "Grade obtained in the course"
+        ],
+        "challenge_types": [],
+        "primary_key": "reg_id",
+        "foreign_keys": [
+          "registration.course_id = course.course_id",
+          "registration.student_id = student.student_id"
+        ],
+        "data": [
+          ["R1", "C1", "S1", "88"],
+          ["R2", "C2", "S2", "92"]
+        ]
+      },
+      {
+        "name": "RA",
+        "columns": ["ra_id", "prof_id", "student_id", "capability", "salary"],
+        "column_descriptions": [
+          "Primary identifier for each RA assignment",
+          "Foreign key referencing prof",
+          "Foreign key referencing student",
+          "Capability the student is assigned for",
+          "Salary the student receives for this capability"
+        ],
+        "challenge_types": [],
+        "primary_key": "ra_id",
+        "foreign_keys": [
+          "RA.prof_id = prof.prof_id",
+          "RA.student_id = student.student_id"
+        ],
+        "data": [
+          ["RA1", "P1", "S1", "Data Mining", "12000"],
+          ["RA2", "P2", "S2", "Systems", "10000"]
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "question_id": "question_fl001",
+        "question": "Which professor has the highest average salary across all capabilities they handle?",
+        "answer": ["P1"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["RA", "prof"],
+        "primary_keys": ["RA.prof_id", "prof.prof_id"],
+        "foreign_keys": ["RA.prof_id = prof.prof_id"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Group RA by prof_id and compute the average of salary.",
+            "tables": ["RA"],
+            "columns": ["prof_id", "salary"]
+          },
+          {
+            "step": 2,
+            "description": "Order the grouped results by the computed average salary descending and pick the top professor.",
+            "tables": ["RA"],
+            "columns": ["prof_id", "avg_salary"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl002",
+        "question": "Which course has the highest average grade among students whose ranking is in the top 10?",
+        "answer": ["C1"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["registration", "student", "course"],
+        "primary_keys": ["registration.course_id", "student.student_id", "course.course_id"],
+        "foreign_keys": [
+          "registration.student_id = student.student_id",
+          "registration.course_id = course.course_id"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter students with ranking ≤ 10 and join with registration to get their grades.",
+            "tables": ["student", "registration"],
+            "columns": ["student_id", "ranking", "grade"]
+          },
+          {
+            "step": 2,
+            "description": "Group filtered registrations by course_id and compute average grade; return course with highest average.",
+            "tables": ["registration"],
+            "columns": ["course_id", "avg_grade"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl003",
+        "question": "Which student is assigned to the largest number of distinct capabilities across all professors, and what is their intelligence score?",
+        "answer": ["S1", "140"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["RA", "student"],
+        "primary_keys": ["RA.student_id", "student.student_id"],
+        "foreign_keys": ["RA.student_id = student.student_id"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Count distinct capability values in RA per student_id.",
+            "tables": ["RA"],
+            "columns": ["student_id", "capability"]
+          },
+          {
+            "step": 2,
+            "description": "Select student(s) with the maximum count and fetch intelligence from student table.",
+            "tables": ["student"],
+            "columns": ["student_id", "intelligence"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl004",
+        "question": "For each professor, find the average intelligence of all students assigned to them, and identify which capability is most common among those students.",
+        "answer": [
+          "P1: avg_intelligence 140, capability Data Mining",
+          "P2: avg_intelligence 125, capability Systems"
+        ],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["RA", "student", "prof"],
+        "primary_keys": ["RA.prof_id", "student.student_id", "prof.prof_id"],
+        "foreign_keys": [
+          "RA.student_id = student.student_id",
+          "RA.prof_id = prof.prof_id"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Join RA with student to pull intelligence, then group by prof_id to compute average intelligence.",
+            "tables": ["RA", "student"],
+            "columns": ["prof_id", "intelligence"]
+          },
+          {
+            "step": 2,
+            "description": "Within each prof_id group, compute the mode of capability values.",
+            "tables": ["RA"],
+            "columns": ["prof_id", "capability"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl005",
+        "question": "For each course, find the average SAT of the enrolled students, and display the course’s rating and difficulty.",
+        "answer": [
+          "C1: avg_sat 1450, rating 4.7, diff Medium",
+          "C2: avg_sat 1380, rating 4.2, diff Hard"
+        ],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["registration", "student", "course"],
+        "primary_keys": ["registration.course_id", "student.student_id", "course.course_id"],
+        "foreign_keys": [
+          "registration.student_id = student.student_id",
+          "registration.course_id = course.course_id"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Join registration with student to retrieve each student's SAT, then group by course_id to average SAT.",
+            "tables": ["registration", "student"],
+            "columns": ["course_id", "sat"]
+          },
+          {
+            "step": 2,
+            "description": "Join the aggregate with course to display rating and diff fields.",
+            "tables": ["course"],
+            "columns": ["course_id", "rating", "diff"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl006",
+        "question": "Among the students who have a ranking below 50, which course yields the highest average grade?",
+        "answer": ["C2"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["student", "registration", "course"],
+        "primary_keys": ["student.student_id", "registration.course_id", "course.course_id"],
+        "foreign_keys": [
+          "registration.student_id = student.student_id",
+          "registration.course_id = course.course_id"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter student rows where ranking < 50 and join with registration to obtain grade values.",
+            "tables": ["student", "registration"],
+            "columns": ["student_id", "ranking", "grade"]
+          },
+          {
+            "step": 2,
+            "description": "Group these filtered registrations by course_id and compute average grade; pick the highest.",
+            "tables": ["registration"],
+            "columns": ["course_id", "avg_grade"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl007",
+        "question": "Which professor has the highest combined score of popularity plus teachability among those whose salary exceeds 100 000?",
+        "answer": [],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["RA", "prof"],
+        "primary_keys": ["RA.prof_id", "prof.prof_id"],
+        "foreign_keys": ["RA.prof_id = prof.prof_id"],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Filter RA rows where salary > 100 000 to identify qualifying prof_id values.",
+            "tables": ["RA"],
+            "columns": ["prof_id", "salary"]
+          },
+          {
+            "step": 2,
+            "description": "Join with prof to calculate popularity + teachability for each professor and return the maximum.",
+            "tables": ["prof"],
+            "columns": ["prof_id", "popularity", "teachability"]
+          }
+        ]
+      },
+      {
+        "question_id": "question_fl008",
+        "question": "For each capability, find the average SAT and the average intelligence of the students assigned that capability; rank capabilities by the highest average intelligence.",
+        "answer": ["Data Mining"],
+        "challenge_types": ["multi-hop"],
+        "num_hops": 2,
+        "table_names": ["RA", "registration", "student"],
+        "primary_keys": ["RA.capability"],
+        "foreign_keys": [
+          "RA.student_id = registration.student_id",
+          "registration.student_id = student.student_id"
+        ],
+        "intermediate_reasoning_steps": [
+          {
+            "step": 1,
+            "description": "Join RA with registration to access SAT, and with student to access intelligence.",
+            "tables": ["RA", "registration", "student"],
+            "columns": ["capability", "sat", "intelligence"]
+          },
+          {
+            "step": 2,
+            "description": "Group by capability to compute average SAT and average intelligence, then order by average intelligence descending.",
+            "tables": ["RA"],
+            "columns": ["capability", "avg_sat", "avg_intelligence"]
+          }
+        ]
+      }
+    ]
+  }
+  

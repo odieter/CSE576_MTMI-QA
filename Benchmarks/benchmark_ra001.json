@@ -1,0 +1,455 @@
+{
+  "schema_id": "schema_r001",
+  "domain": "Video Games",
+  "tables": [
+    {
+      "name": "VideoGameSales",
+      "columns": [
+        "game_id",
+        "game_name",
+        "publisher",
+        "genre",
+        "release_year",
+        "global_sales_m"
+      ],
+      "column_descriptions": [
+        "game_id (integer) — Unique identifier for each video game; primary key used for joins with other tables.",
+        "game_name (string) — Title of the video game as marketed globally.",
+        "publisher (string) — Name of the company that published the game; useful for grouping games by publisher performance.",
+        "genre (string) — Category of the game based on gameplay style (e.g., MOBA, FPS, Sports); used for genre-based analysis.",
+        "release_year (integer) — Year the game was first officially released; helpful for temporal trends and cohort analysis.",
+        "global_sales_m (float) — Total global sales figures, measured in millions of units sold; indicates commercial success."
+      ],
+      "challenge_types": [
+        "mixed_units", "ambiguous_column_name", "overlapping_column_names"
+      ],
+      "primary_key": "game_id",
+      "foreign_keys": [
+      ],
+      "data": [
+        [1,"Valorant","Riot Games","FPS",2020,3.2],
+        [2,"League of Legends","Riot Games","MOBA",2009,5.8],
+        [3,"Dota 2","Valve","MOBA",2013,4.7],
+        [4,"Counter-Strike: Global Offensive","Valve","FPS",2012,6.1],
+        [5,"Fortnite","Epic Games","Battle Royale",2017,7.9],
+        [6,"Apex Legends","Electronic Arts","Battle Royale",2019,3.9],
+        [7,"Overwatch","Blizzard Entertainment","FPS",2016,4.3],
+        [8,"Super Smash Bros. Ultimate","Nintendo","Fighting",2018,10.5],
+        [9,"Call of Duty: Warzone","Activision","FPS",2020,6.8],
+        [10,"Street Fighter V","Capcom","Fighting",2016,2.1],
+        [11,"Rainbow Six Siege","Ubisoft","FPS",2015,3.0],
+        [12,"Hearthstone","Blizzard Entertainment","Card",2014,4.0],
+        [13,"StarCraft II","Blizzard Entertainment","RTS",2010,4.5],
+        [14,"Team Fortress 2","Valve","FPS",2007,1.9],
+        [15,"PUBG","Krafton","Battle Royale",2017,9.0],
+        [16,"Rocket League","Psyonix","Sports",2015,4.1],
+        [17,"Smite","Hi-Rez Studios","MOBA",2014,1.2],
+        [18,"Dead by Daylight","Behaviour Interactive","Horror",2016,2.5],
+        [19,"FIFA 22","Electronic Arts","Sports",2021,10.2],
+        [20,"Among Us","Innersloth","Party",2018,3.3]
+      ]
+    },
+    {
+      "name": "TwitchStats",
+      "columns": [
+        "game_id",
+        "avg_viewers",
+        "peak_viewers",
+        "streamers_count",
+        "month"
+      ],
+      "column_descriptions": [
+        "game_id (integer) — Foreign key linking to the VideoGameSales table; identifies which game the stats belong to.",
+        "avg_viewers (integer) — Average number of concurrent viewers watching streams of the game during the specified month.",
+        "peak_viewers (integer) — Highest recorded number of concurrent viewers for the game within the month.",
+        "streamers_count (integer) — Number of individual streamers who streamed the game during the given month; indicates streamer popularity.",
+        "month (string in YYYY-MM format) — Calendar month the data was recorded; enables time series analysis."
+      ],
+      "challenge_types": [
+        "ambiguous_column_name", "overlapping_column_names", "aliasing"
+      ],
+      "primary_key": "game_id",
+      "foreign_keys": [
+        "TwitchStats.game_id = VideoGameSales.game_id"
+      ],
+      "data": [
+        [1,87000,180000,12000,"2025-03"],
+        [2,140000,250000,9500,"2025-03"],
+        [3,90000,160000,8000,"2025-03"],
+        [4,110000,210000,7000,"2025-03"],
+        [5,200000,350000,18000,"2025-03"],
+        [6,95000,170000,8500,"2025-03"],
+        [7,88000,145000,6000,"2025-03"],
+        [8,50000,120000,4000,"2025-03"],
+        [9,130000,220000,10000,"2025-03"],
+        [10,30000,60000,1500,"2025-03"],
+        [11,45000,90000,2800,"2025-03"],
+        [12,30000,70000,2100,"2025-03"],
+        [13,22000,50000,1700,"2025-03"],
+        [14,26000,55000,1200,"2025-03"],
+        [15,160000,310000,14000,"2025-03"],
+        [16,47000,110000,4300,"2025-03"],
+        [17,19000,48000,1000,"2025-03"],
+        [18,35000,75000,2500,"2025-03"],
+        [19,125000,200000,9500,"2025-03"],
+        [20,115000,185000,8500,"2025-03"]
+      ]
+    },
+    {
+      "name": "EsportsPerformance",
+      "columns": [
+        "team_id",
+        "team_name",
+        "game_id",
+        "tournaments_won",
+        "earnings_usd",
+        "region"
+      ],
+      "column_descriptions": [
+        "team_id (integer) — Unique identifier for each esports team; serves as the primary key for the table.",
+        "team_name (string) — Official name of the esports organization or team competing in tournaments.",
+        "game_id (integer) — Foreign key linking the team to the specific game they primarily compete in.",
+        "tournaments_won (integer) — Total number of tournaments won by the team for the associated game; metric of competitive success.",
+        "earnings_usd (float) — Total earnings by the team from tournament prizes, measured in U.S. dollars.",
+        "region (string) — Geographic region the team primarily represents (e.g., NA for North America, EU for Europe)."
+      ],
+      "challenge_types": [
+        "ambiguous_column_name", "inconsistent_naming_style", "overlapping_column_names", "aliasing"
+      ],
+      "primary_key": "team_id",
+      "foreign_keys": [
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "data": [
+        [101,"Sentinels",1,5,1200000,"NA"],
+        [102,"T1",2,12,2400000,"KR"],
+        [103,"OG",3,8,3200000,"EU"],
+        [104,"Natus Vincere",4,10,2700000,"EU"],
+        [105,"Faze Clan",5,6,1500000,"NA"],
+        [106,"TSM",6,4,900000,"NA"],
+        [107,"Seoul Dynasty",7,7,1300000,"KR"],
+        [108,"Team Liquid",3,9,3000000,"NA"],
+        [109,"Luminosity Gaming",9,3,750000,"NA"],
+        [110,"Panda Global",8,5,400000,"NA"],
+        [111,"Rogue",11,3,700000,"EU"],
+        [112,"Cloud9",2,11,2200000,"NA"],
+        [113,"Astralis",4,9,2600000,"EU"],
+        [114,"G2 Esports",13,6,1800000,"EU"],
+        [115,"Evil Geniuses",14,5,800000,"NA"],
+        [116,"Gen.G",1,4,1100000,"KR"],
+        [117,"Fnatic",2,10,2000000,"EU"],
+        [118,"Envy",15,3,900000,"NA"],
+        [119,"NRG",16,7,950000,"NA"],
+        [120,"Innersloth Crew",20,0,0,"Global"]
+      ]
+    },
+    {
+      "name": "GamePlatforms",
+      "columns": [
+        "game_id",
+        "platform"
+      ],
+      "column_descriptions": [
+        "game_id (integer) — Foreign key linking to VideoGameSales; identifies the game associated with platform availability.",
+        "platform (string) — List of gaming platforms (comma-separated) where the game is officially available (e.g., PC, PS5, Xbox, Switch)."
+      ],
+      "challenge_types": [
+        "ambiguous_column_name"
+      ],
+      "primary_key": "game_id",
+      "foreign_keys": [
+        "GamePlatforms.game_id = VideoGameSales.game_id"
+      ],
+      "data": [
+        [1,"PC"],
+        [2,"PC"],
+        [3,"PC"],
+        [4,"PC"],
+        [5,"PC, PS5, Xbox, Switch"],
+        [6,"PC, PS5, Xbox"],
+        [7,"PC, PS4, Xbox"],
+        [8,"Nintendo Switch"],
+        [9,"PC, PS5, Xbox"],
+        [10,"PC, PS4"],
+        [11,"PC, PS5, Xbox"],
+        [12,"PC, Mobile"],
+        [13,"PC"],
+        [14,"PC"],
+        [15,"PC, Xbox, PS4"],
+        [16,"PC, PS4, Xbox, Switch"],
+        [17,"PC, Xbox"],
+        [18,"PC, PS4, Xbox, Switch"],
+        [19,"PC, PS5, Xbox"],
+        [20,"PC, Mobile, Switch"]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_ra001",
+      "question": "Which genre had the highest total Twitch peak viewers across all its games in March 2025?",
+      "answer": ["FPS"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "temporal", "superlative"],
+      "num_hops": 3,
+      "table_names": ["TwitchStats", "VideoGameSales"],
+      "primary_keys": ["TwitchStats.game_id", "VideoGameSales.game_id"],
+      "foreign_keys": [
+        "TwitchStats.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In TwitchStats, filter rows to month = '2025-03' and group by game_id to sum peak_viewers.",
+          "tables": ["TwitchStats"],
+          "columns": ["TwitchStats.month", "TwitchStats.game_id", "TwitchStats.peak_viewers"]
+        },
+        {
+          "step": 2,
+          "description": "Join the result with VideoGameSales to get each game's genre.",
+          "tables": ["TwitchStats", "VideoGameSales"],
+          "columns": ["TwitchStats.game_id", "VideoGameSales.game_id", "VideoGameSales.genre"]
+        },
+        {
+          "step": 3,
+          "description": "Aggregate peak_viewers by genre and select the genre with the highest total.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.genre"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra002",
+      "question": "What is the name of the most-watched game (by average viewers) in March 2025 that was released before 2015 and is available on more than one platform?",
+      "answer": ["Dota 2"],
+      "challenge_types": ["multi-hop", "temporal", "conditional", "aggregation", "comparison", "superlative"],
+      "num_hops": 4,
+      "table_names": ["VideoGameSales", "GamePlatforms", "TwitchStats"],
+      "primary_keys": ["VideoGameSales.game_id", "GamePlatforms.game_id", "TwitchStats.game_id"],
+      "foreign_keys": [
+        "GamePlatforms.game_id = VideoGameSales.game_id",
+        "TwitchStats.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter VideoGameSales for games with release_year < 2015.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.release_year"]
+        },
+        {
+          "step": 2,
+          "description": "From GamePlatforms, count platforms per game_id and filter to those with more than one.",
+          "tables": ["GamePlatforms"],
+          "columns": ["GamePlatforms.game_id", "GamePlatforms.platform"]
+        },
+        {
+          "step": 3,
+          "description": "Join those game_ids with TwitchStats (month = '2025-03') to find avg_viewers.",
+          "tables": ["TwitchStats"],
+          "columns": ["TwitchStats.game_id", "TwitchStats.avg_viewers", "TwitchStats.month"]
+        },
+        {
+          "step": 4,
+          "description": "Select the game with the highest avg_viewers and return its name from VideoGameSales.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.game_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra003",
+      "question": "Which publisher has the highest total earnings from esports teams across all their games?",
+      "answer": ["Valve"],
+      "challenge_types": ["multi-hop", "aggregation", "group_by", "superlative"],
+      "num_hops": 3,
+      "table_names": ["EsportsPerformance", "VideoGameSales"],
+      "primary_keys": ["EsportsPerformance.team_id", "VideoGameSales.game_id"],
+      "foreign_keys": [
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join EsportsPerformance with VideoGameSales on game_id to get publisher for each team.",
+          "tables": ["EsportsPerformance", "VideoGameSales"],
+          "columns": ["EsportsPerformance.game_id", "VideoGameSales.game_id", "VideoGameSales.publisher"]
+        },
+        {
+          "step": 2,
+          "description": "Group by publisher and sum earnings_usd.",
+          "tables": ["EsportsPerformance"],
+          "columns": ["EsportsPerformance.earnings_usd"]
+        },
+        {
+          "step": 3,
+          "description": "Return the publisher with the highest total earnings.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.publisher"]
+        }
+      ]
+    },            
+    {
+      "question_id": "question_ra004",
+      "question": "Which game available on exactly four platforms had the highest number of Twitch streamers in March 2025?",
+      "answer": ["Rocket League"],
+      "challenge_types": ["multi-hop", "conditional", "comparison", "temporal", "superlative"],
+      "num_hops": 2,
+      "table_names": ["GamePlatforms", "TwitchStats", "VideoGameSales"],
+      "primary_keys": ["GamePlatforms.game_id", "TwitchStats.game_id", "VideoGameSales.game_id"],
+      "foreign_keys": [
+        "GamePlatforms.game_id = TwitchStats.game_id",
+        "GamePlatforms.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Find games in GamePlatforms that are associated with exactly four distinct platforms.",
+          "tables": ["GamePlatforms"],
+          "columns": ["GamePlatforms.game_id", "GamePlatforms.platform"]
+        },
+        {
+          "step": 2,
+          "description": "Filter TwitchStats to entries with month = \"2025-03\" and retrieve streamers_count for those games.",
+          "tables": ["TwitchStats"],
+          "columns": ["TwitchStats.game_id", "TwitchStats.month", "TwitchStats.streamers_count"]
+        },
+        {
+          "step": 3,
+          "description": "Select the game with the highest streamers_count and return its game_name from VideoGameSales.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.game_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra005",
+      "question": "Which teams have an average earnings per tournament higher than $350,000 and also play games that sold less than 5 million copies?",
+      "answer": ["OG", "G2 Esports"],
+      "challenge_types": ["multi-hop", "derived_metric", "conditional", "comparison", "aggregation"],
+      "num_hops": 3,
+      "table_names": ["EsportsPerformance", "VideoGameSales"],
+      "primary_keys": ["EsportsPerformance.team_id", "VideoGameSales.game_id"],
+      "foreign_keys": [
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In EsportsPerformance, compute average earnings per tournament as earnings_usd / tournaments_won (exclude 0 wins).",
+          "tables": ["EsportsPerformance"],
+          "columns": ["EsportsPerformance.team_id", "EsportsPerformance.earnings_usd", "EsportsPerformance.tournaments_won"]
+        },
+        {
+          "step": 2,
+          "description": "Filter VideoGameSales for games where global_sales_m < 5.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.global_sales_m"]
+        },
+        {
+          "step": 3,
+          "description": "Return team_names from EsportsPerformance where both conditions hold.",
+          "tables": ["EsportsPerformance"],
+          "columns": ["EsportsPerformance.team_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra006",
+      "question": "Which publishers have teams that together won more than 10 tournaments across at least 2 different games?",
+      "answer": ["Riot Games", "Valve"],
+      "challenge_types": ["multi-hop", "group_by", "aggregation", "conditional", "comparison"],
+      "num_hops": 2,
+      "table_names": ["EsportsPerformance", "VideoGameSales"],
+      "primary_keys": ["EsportsPerformance.team_id", "VideoGameSales.game_id"],
+      "foreign_keys": [
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join EsportsPerformance with VideoGameSales to associate each team with a publisher.",
+          "tables": ["EsportsPerformance", "VideoGameSales"],
+          "columns": ["EsportsPerformance.game_id", "VideoGameSales.game_id", "VideoGameSales.publisher"]
+        },
+        {
+          "step": 2,
+          "description": "Group by publisher, count distinct games, and sum tournaments_won.",
+          "tables": ["VideoGameSales", "EsportsPerformance"],
+          "columns": ["VideoGameSales.publisher", "VideoGameSales.game_id", "EsportsPerformance.tournaments_won"]
+        },
+        {
+          "step": 3,
+          "description": "Filter to publishers with at least 2 games and total tournaments_won > 10.",
+          "tables": ["VideoGameSales", "EsportsPerformance"],
+          "columns": ["VideoGameSales.publisher"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra007",
+      "question": "Which MOBA games had at least one North American team win more than 5 tournaments?",
+      "answer": ["League of Legends", "Dota 2"],
+      "challenge_types": ["multi-hop", "conditional", "comparison", "superlative"],
+      "num_hops": 2,
+      "table_names": ["VideoGameSales", "EsportsPerformance"],
+      "primary_keys": ["VideoGameSales.game_id", "EsportsPerformance.team_id"],
+      "foreign_keys": [
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter VideoGameSales to only games with genre = 'MOBA'.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.genre"]
+        },
+        {
+          "step": 2,
+          "description": "In EsportsPerformance, filter for region = 'NA' and tournaments_won > 5.",
+          "tables": ["EsportsPerformance"],
+          "columns": ["EsportsPerformance.team_id", "EsportsPerformance.region", "EsportsPerformance.tournaments_won"]
+        },
+        {
+          "step": 3,
+          "description": "Return game_name for matching game_ids from VideoGameSales.",
+          "tables": ["VideoGameSales"],
+          "columns": ["VideoGameSales.game_id", "VideoGameSales.game_name"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_ra008",
+      "question": "Which teams earned over $1 million despite playing games that had fewer than 50,000 average Twitch viewers in March 2025?",
+      "answer": ["G2 Esports", "Evil Geniuses"],
+      "challenge_types": ["multi-hop", "conditional", "comparison", "aggregation", "temporal", "superlative"],
+      "num_hops": 3,
+      "table_names": ["TwitchStats", "VideoGameSales", "EsportsPerformance"],
+      "primary_keys": ["TwitchStats.game_id", "VideoGameSales.game_id", "EsportsPerformance.team_id"],
+      "foreign_keys": [
+        "TwitchStats.game_id = VideoGameSales.game_id",
+        "EsportsPerformance.game_id = VideoGameSales.game_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "In TwitchStats, find game_ids with avg_viewers < 50000 for month = \"2025-03\".",
+          "tables": ["TwitchStats"],
+          "columns": ["TwitchStats.game_id", "TwitchStats.avg_viewers", "TwitchStats.month"]
+        },
+        {
+          "step": 2,
+          "description": "Join with VideoGameSales to get corresponding game_ids.",
+          "tables": ["TwitchStats", "VideoGameSales"],
+          "columns": ["TwitchStats.game_id", "VideoGameSales.game_id"]
+        },
+        {
+          "step": 3,
+          "description": "Use those game_ids in EsportsPerformance and filter for earnings_usd > 1000000.",
+          "tables": ["EsportsPerformance"],
+          "columns": ["EsportsPerformance.team_name", "EsportsPerformance.earnings_usd"]
+        }
+      ]
+    }                
+  ]
+}
+  

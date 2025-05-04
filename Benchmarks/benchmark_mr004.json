@@ -1,0 +1,620 @@
+{
+  "schema_id": "schema_mr005",
+  "domain": "Temples in India",
+  "tables": [
+    {
+      "name": "Temples",
+      "columns": ["temple_id", "name", "location_id", "construction_year", "deity"],
+      "column_descriptions": {
+        "temple_id": "Unique identifier for the temple",
+        "name": "Name of the temple",
+        "location_id": "ID of the temple's location",
+        "construction_year": "Year the temple was constructed",
+        "deity": "Primary deity worshipped"
+      },
+      "challenge_types": ["inconsistent_naming_style"],
+      "primary_key": "temple_id",
+      "foreign_keys": [
+        "Temples.location_id = Locations.location_id"
+      ],
+      "data": [
+        ["T001", "Meenakshi Temple", "L001", 1600, "Meenakshi"],
+        ["T002", "Brihadeeswarar Temple", "L002", 1010, "Shiva"],
+        ["T003", "Jagannath Temple", "L003", 1161, "Jagannath"],
+        ["T004", "Kashi Vishwanath", "L004", 1780, "Shiva"],
+        ["T005", "Somnath Temple", "L005", 1951, "Shiva"]
+      ]
+    },
+    {
+      "name": "Priests",
+      "columns": ["priest_id", "name", "temple_id", "birth_year"],
+      "column_descriptions": {
+        "priest_id": "Unique identifier for the priest",
+        "name": "Full name of the priest",
+        "temple_id": "ID of the temple where the priest serves",
+        "birth_year": "Year of birth"
+      },
+      "challenge_types": ["format_variation"],
+      "primary_key": "priest_id",
+      "foreign_keys": [
+        "Priests.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["P001", "Ramesh Sharma", "T001", 1970],
+        ["P002", "Suresh Iyer", "T002", 1965],
+        ["P003", "Anil Das", "T003", 1980],
+        ["P004", "Vikram Singh", "T004", 1975],
+        ["P005", "Mohan Patel", "T005", 1985]
+      ]
+    },
+    {
+      "name": "Rituals",
+      "columns": ["ritual_id", "temple_id", "name", "frequency_per_year", "duration_minutes"],
+      "column_descriptions": {
+        "ritual_id": "Unique identifier for the ritual",
+        "temple_id": "ID of the temple where the ritual is performed",
+        "name": "Name of the ritual",
+        "frequency_per_year": "Number of times performed annually",
+        "duration_minutes": "Duration of the ritual in minutes"
+      },
+      "challenge_types": ["mixed_units"],
+      "primary_key": "ritual_id",
+      "foreign_keys": [
+        "Rituals.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["R001", "T001", "Aarti", 365, 30],
+        ["R002", "T002", "Abhishekam", 12, 60],
+        ["R003", "T003", "Rath Yatra", 1, 240],
+        ["R004", "T004", "Shiv Puja", 52, 45],
+        ["R005", "T005", "Somvar Puja", 52, 40]
+      ]
+    },
+    {
+      "name": "Festivals",
+      "columns": ["festival_id", "temple_id", "name", "start_date", "duration_days"],
+      "column_descriptions": {
+        "festival_id": "Unique identifier for the festival",
+        "temple_id": "ID of the temple hosting the festival",
+        "name": "Name of the festival",
+        "start_date": "Start date of the festival (YYYY-MM-DD)",
+        "duration_days": "Duration of the festival in days"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "festival_id",
+      "foreign_keys": [
+        "Festivals.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["F001", "T001", "Meenakshi Thirukalyanam", "2023-04-15", 10],
+        ["F002", "T002", "Shivaratri", "2023-02-18", 1],
+        ["F003", "T003", "Rath Yatra", "2023-06-20", 7],
+        ["F004", "T004", "Mahashivratri", "2023-02-18", 1],
+        ["F005", "T005", "Somnath Mahotsav", "2023-03-10", 5]
+      ]
+    },
+    {
+      "name": "Visitors",
+      "columns": ["visitor_id", "temple_id", "visit_date", "visitor_count"],
+      "column_descriptions": {
+        "visitor_id": "Unique identifier for the visitor record",
+        "temple_id": "ID of the temple visited",
+        "visit_date": "Date of the visit (YYYY-MM-DD)",
+        "visitor_count": "Number of visitors on that date"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "visitor_id",
+      "foreign_keys": [
+        "Visitors.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["V001", "T001", "2023-04-15", 5000],
+        ["V002", "T002", "2023-02-18", 3000],
+        ["V003", "T003", "2023-06-20", 10000],
+        ["V004", "T004", "2023-02-18", 4000],
+        ["V005", "T005", "2023-03-10", 2000]
+      ]
+    },
+    {
+      "name": "Donations",
+      "columns": ["donation_id", "temple_id", "amount_inr", "donation_date"],
+      "column_descriptions": {
+        "donation_id": "Unique identifier for the donation",
+        "temple_id": "ID of the temple receiving the donation",
+        "amount_inr": "Donation amount in Indian Rupees",
+        "donation_date": "Date of the donation (YYYY-MM-DD)"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "donation_id",
+      "foreign_keys": [
+        "Donations.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["D001", "T001", 100000, "2023-04-15"],
+        ["D002", "T002", 50000, "2023-02-18"],
+        ["D003", "T003", 200000, "2023-06-20"],
+        ["D004", "T004", 75000, "2023-02-18"],
+        ["D005", "T005", 30000, "2023-03-10"]
+      ]
+    },
+    {
+      "name": "Artifacts",
+      "columns": ["artifact_id", "temple_id", "name", "creation_year", "material"],
+      "column_descriptions": {
+        "artifact_id": "Unique identifier for the artifact",
+        "temple_id": "ID of the temple housing the artifact",
+        "name": "Name or description of the artifact",
+        "creation_year": "Year the artifact was created",
+        "material": "Material of the artifact"
+      },
+      "challenge_types": [],
+      "primary_key": "artifact_id",
+      "foreign_keys": [
+        "Artifacts.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["A001", "T001", "Golden Crown", 1650, "Gold"],
+        ["A002", "T002", "Shiva Lingam", 1010, "Stone"],
+        ["A003", "T003", "Wooden Chariot", 1161, "Wood"],
+        ["A004", "T004", "Silver Trident", 1780, "Silver"],
+        ["A005", "T005", "Bronze Idol", 1951, "Bronze"]
+      ]
+    },
+    {
+      "name": "Locations",
+      "columns": ["location_id", "city", "state", "country"],
+      "column_descriptions": {
+        "location_id": "Unique identifier for the location",
+        "city": "City where the temple is located",
+        "state": "State where the temple is located",
+        "country": "Country of the temple"
+      },
+      "challenge_types": [],
+      "primary_key": "location_id",
+      "foreign_keys": [],
+      "data": [
+        ["L001", "Madurai", "Tamil Nadu", "India"],
+        ["L002", "Thanjavur", "Tamil Nadu", "India"],
+        ["L003", "Puri", "Odisha", "India"],
+        ["L004", "Varanasi", "Uttar Pradesh", "India"],
+        ["L005", "Somnath", "Gujarat", "India"]
+      ]
+    },
+    {
+      "name": "Trusts",
+      "columns": ["trust_id", "temple_id", "name", "establishment_year"],
+      "column_descriptions": {
+        "trust_id": "Unique identifier for the trust",
+        "temple_id": "ID of the temple managed by the trust",
+        "name": "Name of the trust",
+        "establishment_year": "Year the trust was established"
+      },
+      "challenge_types": [],
+      "primary_key": "trust_id",
+      "foreign_keys": [
+        "Trusts.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["TR001", "T001", "Meenakshi Trust", 1800],
+        ["TR002", "T002", "Brihadeeswarar Trust", 1100],
+        ["TR003", "T003", "Jagannath Trust", 1200],
+        ["TR004", "T004", "Kashi Trust", 1850],
+        ["TR005", "T005", "Somnath Trust", 1955]
+      ]
+    },
+    {
+      "name": "Restorations",
+      "columns": ["restoration_id", "temple_id", "start_date", "cost_inr", "duration_months"],
+      "column_descriptions": {
+        "restoration_id": "Unique identifier for the restoration",
+        "temple_id": "ID of the temple restored",
+        "start_date": "Start date of the restoration (YYYY-MM-DD)",
+        "cost_inr": "Cost of restoration in Indian Rupees",
+        "duration_months": "Duration of restoration in months"
+      },
+      "challenge_types": ["date_format_inference"],
+      "primary_key": "restoration_id",
+      "foreign_keys": [
+        "Restorations.temple_id = Temples.temple_id"
+      ],
+      "data": [
+        ["RS001", "T001", "2020-01-01", 500000, 12],
+        ["RS002", "T002", "2015-06-01", 300000, 18],
+        ["RS003", "T003", "2018-03-01", 400000, 10],
+        ["RS004", "T004", "2019-07-01", 200000, 8],
+        ["RS005", "T005", "2021-05-01", 250000, 6]
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "question_mr001",
+      "question": "Which priests under 50 years old in 2023 served at temples in Tamil Nadu that received donations exceeding 100000 INR during festivals starting in 2023?",
+      "answer": ["Suresh Iyer"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Priests", "Temples", "Locations", "Donations", "Festivals"],
+      "primary_keys": ["Priests.priest_id", "Temples.temple_id", "Locations.location_id", "Donations.donation_id", "Festivals.festival_id"],
+      "foreign_keys": [
+        "Priests.temple_id = Temples.temple_id",
+        "Temples.location_id = Locations.location_id",
+        "Donations.temple_id = Temples.temple_id",
+        "Festivals.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate priest ages in 2023 by subtracting birth_year from 2023 and filter for those under 50, requiring arithmetic computation.",
+          "tables": ["Priests"],
+          "columns": ["priest_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Priests with Temples and Locations to filter temples located in Tamil Nadu.",
+          "tables": ["Priests", "Temples", "Locations"],
+          "columns": ["priest_id", "temple_id", "location_id", "state"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Donations to find temples with donations exceeding 100000 INR.",
+          "tables": ["Temples", "Donations"],
+          "columns": ["temple_id", "donation_id", "amount_inr"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Festivals to ensure donations occurred during festivals starting in 2023, addressing temporal logic.",
+          "tables": ["Temples", "Festivals"],
+          "columns": ["temple_id", "festival_id", "start_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr002",
+      "question": "Which temples constructed before 1200 had rituals performed more than 50 times annually and received visitor counts exceeding 5000 on festival days in 2023?",
+      "answer": ["Jagannath Temple"],
+      "challenge_types": ["multi-hop", "temporal", "conditional", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Temples", "Rituals", "Visitors", "Festivals"],
+      "primary_keys": ["Temples.temple_id", "Rituals.ritual_id", "Visitors.visitor_id", "Festivals.festival_id"],
+      "foreign_keys": [
+        "Rituals.temple_id = Temples.temple_id",
+        "Visitors.temple_id = Temples.temple_id",
+        "Festivals.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Temples table for temples constructed before 1200.",
+          "tables": ["Temples"],
+          "columns": ["temple_id", "name", "construction_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Temples with Rituals to find temples with rituals performed more than 50 times annually.",
+          "tables": ["Temples", "Rituals"],
+          "columns": ["temple_id", "ritual_id", "frequency_per_year"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Festivals to identify festival dates in 2023.",
+          "tables": ["Temples", "Festivals"],
+          "columns": ["temple_id", "festival_id", "start_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Visitors to filter for visitor counts exceeding 5000 on festival dates in 2023, addressing temporal logic.",
+          "tables": ["Temples", "Visitors"],
+          "columns": ["temple_id", "visitor_id", "visit_date", "visitor_count"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr003",
+      "question": "Which artifacts created more than 500 years before 2023 are housed in temples that underwent restorations costing over 300000 INR after 2018?",
+      "answer": ["Golden Crown", "Shiva Lingam", "Wooden Chariot", "Silver Trident"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Artifacts", "Temples", "Restorations"],
+      "primary_keys": ["Artifacts.artifact_id", "Temples.temple_id", "Restorations.restoration_id"],
+      "foreign_keys": [
+        "Artifacts.temple_id = Temples.temple_id",
+        "Restorations.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate artifact age by subtracting creation_year from 2023 and filter for those over 500 years old, using arithmetic logic.",
+          "tables": ["Artifacts"],
+          "columns": ["artifact_id", "name", "creation_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Artifacts with Temples to link artifacts to their temples.",
+          "tables": ["Artifacts", "Temples"],
+          "columns": ["artifact_id", "temple_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Restorations to filter for temples with restorations costing over 300000 INR after 2018, addressing temporal logic.",
+          "tables": ["Temples", "Restorations"],
+          "columns": ["temple_id", "restoration_id", "cost_inr", "start_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr004",
+      "question": "Which priests born after 1970 performed rituals lasting longer than 45 minutes in temples managed by trusts established before 1850?",
+      "answer": ["Anil Das", "Mohan Patel"],
+      "challenge_types": ["multi-hop", "temporal", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Priests", "Rituals", "Temples", "Trusts"],
+      "primary_keys": ["Priests.priest_id", "Rituals.ritual_id", "Temples.temple_id", "Trusts.trust_id"],
+      "foreign_keys": [
+        "Priests.temple_id = Temples.temple_id",
+        "Rituals.temple_id = Temples.temple_id",
+        "Trusts.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Priests table for priests born after 1970.",
+          "tables": ["Priests"],
+          "columns": ["priest_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Priests with Temples to link priests to their temples.",
+          "tables": ["Priests", "Temples"],
+          "columns": ["priest_id", "temple_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Rituals to find rituals lasting longer than 45 minutes.",
+          "tables": ["Temples", "Rituals"],
+          "columns": ["temple_id", "ritual_id", "duration_minutes"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Trusts to filter for temples managed by trusts established before 1850, addressing temporal logic.",
+          "tables": ["Temples", "Trusts"],
+          "columns": ["temple_id", "trust_id", "establishment_year"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr005",
+      "question": "Which temples in Uttar Pradesh had festivals lasting more than 5 days in 2023 and received donations exceeding the average donation amount for that year?",
+      "answer": [],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join", "aggregation"],
+      "num_hops": 3,
+      "table_names": ["Temples", "Locations", "Festivals", "Donations"],
+      "primary_keys": ["Temples.temple_id", "Locations.location_id", "Festivals.festival_id", "Donations.donation_id"],
+      "foreign_keys": [
+        "Temples.location_id = Locations.location_id",
+        "Festivals.temple_id = Temples.temple_id",
+        "Donations.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Temples with Locations to filter temples in Uttar Pradesh.",
+          "tables": ["Temples", "Locations"],
+          "columns": ["temple_id", "name", "location_id", "state"]
+        },
+        {
+          "step": 2,
+          "description": "Join Temples with Festivals to find festivals in 2023 lasting more than 5 days.",
+          "tables": ["Temples", "Festivals"],
+          "columns": ["temple_id", "festival_id", "start_date", "duration_days"]
+        },
+        {
+          "step": 3,
+          "description": "Calculate the average donation amount for 2023 using the Donations table, requiring arithmetic logic.",
+          "tables": ["Donations"],
+          "columns": ["donation_id", "amount_inr", "donation_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Donations to filter for donations exceeding the average amount in 2023.",
+          "tables": ["Temples", "Donations"],
+          "columns": ["temple_id", "donation_id", "amount_inr"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr006",
+      "question": "Which temples constructed over 500 years ago had restorations completed within 12 months and attracted more than 3000 visitors on a single day in 2023?",
+      "answer": ["Brihadeeswarar Temple", "Jagannath Temple"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 2,
+      "table_names": ["Temples", "Restorations", "Visitors"],
+      "primary_keys": ["Temples.temple_id", "Restorations.restoration_id", "Visitors.visitor_id"],
+      "foreign_keys": [
+        "Restorations.temple_id = Temples.temple_id",
+        "Visitors.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate temple age by subtracting construction_year from 2023 and filter for those over 500 years old, using arithmetic logic.",
+          "tables": ["Temples"],
+          "columns": ["temple_id", "name", "construction_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Temples with Restorations to filter for restorations completed within 12 months.",
+          "tables": ["Temples", "Restorations"],
+          "columns": ["temple_id", "restoration_id", "duration_months"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Visitors to find temples with over 3000 visitors on a single day in 2023, addressing temporal logic.",
+          "tables": ["Temples", "Visitors"],
+          "columns": ["temple_id", "visitor_id", "visit_date", "visitor_count"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr007",
+      "question": "Which priests over 40 years old in 2023 served at temples with artifacts created before 1700 and festivals starting after March 1, 2023?",
+      "answer": ["Ramesh Sharma"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 3,
+      "table_names": ["Priests", "Temples", "Artifacts", "Festivals"],
+      "primary_keys": ["Priests.priest_id", "Temples.temple_id", "Artifacts.artifact_id", "Festivals.festival_id"],
+      "foreign_keys": [
+        "Priests.temple_id = Temples.temple_id",
+        "Artifacts.temple_id = Temples.temple_id",
+        "Festivals.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate priest ages in 2023 by subtracting birth_year from 2023 and filter for those over 40, using arithmetic logic.",
+          "tables": ["Priests"],
+          "columns": ["priest_id", "name", "birth_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Priests with Temples to link priests to their temples.",
+          "tables": ["Priests", "Temples"],
+          "columns": ["priest_id", "temple_id"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Artifacts to filter for temples with artifacts created before 1700.",
+          "tables": ["Temples", "Artifacts"],
+          "columns": ["temple_id", "artifact_id", "creation_year"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Festivals to filter for festivals starting after March 1, 2023, addressing temporal logic.",
+          "tables": ["Temples", "Festivals"],
+          "columns": ["temple_id", "festival_id", "start_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr008",
+      "question": "Which temples in Odisha had rituals performed at least 10 times annually and received donations after restorations that started within 5 years of 2023?",
+      "answer": ["Jagannath Temple"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join"],
+      "num_hops": 4,
+      "table_names": ["Temples", "Locations", "Rituals", "Donations", "Restorations"],
+      "primary_keys": ["Temples.temple_id", "Locations.location_id", "Rituals.ritual_id", "Donations.donation_id", "Restorations.restoration_id"],
+      "foreign_keys": [
+        "Temples.location_id = Locations.location_id",
+        "Rituals.temple_id = Temples.temple_id",
+        "Donations.temple_id = Temples.temple_id",
+        "Restorations.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Join Temples with Locations to filter temples in Odisha.",
+          "tables": ["Temples", "Locations"],
+          "columns": ["temple_id", "name", "location_id", "state"]
+        },
+        {
+          "step": 2,
+          "description": "Join Temples with Rituals to find rituals performed at least 10 times annually.",
+          "tables": ["Temples", "Rituals"],
+          "columns": ["temple_id", "ritual_id", "frequency_per_year"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Restorations to identify restorations starting within 5 years of 2023 (i.e., after 2018), using arithmetic logic.",
+          "tables": ["Temples", "Restorations"],
+          "columns": ["temple_id", "restoration_id", "start_date"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Donations to filter for donations received after the restoration start date, addressing temporal logic.",
+          "tables": ["Temples", "Donations"],
+          "columns": ["temple_id", "donation_id", "donation_date"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr009",
+      "question": "Which temples with trusts established over 200 years before 2023 had visitor counts during festivals in 2023 that were at least twice the average visitor count for that temple in 2023?",
+      "answer": ["Meenakshi Temple"],
+      "challenge_types": ["multi-hop", "temporal", "arithmetic", "deep_join", "aggregation"],
+      "num_hops": 2,
+      "table_names": ["Temples", "Trusts", "Visitors", "Festivals"],
+      "primary_keys": ["Temples.temple_id", "Trusts.trust_id", "Visitors.visitor_id", "Festivals.festival_id"],
+      "foreign_keys": [
+        "Trusts.temple_id = Temples.temple_id",
+        "Visitors.temple_id = Temples.temple_id",
+        "Festivals.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Calculate trust age by subtracting establishment_year from 2023 and filter for trusts over 200 years old, using arithmetic logic.",
+          "tables": ["Trusts"],
+          "columns": ["trust_id", "temple_id", "establishment_year"]
+        },
+        {
+          "step": 2,
+          "description": "Join Trusts with Temples to link trusts to their temples.",
+          "tables": ["Trusts", "Temples"],
+          "columns": ["trust_id", "temple_id", "name"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Visitors and Festivals to find visitor counts during festivals in 2023.",
+          "tables": ["Temples", "Visitors", "Festivals"],
+          "columns": ["temple_id", "visitor_id", "visit_date", "visitor_count", "festival_id", "start_date"]
+        },
+        {
+          "step": 4,
+          "description": "Calculate the average visitor count per temple in 2023 and filter for festival visitor counts at least twice the average, using arithmetic and aggregation logic.",
+          "tables": ["Visitors"],
+          "columns": ["temple_id", "visitor_count"]
+        }
+      ]
+    },
+    {
+      "question_id": "question_mr010",
+      "question": "Which temples dedicated to Shiva had restorations costing more than 250000 INR after 2019 and attracted visitors on dates when rituals lasted over 30 minutes?",
+      "answer": ["Kashi Vishwanath"],
+      "challenge_types": ["multi-hop", "temporal", "deep_join", "conditional"],
+      "num_hops": 3,
+      "table_names": ["Temples", "Restorations", "Visitors", "Rituals"],
+      "primary_keys": ["Temples.temple_id", "Restorations.restoration_id", "Visitors.visitor_id", "Rituals.ritual_id"],
+      "foreign_keys": [
+        "Restorations.temple_id = Temples.temple_id",
+        "Visitors.temple_id = Temples.temple_id",
+        "Rituals.temple_id = Temples.temple_id"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Filter Temples table for temples dedicated to Shiva.",
+          "tables": ["Temples"],
+          "columns": ["temple_id", "name", "deity"]
+        },
+        {
+          "step": 2,
+          "description": "Join Temples with Restorations to find restorations costing over 250000 INR after 2019, addressing temporal logic.",
+          "tables": ["Temples", "Restorations"],
+          "columns": ["temple_id", "restoration_id", "cost_inr", "start_date"]
+        },
+        {
+          "step": 3,
+          "description": "Join Temples with Rituals to identify rituals lasting over 30 minutes.",
+          "tables": ["Temples", "Rituals"],
+          "columns": ["temple_id", "ritual_id", "duration_minutes"]
+        },
+        {
+          "step": 4,
+          "description": "Join Temples with Visitors to find temples with visitors on dates when these rituals were performed, assuming daily rituals for simplicity.",
+          "tables": ["Temples", "Visitors"],
+          "columns": ["temple_id", "visitor_id", "visit_date"]
+        }
+      ]
+    }
+  ]
+}
+
