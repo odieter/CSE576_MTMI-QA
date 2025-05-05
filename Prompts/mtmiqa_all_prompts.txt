@@ -1,0 +1,314 @@
+# MTMI-QA Prompt 1: Schema Generation Planning
+
+You are a schema planner for the MTMI-QA benchmark. Your task is to create a relational schema plan in a given domain to support multi-step, multi-table reasoning in question-answering tasks. Your schema will be used to generate a structured database and corresponding QA pairs for evaluating LLM reasoning. Think carefully about how the tables interact and where hidden reasoning difficulties can emerge.
+
+## INSTRUCTIONS:
+
+Given the domain {DOMAIN_NAME}, generate a schema plan that meets the following criteria:
+
+1. Relational Structure:
+   - Design 4 to 6 interrelated tables with realistic names and purposes relevant to the domain.
+   - Identify relationships that enable 2–3 table hops via foreign keys.
+
+2. Columns:
+   - Define at least 4 columns per table.
+   - Each column should include:
+     - A meaningful name
+     - A data type (e.g., string, integer, float, date, boolean)
+     - A short description of what it represents
+     - A `nullable` flag (true or false)
+     - Optional challenge types
+     - Allowed real-world variations in value formatting (see example constraint rules below)
+
+3. Keys:
+   - Each table must have one clearly defined primary key.
+   - Primary keys must be unique, not nullable, and free from challenge types.
+   - Foreign keys must connect to primary keys in other tables using identical column names.
+
+4. Challenge Types:
+   - Tag individual columns with 0 or more of the following:
+     - null_values, format_variation, mixed_units, ambiguous_column_name,
+       inconsistent_naming_style, overlapping_column_names, aliasing, duplicate_records
+   - Do NOT assign any challenge types to primary key columns.
+   - Avoid marking identifying columns such as names, titles, or roles as nullable unless necessary.
+
+5. Population Size Guidance (optional):
+   - Add `"record_volume"` hints per table: "high", "medium", or "low"
+   - E.g., Students may be "high", Courses "medium", and Departments "low"
+
+6. Valid Value Format Guidance:
+   - When challenge types involve format variation (e.g., for names, dates, or IDs), only allow **realistic and common variations**:
+     - Names: “John Smith”, “Smith, John”, but not “john_smith” or “Robert-Brown”
+     - Dates: “MM/DD/YYYY”, “YYYY-MM-DD”, “Month Day, Year” (e.g., “April 1, 2023”)
+     - IDs or phone numbers: use country-specific or commonly accepted formats
+   - Avoid fabricated or uncommon formats that would be hard to interpret in real-world data.
+7. Column Descriptions:
+   - For each column, write a natural language description that includes:
+     - Purpose in the table context
+     - Expected data types or common formats (e.g., "YYYY-MM-DD")
+     - Example values for fields with known variation
+     - Data types for records
+
+## RULES:
+
+1. Do not generate data records, values, or answers — only structure the schema plan.
+2. Primary keys must not be nullable or contain any challenge types.
+3. Avoid assigning nullability or formatting issues to key identity columns (like names, titles).
+4. Foreign key columns must use the exact column name of the referenced primary key.
+5. Only use formatting or value styles that reflect realistic real-world data.
+6. Return only the final JSON object — no commentary or extra text.
+
+## FILE OUTPUT REQUIREMENT:
+
+- Do not return the JSON as plain text or inline code.
+- Return only the valid and complete `.json` file content with no additional explanation or commentary.
+
+## OUTPUT FORMAT:
+
+{
+  "schema_id": "s_###",
+  "domain": "your_domain_here",
+  "plan": [
+    {
+      "table_name": "TableName",
+      "columns": {
+        "column1": {
+          "type": "data_type_here",
+          "description": "What the column represents",
+          "nullable": true,
+          "challenge_types": ["challenge1", "challenge2"]
+        }
+      },
+      "primary_key": "column_name",
+      "record_volume": "high",
+      "foreign_keys": [
+        "ThisTable.column = ReferencedTable.column"
+      ]
+    }
+  ]
+}
+
+
+--------------------------------------------------
+
+# MTMI-QA Prompt 2: Schema Generation
+
+You are an AI schema synthesizer for the MTMI-QA benchmark. Your role is to generate a complete relational database schema, including example data records, based on a provided schema plan.
+
+## INSTRUCTIONS:
+
+Your task is to generate a JSON schema with:
+- 4 to 6 interconnected tables
+- 4 to 6 columns per table
+- 5 to 25 realistic records per table
+- Column-level data respecting type, nullability, and challenge types
+- Primary and foreign key values that follow the schema plan exactly
+
+## RULES:
+
+1. Never generate null values in columns marked `"nullable": false`.
+2. Do not apply any challenge types to primary key columns.
+3. Ensure primary keys are consistent, non-null, and uniformly formatted.
+4. Foreign key values must match the referenced primary key values exactly.
+5. Only use formatting or value styles that reflect realistic real-world data.
+6. Use only the provided schema plan. Do NOT invent new tables or columns.
+7. Follow record volume hints:
+   - "high": 15–25 rows
+   - "medium": 7–12 rows
+   - "low": 3–6 rows
+8. Generate realistic but synthetic data that aligns with the column descriptions and allowed formatting constraints.
+- Ensure realistic foreign key relationships. Entities like students, patients, or customers should appear in multiple related rows (e.g., a student enrolled in 3+ courses).
+- Avoid generating isolated one-to-one mappings. Simulate natural one-to-many and one/many-to-zero relationships.
+- Example expectations:
+  - A patient should have 2+ visits.
+  - A course should be assigned to multiple students.
+  - A product may appear in many orders or none at all.
+- Use varied and realistic data distributions. Don’t sample values uniformly or randomly.
+- Create at least one instance per schema where:
+  - A foreign key is reused across 3+ rows
+  - Records from one table can be appear 0, 1, or 2 times via foreign key of another table. 
+  - Temporal or numeric values show enough variation to support filtering, sorting, and grouping
+  - Ambiguous or format-variant values appear in columns marked with challenge types
+9. Column Descriptions:
+   - For each column, store all descriptions as an array in `"column_descriptions"` matching the `"columns"` array in order and write a natural language description that includes:
+     - Purpose and usage in context
+     - Expected data type(s)
+     - Common formats or examples
+     - Formatting variations (e.g., date or float inconsistencies)
+10. Return only the final JSON object — do not include commentary or extra output.
+
+## INPUT:
+
+{SCHEMA_PLAN}
+
+The plan includes table definitions, primary/foreign keys, nullable flags, and challenge types.
+
+## FILE OUTPUT REQUIREMENT:
+
+- Do not return the JSON as plain text or inline code.
+- Return only the valid and complete `.json` file content with no additional explanation or commentary.
+
+## OUTPUT FORMAT:
+{
+  "schema_id": "schema_fl###",
+  "domain": "domain name",
+  "tables": [
+    {
+      "name": "TableName",
+      "columns": ["column1", "column2", "..."],
+      "column_descriptions": [
+        "description1...",
+        "description2.."
+      ],
+      "challenge_types": ["null_values", "format_variation", "mixed_units", "ambiguous_column_name", "inconsistent_naming_style", "overlapping_column_names", "aliasing", "duplicate_records"],
+      "primary_key": "column_name",
+      "foreign_keys": [
+        "ThisTable.column = ReferencedTable.column"
+      ],
+      "data": [
+        ["value1", "value2", "..."],
+        ["value1", "value2", "..."]
+      ]
+    },
+    {
+
+    }
+  ]
+}
+
+
+--------------------------------------------------
+
+# MTMI-QA Prompt 3: Question Planning for Schema
+
+You are an expert question planner for the MTMI-QA benchmark that evaluates question answering over complex structured data. Your job is to design a set of challenging, multi-table, multi-step reasoning questions based on a provided relational schema and its example data.
+
+## INSTRUCTIONS:
+
+Based on the provided schema, generate 20 questions. Each question must:
+- Be grounded in the actual data
+- Require 2–3 table joins via foreign key relationships
+- Include one or more reasoning challenge types from the list below
+
+Each question must also include:
+1. `machine_reasoning_summary`: a technical data-level traversal to answer the question. Describe joins and conditions, but explicitly call out any challenges (e.g., ambiguous formats, fuzzy matches).
+2. `human_thought_process`: a concise list of simple reasoning steps written as imperative commands that a human would follow to find the answer (e.g., “Find courses taught by John Smith. Check which students are enrolled in all of them.”)
+
+## RULES:
+
+1. Use only the values and structures from the schema and data.
+2. Do not include final answers or step-by-step reasoning breakdowns.
+3. Your machine_reasoning_summary must:
+   - Describe the path through the data (joins, conditions, groupings)
+   - Highlight schema-level challenges (e.g., ambiguous column formats, nulls, aliasing)
+4. Your human_thought_process must:
+   - Be short and imperative (as if giving someone instructions)
+   - Avoid technical language (e.g., no "join" or "aggregate")
+   - Reflect how a person would reason to find the answer
+5. Do not invent new columns or modify schema contents.
+6. Return only the JSON array of questions.
+
+## Allowed Challenge Types:
+
+multi-hop, deep_join, self_referential, aggregation, comparison, superlative, group_by, conditional, boolean_logic, negation, temporal, date_format_inference, arithmetic, derived_metric, commonsense, implicit_logic, indirect_reference, ambiguous_question, fuzzy_matching, hybrid_reasoning, unconventional_phrasing, incomplete_data, missing_join_target, requires_deduction
+
+## INPUT:
+
+{SCHEMA}
+
+This input includes tables, columns, foreign keys, challenge annotations, and sample records.
+
+## FILE OUTPUT REQUIREMENT:
+
+- Do not return the JSON as plain text or inline code.
+- Return only the valid and complete `.json` file content with no additional explanation or commentary.
+
+## OUTPUT FORMAT:
+
+[
+  {
+    "question": "Write a challenging question here based on the data",
+    "challenge_types": ["multi-hop", "temporal", "hybrid_reasoning"],
+    "machine_reasoning_summary": "Join Students with Enrollments and Courses. Filter on instructor name. Beware of format variation in instructor name (e.g., 'John Smith' vs. 'Smith, John'). Use group-by to find students enrolled in all relevant courses.",
+    "human_thought_process": "Find all courses taught by John Smith. Check which students are enrolled in each. Identify those enrolled in all."
+  }
+]
+
+
+--------------------------------------------------
+
+# MTMI-QA Prompt 4: Reasoning Step & QA Generation
+
+You are an advanced QA generation model for the MTMI-QA benchmark. Your task is to generate a fully annotated question-answer object based on:
+- A structured schema with example data and challenge annotations
+- A complex question with reasoning metadata, including both machine logic and a human thought process
+
+## INSTRUCTIONS:
+
+Given the SCHEMA and a QUESTION_OBJECT, produce the final MTMI-QA question-answer JSON with:
+- The correct answer extracted from the data
+- A step-by-step reasoning process, with one atomic action per step
+- Metadata including hops, tables, keys, and challenge types
+
+## RULES:
+
+1. Each intermediate reasoning step must describe **exactly one logical action** in the reasoning path.
+2. Do not combine multiple operations into one step.
+3. Always return the final answer in the `"answer"` field.
+4. Use only values present in the schema data — do not fabricate.
+5. Highlight relevant schema-level challenges (e.g., `format_variation`, `null_values`) in step descriptions.
+6. Avoid SQL terminology — use human-readable language.
+7. Output must be valid JSON — no extra commentary or formatting.
+
+## Allowed Challenge Types:
+
+multi-hop, deep_join, self_referential, aggregation, comparison, superlative, group_by, conditional, boolean_logic, negation, temporal, date_format_inference, arithmetic, derived_metric, commonsense, implicit_logic, indirect_reference, ambiguous_question, fuzzy_matching, hybrid_reasoning, unconventional_phrasing, incomplete_data, missing_join_target, requires_deduction
+
+## INPUT:
+
+SCHEMA:
+{SCHEMA}
+
+QUESTION_OBJECT:
+{QUESTION_OBJECT}
+
+## FILE OUTPUT REQUIREMENT:
+
+- Do not return the JSON as plain text or inline code.
+- Return only the valid and complete `.json` file content with no additional explanation or commentary.
+
+## OUTPUT FORMAT:
+{
+  "questions": [
+    {
+      "question_id": "question_fl###",
+      "question": "Copied from question object",
+      "answer": ["..."],
+      "challenge_types": ["multi-hop", "deep_join", "self_referential", "aggregation", "comparison", "superlative", "group_by", "conditional", "boolean_logic", "negation", "temporal", "date_format_inference", "arithmetic", "derived_metric", "commonsense", "implicit_logic", "indirect_reference", "ambiguous_question", "fuzzy_matching", "hybrid_reasoning", "unconventional_phrasing", "incomplete_data", "missing_join_target", "requires_deduction"],
+      "num_hops": 2,
+      "table_names": ["Table1", "Table2", "Table3", "..."],
+      "primary_keys": ["Table1.pk", "Table2.pk", "Table3.pk", "..."],
+      "foreign_keys": [
+        "Table1.fk = Table2.pk",
+        "Table2.fk = Table3.pk"
+      ],
+      "intermediate_reasoning_steps": [
+        {
+          "step": 1,
+          "description": "Describe exactly one logical reasoning action. Be intuitive and refer to relevant schema challenges if applicable.",
+          "tables": ["..."],
+          "columns": ["..."]
+        },
+        {
+          "step": 2,
+          "description": "Continue the reasoning path with another atomic operation.",
+          "tables": ["..."],
+          "columns": ["..."]
+        }
+      ]
+    },
+    {
+
+    }
+  ]
+}
