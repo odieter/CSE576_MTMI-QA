@@ -28,17 +28,21 @@ def visualize_questions(path):
     with open(path, 'r') as file:
         df = pd.json_normalize(json.load(file))
     questions = df.loc[0,"questions"]
-    #print(questions)
     for j in range(len(questions)):
         question = questions[j]
         print("Question: ",question['question'])
+        print("Hops: ", question["num_hops"])
+        challenge_types = question['challenge_types']
+        print(challenge_types)
+        # for i in range(len(challenge_types)):
+        #     print(challenge_types[i])
         reasoning = question['intermediate_reasoning_steps']
-        for i in range(len(reasoning)):
-            print('Step ',reasoning[i]['step'],":",reasoning[i]['description'])
-            print("\tUse table ",reasoning[i]['tables'])
-            print("\tUse columns ",reasoning[i]['columns'])
-        print("Primary keys:",question['primary_keys'])
-        print("Foreign keys:",question['foreign_keys'])
+        # for i in range(len(reasoning)):
+        #     print('Step ',reasoning[i]['step'],":",reasoning[i]['description'])
+        #     print("\tUse table ",reasoning[i]['tables'])
+        #     print("\tUse columns ",reasoning[i]['columns'])
+        # print("Primary keys:",question['primary_keys'])
+        # print("Foreign keys:",question['foreign_keys'])
         print("Answer: ", question['answer'])
         print("\n")
 
@@ -61,6 +65,7 @@ def analyze_benchmark(path):
     num_3table = 0
     num_4table = 0
     num_5table = 0
+    num_6table = 0
 
     for j in range(len(questions)):
         question = questions[j]
@@ -77,6 +82,8 @@ def analyze_benchmark(path):
         if num_tables == 3: num_3table+=1
         if num_tables == 4: num_4table+=1
         if num_tables == 5: num_5table+=1
+        if num_tables == 6: num_5table+=1
+
     print("Number of 1-hop Q's: ",num_1hop)
     print("Number of 2-hop Q's: ",num_2hop)
     print("Number of 3-hop Q's: ",num_3hop)
@@ -86,12 +93,14 @@ def analyze_benchmark(path):
     print("Number of 3-table Q's: ",num_3table)
     print("Number of 4-table Q's: ",num_4table)
     print("Number of 5-table Q's: ",num_5table)
+    print("Number of 6-table Q's: ",num_6table)
 
 
-benchmark_path = 'benchmark_od004.json'
-visualize_schema(benchmark_path)
+
+benchmark_path = 'Benchmarks/benchmark_ss004.json'
+#visualize_schema(benchmark_path)
 visualize_questions(benchmark_path)
-analyze_benchmark(benchmark_path)
+#analyze_benchmark(benchmark_path)
 
 
 
